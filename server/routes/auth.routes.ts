@@ -1,9 +1,10 @@
-import * as express from "express";
+import express from "express";
 import { Request, Response, NextFunction } from "express";
-import * as bcrypt from "bcrypt";
-import * as jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
 import { isAuthenticated } from "../middleware/jwt.middleware";
+import { TOKEN_SECRET } from "../config";
 
 const router = express.Router();
 const saltRounds = 10;
@@ -83,7 +84,7 @@ router.post(
 
       const payload = { _id, email, username };
 
-      const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      const authToken = jwt.sign(payload, TOKEN_SECRET, {
         algorithm: "HS256",
         expiresIn: "6h",
       });
@@ -95,15 +96,11 @@ router.post(
   }
 );
 
-interface AuthenticatedRequest extends Request {
-  payload: any;
-}
-
 // GET  /auth/verify  -  Used to verify JWT stored on the client
 router.get(
   "/verify",
   isAuthenticated,
-  (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  (req: any, res: Response, next: NextFunction) => {
     res.status(200).json(req.payload);
   }
 );

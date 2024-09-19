@@ -1,40 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // The ECMAScript version target
-    "module": "ESNext", // Module system for ESNext (ESM)
-    "lib": ["ES2020", "DOM"], // Include DOM types (useful for frontend/React)
-    "allowJs": true, // Allows JavaScript files to be compiled
-    "skipLibCheck": true, // Skip type checking for declaration files (faster compilation)
-    "strict": true, // Enable strict type-checking options
-    "esModuleInterop": true, // Ensures compatibility with CommonJS and ES modules
-    "forceConsistentCasingInFileNames": true, // Disallows inconsistently-cased references to the same file
-    "noImplicitAny": true, // Raises error for variables without a type
-    "moduleResolution": "Node", // Determines how modules are resolved
-    "resolveJsonModule": true, // Enables importing .json files
-    "isolatedModules": true, // Ensures that each file can be safely transpiled
-    "noEmit": true, // No output files, just type-checking (if you plan to use Babel/Webpack for transpiling)
-    "allowSyntheticDefaultImports": true, // Allows default imports from modules without default exports
-    "baseUrl": ".", // Specifies the base directory for module resolution
-    "paths": {},
-    "outDir": "./dist", // Output directory for compiled files
-    "rootDir": ".", // Specify the root directory of the input files
-    "incremental": true // Enable faster subsequent builds,
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
-
-  "ts-node": {
-    "esm": true, // Enable ESM support in ts-node
-    "experimentalSpecifierResolution": "node" // Resolve specifiers like native Node.js ESM
-  },
-
-  "include": [
-    "src/**/*", // Include all source files in the 'src' folder
-    "models/**/*", // Include models
-    "controllers/**/*", // Include controllers
-    "services/**/*" // Include services
-  ],
-  "exclude": [
-    "node_modules", // Exclude the node_modules directory
-    "**/*.test.ts", // Optionally exclude test files
-    "dist" // Exclude the output directory
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }

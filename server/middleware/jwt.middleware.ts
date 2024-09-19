@@ -8,7 +8,7 @@ const isAuthenticated = jwt({
   getToken: getTokenFromHeaders,
 });
 
-function getTokenFromHeaders(req: Request): string | null {
+function getTokenFromHeaders(req: Request): string | undefined {
   if (
     req.headers.authorization &&
     req.headers.authorization.split(" ")[0] === "Bearer"
@@ -16,8 +16,6 @@ function getTokenFromHeaders(req: Request): string | null {
     const token = req.headers.authorization.split(" ")[1];
     return token;
   }
-
-  return null;
 }
 
 export { isAuthenticated };

@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../models/User";
 
 // Define a type for location response
 type LocationResponse = {
