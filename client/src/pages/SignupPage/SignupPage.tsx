@@ -1,9 +1,9 @@
 import "./SignupPage.css";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/auth.service";
 
-function SignupPage() {
+export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -11,19 +11,24 @@ function SignupPage() {
 
   const navigate = useNavigate();
 
-  const handleEmailField = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
-  const handleName = (e) => setUsername(e.target.value);
+  const handleEmailField = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+  const handleName = (e: ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
 
-  const handleSignupSubmit = async (e) => {
+  const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const requestBody = { email, password, username };
 
     try {
       await authService.signup(requestBody);
       navigate("/login");
-    } catch (error) {
-      // If the request resolves with an error, set the error message in the state
+    } catch (error: any) {
       const errorDescription = error.response.data.message;
       setErrorMessage(errorDescription);
     }

@@ -1,10 +1,10 @@
 import "./LoginPage.css";
-import { useState, useContext } from "react";
+import { useState, useContext, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import authService from "../../services/auth.service";
 
-function LoginPage() {
+export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -13,10 +13,12 @@ function LoginPage() {
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
+  const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const requestBody = { email, password };
 
@@ -25,7 +27,7 @@ function LoginPage() {
       storeToken(response.data.authToken);
       authenticateUser();
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       const errorDescription = error.response.data.message;
       setErrorMessage(errorDescription);
     }

@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
 import authService from "../services/auth.service";
 
-const AuthContext = React.createContext();
+export interface AuthContextType {
+  isLoggedIn: boolean;
+  isLoading: boolean;
+  user: any;
+  storeToken: (token: string) => void;
+  authenticateUser: () => void;
+  logOutUser: () => void;
+}
 
-function AuthProviderWrapper(props) {
+const AuthContext = React.createContext({} as AuthContextType);
+
+function AuthProviderWrapper(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  const storeToken = (token) => {
+  const storeToken = (token: string) => {
     localStorage.setItem("authToken", token);
   };
 
