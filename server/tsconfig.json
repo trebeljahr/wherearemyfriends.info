@@ -15,16 +15,17 @@
     "noEmit": true, // No output files, just type-checking (if you plan to use Babel/Webpack for transpiling)
     "allowSyntheticDefaultImports": true, // Allows default imports from modules without default exports
     "baseUrl": ".", // Specifies the base directory for module resolution
-    "paths": {
-      // Define paths for cleaner imports
-      "@models/*": ["./models/*"],
-      "@services/*": ["./services/*"],
-      "@controllers/*": ["./controllers/*"]
-    },
+    "paths": {},
     "outDir": "./dist", // Output directory for compiled files
     "rootDir": ".", // Specify the root directory of the input files
-    "incremental": true // Enable faster subsequent builds
+    "incremental": true // Enable faster subsequent builds,
   },
+
+  "ts-node": {
+    "esm": true, // Enable ESM support in ts-node
+    "experimentalSpecifierResolution": "node" // Resolve specifiers like native Node.js ESM
+  },
+
   "include": [
     "src/**/*", // Include all source files in the 'src' folder
     "models/**/*", // Include models

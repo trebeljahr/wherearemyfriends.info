@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 
-const MONGO_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/wherearemyfriends.info";
+const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose
-  .connect(MONGO_URI)
-  .then((x) => {
-    const dbName = x.connections[0].name;
-    console.log(`Connected to Mongo! Database name: "${dbName}"`);
-  })
-  .catch((err) => {
-    console.error("Error connecting to mongo: ", err);
-  });
+if (!MONGODB_URI) {
+  throw new Error("No MONGODB_URI provided in the environment");
+}
+
+try {
+  const x = await mongoose.connect(MONGODB_URI);
+  const dbName = x.connections[0].name;
+  console.log(`Connected to Mongo! Database name: "${dbName}"`);
+} catch (err) {
+  console.error("Error connecting to mongo: ", err);
+}
