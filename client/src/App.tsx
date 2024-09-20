@@ -1,8 +1,4 @@
-import "./App.css";
-// import "leaflet/dist/leaflet.css";
-
 import { Routes, Route } from "react-router-dom";
-
 import HomePage from "./pages/HomePage/HomePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
@@ -14,7 +10,7 @@ import IsAnon from "./components/IsAnon/IsAnon";
 
 function App() {
   return (
-    <div className="App">
+    <div className="prose bg-slate-400">
       <Navbar />
 
       <Routes>
