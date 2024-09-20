@@ -1,20 +1,25 @@
 // import "leaflet/dist/leaflet.css";
-import { Icon } from "leaflet";
+import { DivIcon, divIcon } from "leaflet";
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-import { useMap } from "react-leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
+import { useMap } from "react-leaflet";
 
-const createAvatarMarker = (avatarUrl: string) =>
-  new Icon({
-    iconUrl: avatarUrl,
-    iconSize: [40, 40], // size of the icon
-    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
-    popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
-    className: "avatar-marker",
+const createAvatarMarker = (avatarUrl: string): DivIcon => {
+  return divIcon({
+    html: `
+      <div class="custom-pin">
+        <div class="avatar-circle" style="background-image: url('${avatarUrl}');"></div>
+      </div>
+    `,
+    className: "custom-avatar-marker", // Class for the custom marker
+    iconAnchor: [20, 40], // Adjust this based on pin and avatar size
+    popupAnchor: [0, -40], // Adjust for popup placement
+    iconSize: [40, 40], // Size of the overall marker (including pin)
   });
+};
 
 type FriendLocation = {
   id: string;
@@ -25,7 +30,7 @@ type FriendLocation = {
   };
 };
 
-const MapComponent: React.FC = () => {
+export const MapComponent: React.FC = () => {
   const [friends, setFriends] = useState<FriendLocation[]>([]);
 
   // Fetch friends' locations from API
@@ -36,15 +41,28 @@ const MapComponent: React.FC = () => {
 
         // const data: FriendLocation[] = await response.json();
 
-        const data = [
+        // const user = await fetch("https://randomuser.me/api/");
+        // const userData = await user.json();
+
+        // console.log(userData);
+
+        const data: FriendLocation[] = [
           {
             id: "string",
-            name: "Marc",
-            avatar: "https://randomuser.me/api/portraits",
+            name: "Sabine",
+            avatar: "https://randomuser.me/api/portraits/thumb/women/40.jpg", //userData.results[0].picture.thumbnail,
             location: {
               coordinates: [52.52, 13.405], // [longitude, latitude]
             },
-          } as FriendLocation,
+          },
+          {
+            id: "string",
+            name: "Marc",
+            avatar: "https://randomuser.me/api/portraits/thumb/men/40.jpg", //userData.results[0].picture.thumbnail,
+            location: {
+              coordinates: [30.52, 10.405], // [longitude, latitude]
+            },
+          },
         ];
 
         setFriends(data);
@@ -58,14 +76,15 @@ const MapComponent: React.FC = () => {
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
-      style={{ height: "100vh", width: "100%" }}
+      center={[0, 0]}
+      zoom={2}
+      style={{ height: "100vh", width: "100vw" }}
     >
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <MapController />
 
       {friends.map((friend) => (
         <Marker
@@ -92,8 +111,6 @@ const MapComponent: React.FC = () => {
   );
 };
 
-export default MapComponent;
-
 export const MapController = () => {
   const map = useMap();
 
@@ -106,27 +123,27 @@ export const MapController = () => {
   return null;
 };
 
-export function Map() {
-  console.log("Map is rendering");
-  return (
-    <div>
-      <MapContainer
-        center={[51.505, -0.09]}
-        zoom={13}
-        scrollWheelZoom={false}
-        style={{ height: "70vh" }}
-      >
-        <MapController />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={[51.505, -0.09]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </MapContainer>
-    </div>
-  );
-}
+// export function Map() {
+//   console.log("Map is rendering");
+//   return (
+//     <div>
+//       <MapContainer
+//         center={[51.505, -0.09]}
+//         zoom={13}
+//         scrollWheelZoom={false}
+//         style={{ height: "70vh" }}
+//       >
+//         <MapController />
+//         <TileLayer
+//           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+//         />
+//         <Marker position={[51.505, -0.09]}>
+//           <Popup>
+//             A pretty CSS3 popup. <br /> Easily customizable.
+//           </Popup>
+//         </Marker>
+//       </MapContainer>
+//     </div>
+//   );
+// }

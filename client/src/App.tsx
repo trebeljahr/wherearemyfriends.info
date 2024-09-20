@@ -10,7 +10,7 @@ import IsAnon from "./components/IsAnon/IsAnon";
 
 function App() {
   return (
-    <div className="prose bg-slate-400">
+    <div className="prose">
       <Navbar />
 
       <Routes>
