@@ -1,10 +1,10 @@
-import { ReactNode, useContext } from "react";
-import { AuthContext } from "../../context/auth.context";
+import { ReactElement, useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../context/auth.context";
 import Loading from "../Loading/Loading";
 
 interface IsAnonProps {
-  children: ReactNode;
+  children: ReactElement;
 }
 
 function IsAnon({ children }: IsAnonProps) {

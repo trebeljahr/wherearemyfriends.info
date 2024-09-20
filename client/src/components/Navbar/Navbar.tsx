@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
 
 export function Navbar() {
-  // Subscribe to the AuthContext to gain access to
-  // the values from AuthContext.Provider's `value` prop
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+
+  console.log({ user });
 
   return (
     <nav>
@@ -20,7 +20,11 @@ export function Navbar() {
 
           <Link to="/profile">
             <button>Profile</button>
-            {/* <img src="https://picsum.photos/id/402/200/300" style={{ width: 50, height: 50, borderRadius: 25}} alt="profile" /> */}
+            <img
+              src="https://picsum.photos/id/402/200/300"
+              style={{ width: 50, height: 50, borderRadius: 25 }}
+              alt="profile"
+            />
           </Link>
 
           <span>{user && user.name}</span>
