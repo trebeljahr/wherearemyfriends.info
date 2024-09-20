@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 
+type SharingState = "full" | "city" | "country" | "none";
+
 export type Friend = {
   id: string;
   name: string;
   avatar: string;
-  sharingState: "full" | "city" | "country" | "none"; // Initial sharing state
+  sharingState: SharingState;
 };
 
 type FriendListProps = {
   friends: Friend[];
-  onSharingStateChange: (
-    id: string,
-    newState: "full" | "city" | "country" | "none"
-  ) => void;
+  onSharingStateChange: (id: string, newState: SharingState) => void;
 };
 
 export const FriendList: React.FC<FriendListProps> = ({
@@ -23,13 +22,10 @@ export const FriendList: React.FC<FriendListProps> = ({
     friends.reduce((acc, friend) => {
       acc[friend.id] = friend.sharingState;
       return acc;
-    }, {} as Record<string, "full" | "city" | "country" | "none">)
+    }, {} as Record<string, SharingState>)
   );
 
-  const handleSharingChange = (
-    friendId: string,
-    newState: "full" | "city" | "country" | "none"
-  ) => {
+  const handleSharingChange = (friendId: string, newState: SharingState) => {
     setSharingStates((prevStates) => ({
       ...prevStates,
       [friendId]: newState,
@@ -54,10 +50,7 @@ export const FriendList: React.FC<FriendListProps> = ({
             <select
               value={sharingStates[friend.id]}
               onChange={(e) =>
-                handleSharingChange(
-                  friend.id,
-                  e.target.value as "full" | "city" | "country" | "none"
-                )
+                handleSharingChange(friend.id, e.target.value as SharingState)
               }
               className="mt-2 p-2 border border-gray-300 rounded-lg shadow-sm"
             >
