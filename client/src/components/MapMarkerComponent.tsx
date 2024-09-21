@@ -7,10 +7,13 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
 
-export const createAvatarMarker = (avatarUrl: string): DivIcon => {
+export const createAvatarMarker = (
+  avatarUrl: string,
+  color: string = "cyan-600"
+): DivIcon => {
   return divIcon({
     html: `
-      <div class="custom-pin">
+      <div class="custom-pin bg-${color}">
         <div class="avatar-circle" style="background-image: url('${avatarUrl}');"></div>
       </div>
     `,
@@ -43,8 +46,6 @@ export const MapComponent: React.FC = () => {
 
         // const user = await fetch("https://randomuser.me/api/");
         // const userData = await user.json();
-
-        // console.log(userData);
 
         const data: FriendLocation[] = [
           {

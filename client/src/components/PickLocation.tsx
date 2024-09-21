@@ -4,151 +4,9 @@ import React, { useMemo, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import { backendURL } from "./FriendsharingList";
 import { createAvatarMarker } from "./MapMarkerComponent";
-import worldGeoJSON from "geojson-world-map";
-import citiesGeoJSON from "./citiesData.json";
-import * as turf from "@turf/turf";
+import { findCityByCoordinates } from "./findCity";
+import { findCountryByCoordinates } from "./findCountry";
 import { LatLngBoundsExpression } from "leaflet";
-
-console.log(worldGeoJSON);
-
-const typedCitiesGeoJSON = citiesGeoJSON as CitiesGeoJSON;
-const typedWorldGeoJSON = worldGeoJSON as WorldGeoJSON;
-
-type CitiesGeoJSON = {
-  type: "FeatureCollection";
-  features: {
-    type: "Feature";
-    geometry: {
-      type: "Polygon";
-      coordinates: [number, number][][];
-    };
-    properties: {
-      name: string;
-    };
-  }[];
-};
-
-type WorldGeoJSON = {
-  type: "FeatureCollection";
-  features: {
-    type: "Feature";
-    geometry: {
-      type: "Polygon";
-      coordinates: [number, number][][];
-    };
-    properties: {
-      name?: string;
-      ADMIN?: string;
-    };
-  }[];
-};
-
-const findCityThatContainsPoint = (lat: number, lon: number) => {
-  const point = turf.point([lon, lat]);
-
-  for (const feature of typedCitiesGeoJSON.features) {
-    if (feature.geometry) {
-      const inside = turf.booleanPointInPolygon(point, feature);
-      if (inside) {
-        return feature;
-      }
-    }
-  }
-  return null;
-};
-
-// Function to find the country for a given point
-const findCountryThatContainsPoint = (lat: number, lon: number) => {
-  console.log(typedWorldGeoJSON);
-
-  const point = turf.point([lon, lat]); // [longitude, latitude]
-
-  for (const feature of typedWorldGeoJSON.features) {
-    if (turf.booleanPointInPolygon(point, feature)) {
-      return feature;
-    }
-  }
-
-  return null;
-};
-
-const findCountryByCoordinates = (lat: number, lon: number) => {
-  const point = turf.point([lon, lat]);
-
-  const inCountry = findCountryThatContainsPoint(lat, lon);
-  if (inCountry) {
-    console.log(`Inside country: ${inCountry}`);
-
-    const centroid = turf.centroid(inCountry);
-    return [inCountry.properties.name, centroid.geometry.coordinates];
-  }
-
-  const nearestCountry = turf.nearestPoint(
-    point,
-    countryCentroidsFeatureCollection
-  );
-
-  if (nearestCountry) {
-    console.log(nearestCountry);
-
-    const countryName = nearestCountry.properties.name || "Unknown Country";
-    console.log(`Nearest Country: ${countryName}`);
-    return [
-      nearestCountry.properties.name,
-      nearestCountry.geometry.coordinates,
-    ];
-  }
-
-  return null;
-};
-
-const cityCentroids = typedCitiesGeoJSON.features.map((feature) => {
-  const centroid = turf.centroid(feature);
-  if (centroid.properties) {
-    centroid.properties.name = feature.properties.name;
-  }
-  return centroid;
-});
-
-const countryCentroids = typedWorldGeoJSON.features.map((feature) => {
-  const centroid = turf.centroid(feature);
-  if (centroid.properties) {
-    centroid.properties.name = feature.properties.name;
-  }
-  return centroid;
-});
-
-const cityCentroidsFeatureCollection = turf.featureCollection(cityCentroids);
-
-const countryCentroidsFeatureCollection =
-  turf.featureCollection(countryCentroids);
-
-const findCityByCoordinates = (lat: number, lon: number) => {
-  console.log(citiesGeoJSON);
-  console.log(lat, lon);
-  const point = turf.point([lon, lat]);
-
-  const inCity = findCityThatContainsPoint(lat, lon);
-  if (inCity) {
-    const centroid = turf.centroid(inCity);
-
-    console.log(`Inside city: ${inCity}`);
-    return [inCity.properties.name, centroid.geometry.coordinates];
-  }
-
-  const nearestCity = turf.nearestPoint(point, cityCentroidsFeatureCollection);
-
-  if (nearestCity) {
-    console.log(nearestCity);
-
-    const cityName = nearestCity.properties.name || "Unknown City";
-    const { name } = nearestCity.properties;
-    console.log(`Nearest City: ${name}`);
-    return [cityName, nearestCity.geometry.coordinates];
-  }
-
-  return null;
-};
 
 type LocationMarkerProps = {
   userId: string; // Current user's ID
@@ -179,21 +37,15 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
 
   // Update user's location when the marker is placed or moved
   const updateUserLocation = async (coords: [number, number]) => {
-    console.log(coords);
-
     const country = findCountryByCoordinates(coords[1], coords[0]);
     const city = findCityByCoordinates(coords[1], coords[0]);
 
-    console.log(country, city);
+    // console.log(country, city);
 
     try {
-      const response = await axios.put(
-        `${backendURL}/api/users/${userId}/location`,
-        {
-          coordinates: coords,
-        }
-      );
-      console.log(response.data.message); // Log success message
+      await axios.put(`${backendURL}/api/users/${userId}/location`, {
+        coordinates: coords,
+      });
     } catch (error) {
       console.error("Error updating location:", error);
     }
@@ -215,20 +67,22 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
     <>
       <MapClickHandler />
       {cityPosition && (
-        <div>
-          <p>
-            City: {cityPosition[0]} <br />
-            Coordinates: {cityPosition[1].join(", ")}
-          </p>
-        </div>
+        <Marker
+          position={[cityPosition[1][1], cityPosition[1][0]]}
+          icon={createAvatarMarker(
+            "https://randomuser.me/api/portraits/men/40.jpg",
+            "red-400"
+          )}
+        />
       )}
       {countryPosition && (
-        <div>
-          <p>
-            Country: {countryPosition[0]} <br />
-            Coordinates: {countryPosition[1].join(", ")}
-          </p>
-        </div>
+        <Marker
+          position={[countryPosition[1][1], countryPosition[1][0]]}
+          icon={createAvatarMarker(
+            "https://randomuser.me/api/portraits/men/40.jpg",
+            "slate-500"
+          )}
+        />
       )}
       {position && (
         <Marker

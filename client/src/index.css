@@ -10,7 +10,7 @@ body {
   position: relative;
   width: 40px;
   height: 40px;
-  background-color: rgb(25, 134, 171); /* Color of the pin */
+  /* background-color: rgb(25, 134, 171); Color of the pin */
   border-radius: 50% 50% 50% 0; /* Shape the bottom half like a pin */
   transform: rotate(-45deg); /* Rotate to create a "pin" shape */
   display: flex;
