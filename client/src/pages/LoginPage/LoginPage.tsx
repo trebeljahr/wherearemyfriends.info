@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/auth.context";
 import authService from "../../services/auth.service";
 
 export function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
 
@@ -13,13 +13,13 @@ export function LoginPage() {
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
+    setEmailOrUsername(e.target.value);
   const handlePassword = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
 
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const requestBody = { email, password };
+    const requestBody = { emailOrUsername, password };
 
     try {
       const response = await authService.login(requestBody);
@@ -37,8 +37,13 @@ export function LoginPage() {
       <h1>Login</h1>
 
       <form onSubmit={handleLoginSubmit}>
-        <label>Email:</label>
-        <input type="email" name="email" value={email} onChange={handleEmail} />
+        <label>Email or Username:</label>
+        <input
+          type="text"
+          name="emailOrUsername"
+          value={emailOrUsername}
+          onChange={handleEmail}
+        />
 
         <label>Password:</label>
         <input

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { userService } from "src/services/user.service";
 
 export const backendURL = process.env.REACT_APP_SERVER_URL;
+
+export type SharingState = "full" | "city" | "country" | "none";
 
 export type Friend = {
   id: string;
   name: string;
   avatar: string;
-  sharingState: "full" | "city" | "country" | "none";
+  sharingState: SharingState;
 };
 
 type FriendListProps = {
@@ -22,8 +25,8 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get(`${backendURL}/api/friends/${userId}`);
-        setFriends(response.data);
+        const data = await userService.fetchFriends();
+        setFriends(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -36,13 +39,15 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
   // Update privacy settings on the server
   const handleSharingStateChange = async (
     friendId: string,
-    newState: "full" | "city" | "country" | "none"
+    newState: SharingState
   ) => {
     try {
       await axios.put(`${backendURL}/api/friends/${userId}/privacy`, {
         friendId,
         newVisibility: newState,
       });
+
+      await userService.updateFriendPrivacy(friendId, newState);
 
       // Update the state locally after the successful API request
       setFriends((prevFriends) =>
@@ -78,7 +83,7 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
               onChange={(e) =>
                 handleSharingStateChange(
                   friend.id,
-                  e.target.value as "full" | "city" | "country" | "none"
+                  e.target.value as SharingState
                 )
               }
               className="mt-2 p-2 border border-gray-300 rounded-lg shadow-sm"

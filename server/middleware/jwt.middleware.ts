@@ -4,7 +4,6 @@ import { Request } from "express";
 const isAuthenticated = jwt({
   secret: process.env.TOKEN_SECRET as string,
   algorithms: ["HS256"],
-  requestProperty: "payload",
   getToken: getTokenFromHeaders,
 });
 

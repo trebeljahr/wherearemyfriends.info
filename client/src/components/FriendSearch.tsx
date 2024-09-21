@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { backendURL } from "./FriendsharingList";
+import { userService } from "src/services/user.service";
 
 type FriendSearchProps = {
   userId: string; // ID of the current user
@@ -16,10 +17,7 @@ export const FriendSearch: React.FC<FriendSearchProps> = ({ userId }) => {
   const searchForFriend = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${backendURL}/api/users/search?username=${username}`
-      );
-      const foundFriend = response.data;
+      const foundFriend = await userService.searchForFriend(username);
       if (foundFriend) {
         setFriendId(foundFriend._id);
         setMessage(`Friend found: ${foundFriend.username}`);
@@ -40,13 +38,8 @@ export const FriendSearch: React.FC<FriendSearchProps> = ({ userId }) => {
 
     try {
       setLoading(true);
-      const response = await axios.post(
-        `${backendURL}/api/friends/${userId}/add`,
-        {
-          friendId,
-        }
-      );
-      setMessage(response.data.message);
+      const data = await userService.makeFriendRequest(friendId);
+      setMessage(data.message);
     } catch (error) {
       console.error("Error adding friend:", error);
       setMessage("Error adding friend.");

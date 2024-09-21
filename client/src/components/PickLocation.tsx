@@ -7,6 +7,7 @@ import { createAvatarMarker } from "./MapMarkerComponent";
 import { findCityByCoordinates } from "./findCity";
 import { findCountryByCoordinates } from "./findCountry";
 import { LatLngBoundsExpression } from "leaflet";
+import { userService } from "src/services/user.service";
 
 type LocationMarkerProps = {
   userId: string; // Current user's ID
@@ -40,12 +41,10 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
     const country = findCountryByCoordinates(coords[1], coords[0]);
     const city = findCityByCoordinates(coords[1], coords[0]);
 
-    // console.log(country, city);
+    console.log(country, city);
 
     try {
-      await axios.put(`${backendURL}/api/users/${userId}/location`, {
-        coordinates: coords,
-      });
+      await userService.updateUserLocation(coords, city as any, country as any);
     } catch (error) {
       console.error("Error updating location:", error);
     }

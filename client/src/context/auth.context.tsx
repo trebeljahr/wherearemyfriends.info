@@ -11,6 +11,7 @@ export interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
   user: null | UserType;
+  authToken: string | null;
   storeToken: (token: string) => void;
   authenticateUser: () => void;
   logOutUser: () => void;
@@ -22,6 +23,7 @@ function AuthProviderWrapper(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [authToken, setAuthToken] = useState<string | null>(null);
 
   const storeToken = (token: string) => {
     localStorage.setItem("authToken", token);
@@ -37,6 +39,7 @@ function AuthProviderWrapper(props: any) {
         setIsLoggedIn(true);
         setIsLoading(false);
         setUser(user);
+        setAuthToken(storedToken);
       } catch (error) {
         setIsLoggedIn(false);
         setIsLoading(false);
@@ -72,6 +75,7 @@ function AuthProviderWrapper(props: any) {
         isLoggedIn,
         isLoading,
         user,
+        authToken,
         storeToken,
         authenticateUser,
         logOutUser,

@@ -18,11 +18,15 @@ class AuthService {
     });
   }
 
-  login = (requestBody: any) => {
+  login = (requestBody: { emailOrUsername: string; password: string }) => {
     return this.api.post("/auth/login", requestBody);
   };
 
-  signup = (requestBody: any) => {
+  signup = (requestBody: {
+    email: string;
+    username: string;
+    password: string;
+  }) => {
     return this.api.post("/auth/signup", requestBody);
   };
 

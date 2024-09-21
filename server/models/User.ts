@@ -22,6 +22,7 @@ interface IUser extends Document {
   location: Location;
   friends: Schema.Types.ObjectId[];
   privacySettings: FriendPrivacy[];
+  pendingFriendRequests: Schema.Types.ObjectId[];
 }
 
 // Sub-schema for friend-specific privacy settings
@@ -60,6 +61,7 @@ const UserSchema = new Schema<IUser>({
     country: { type: String, default: "" },
     city: { type: String, default: "" },
   },
+  pendingFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }], // Add this line
   friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
   privacySettings: [FriendPrivacySchema],
 });

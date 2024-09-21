@@ -55,7 +55,6 @@ export const findCityByCoordinates = (lat: number, lon: number) => {
 
   if (nearestCity) {
     const cityName = nearestCity.properties.name || "Unknown City";
-    const { name } = nearestCity.properties;
     return [cityName, nearestCity.geometry.coordinates];
   }
 

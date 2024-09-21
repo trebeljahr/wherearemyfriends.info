@@ -1,10 +1,11 @@
 import express from "express";
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { isAuthenticated } from "../middleware/jwt.middleware";
 import { TOKEN_SECRET } from "../config";
+import { Request } from "express-jwt";
 
 const router = express.Router();
 const saltRounds = 10;
@@ -64,14 +65,21 @@ router.post(
 router.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { emailOrUsername, password } = req.body;
 
-    if (email === "" || password === "") {
+    if (emailOrUsername === "" || password === "") {
       res.status(400).json({ message: "Provide email and password." });
       return;
     }
 
-    const foundUser = await User.findOne({ email });
+    const foundUserByEmail = await User.findOne({ email: emailOrUsername });
+
+    const foundUserByUsername = await User.findOne({
+      username: emailOrUsername,
+    });
+
+    const foundUser = foundUserByEmail || foundUserByUsername;
+
     if (!foundUser) {
       res.status(401).json({ message: "User not found." });
       return;
@@ -100,8 +108,8 @@ router.post(
 router.get(
   "/verify",
   isAuthenticated,
-  (req: any, res: Response, next: NextFunction) => {
-    res.status(200).json(req.payload);
+  (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).json(req.auth);
   }
 );
 
