@@ -5,8 +5,6 @@ import { AuthContext } from "../../context/auth.context";
 export function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
 
-  console.log({ user });
-
   return (
     <nav>
       <Link to="/">
@@ -26,7 +24,7 @@ export function Navbar() {
             />
           </Link>
 
-          <span>{user && user.name}</span>
+          <span>{user && user.username}</span>
         </>
       )}
 

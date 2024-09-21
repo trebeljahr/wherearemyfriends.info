@@ -7,7 +7,7 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
 
-const createAvatarMarker = (avatarUrl: string): DivIcon => {
+export const createAvatarMarker = (avatarUrl: string): DivIcon => {
   return divIcon({
     html: `
       <div class="custom-pin">
@@ -122,28 +122,3 @@ export const MapController = () => {
 
   return null;
 };
-
-// export function Map() {
-//   console.log("Map is rendering");
-//   return (
-//     <div>
-//       <MapContainer
-//         center={[51.505, -0.09]}
-//         zoom={13}
-//         scrollWheelZoom={false}
-//         style={{ height: "70vh" }}
-//       >
-//         <MapController />
-//         <TileLayer
-//           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//         />
-//         <Marker position={[51.505, -0.09]}>
-//           <Popup>
-//             A pretty CSS3 popup. <br /> Easily customizable.
-//           </Popup>
-//         </Marker>
-//       </MapContainer>
-//     </div>
-//   );
-// }

@@ -1,37 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-type SharingState = "full" | "city" | "country" | "none";
+export const backendURL = process.env.REACT_APP_SERVER_URL;
 
 export type Friend = {
   id: string;
   name: string;
   avatar: string;
-  sharingState: SharingState;
+  sharingState: "full" | "city" | "country" | "none";
 };
 
 type FriendListProps = {
-  friends: Friend[];
-  onSharingStateChange: (id: string, newState: SharingState) => void;
+  userId: string; // User ID of the current user
 };
 
-export const FriendList: React.FC<FriendListProps> = ({
-  friends,
-  onSharingStateChange,
-}) => {
-  const [sharingStates, setSharingStates] = useState(() =>
-    friends.reduce((acc, friend) => {
-      acc[friend.id] = friend.sharingState;
-      return acc;
-    }, {} as Record<string, SharingState>)
-  );
+export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleSharingChange = (friendId: string, newState: SharingState) => {
-    setSharingStates((prevStates) => ({
-      ...prevStates,
-      [friendId]: newState,
-    }));
-    onSharingStateChange(friendId, newState);
+  // Fetch friends and their privacy settings from the backend
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/api/friends/${userId}`);
+        setFriends(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching friends:", error);
+      }
+    };
+
+    fetchFriends();
+  }, [userId]);
+
+  // Update privacy settings on the server
+  const handleSharingStateChange = async (
+    friendId: string,
+    newState: "full" | "city" | "country" | "none"
+  ) => {
+    try {
+      await axios.put(`${backendURL}/api/friends/${userId}/privacy`, {
+        friendId,
+        newVisibility: newState,
+      });
+
+      // Update the state locally after the successful API request
+      setFriends((prevFriends) =>
+        prevFriends.map((friend) =>
+          friend.id === friendId
+            ? { ...friend, sharingState: newState }
+            : friend
+        )
+      );
+    } catch (error) {
+      console.error("Error updating privacy setting:", error);
+    }
   };
+
+  if (loading) return <div>Loading friends...</div>;
 
   return (
     <div className="space-y-6">
@@ -48,9 +74,12 @@ export const FriendList: React.FC<FriendListProps> = ({
           <div>
             <h3 className="text-lg font-medium">{friend.name}</h3>
             <select
-              value={sharingStates[friend.id]}
+              value={friend.sharingState}
               onChange={(e) =>
-                handleSharingChange(friend.id, e.target.value as SharingState)
+                handleSharingStateChange(
+                  friend.id,
+                  e.target.value as "full" | "city" | "country" | "none"
+                )
               }
               className="mt-2 p-2 border border-gray-300 rounded-lg shadow-sm"
             >

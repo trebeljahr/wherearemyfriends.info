@@ -4,8 +4,6 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-console.log(process.env);
-
 const FRONTEND_URL = process.env.ORIGIN as string;
 const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 const MONGODB_URI = process.env.MONGODB_URI as string;

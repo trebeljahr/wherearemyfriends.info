@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import authService from "../services/auth.service";
 
+export type UserType = {
+  email: string;
+  username: string;
+  _id: string;
+};
+
 export interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
-  user: any;
+  user: null | UserType;
   storeToken: (token: string) => void;
   authenticateUser: () => void;
   logOutUser: () => void;

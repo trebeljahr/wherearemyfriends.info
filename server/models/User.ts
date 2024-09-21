@@ -29,7 +29,7 @@ const FriendPrivacySchema = new Schema<FriendPrivacy>({
   friendId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   visibility: {
     type: String,
-    enum: ["none", "country", "city", "nearby", "exact"],
+    enum: ["full", "city", "country", "none"],
     default: "none",
   },
 });
