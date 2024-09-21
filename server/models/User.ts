@@ -23,6 +23,7 @@ interface IUser extends Document {
   friends: Schema.Types.ObjectId[];
   privacySettings: FriendPrivacy[];
   pendingFriendRequests: Schema.Types.ObjectId[];
+  profilePicture: string;
 }
 
 // Sub-schema for friend-specific privacy settings
@@ -64,6 +65,7 @@ const UserSchema = new Schema<IUser>({
   pendingFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }], // Add this line
   friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
   privacySettings: [FriendPrivacySchema],
+  profilePicture: { type: String, default: "/assets/no-user.webp" },
 });
 
 // Create a geospatial index on the coordinates field

@@ -4,10 +4,88 @@ import User from "../models/User"; // Import User model
 import mongoose from "mongoose";
 import { isAuthenticated } from "../middleware/jwt.middleware";
 import { Request } from "express-jwt";
+import fs from "fs";
+import multer from "multer";
+import path from "path";
 
 const router = express.Router();
 
 router.use(isAuthenticated);
+
+// Set up storage configuration
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, path.join(__dirname, "../public/uploads/profile_pictures/"));
+  },
+  filename: (req: Request<{ _id: string }>, file, cb) => {
+    const ext = path.extname(file.originalname);
+
+    if (!req.auth) return cb(new Error("User ID not found"), "");
+
+    const { _id: userId } = req.auth;
+
+    cb(null, `${userId}${ext}`); // Use user ID as the filename
+  },
+});
+
+// Initialize multer with storage configuration
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
+  fileFilter: (req: any, file: any, cb: any) => {
+    // Accept image files only
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed!"));
+    }
+  },
+});
+
+interface AuthenticatedRequest extends Request {
+  auth?: {
+    _id: string;
+  };
+  file?: Express.Multer.File;
+}
+
+// Upload profile picture
+router.post(
+  "/users/profile-picture",
+  isAuthenticated,
+  upload.single("profilePicture"),
+  async (req: AuthenticatedRequest, res) => {
+    if (!req.auth) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Please upload a file" });
+    }
+
+    const { _id: userId } = req.auth;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        if (req.file) fs.unlinkSync(req.file.path);
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      user.profilePicture = `/uploads/profile_pictures/${req.file.filename}`;
+      await user.save();
+
+      return res.status(200).json({
+        message: "Profile picture uploaded successfully",
+        profilePicture: user.profilePicture,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Server error" });
+    }
+  }
+);
 
 // Get the user's friends and privacy settings
 router.get("/friends", async (req: Request<{ _id: string }>, res) => {

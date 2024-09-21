@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/auth.context";
+import { backendURL } from "../FriendsharingList";
 
 export function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -11,16 +12,18 @@ export function Navbar() {
         <button>Home</button>
       </Link>
 
-      {isLoggedIn && (
+      {user && (
         <>
           <button onClick={logOutUser}>Logout</button>
 
           <Link to="/profile">
             <button>Profile</button>
             <img
-              src="https://picsum.photos/id/402/200/300"
+              src={`${backendURL}${
+                user.profilePicture || "/assets/no-user.webp"
+              }`}
               style={{ width: 50, height: 50, borderRadius: 25 }}
-              alt="profile"
+              alt="profile pic"
             />
           </Link>
 

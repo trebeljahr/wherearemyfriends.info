@@ -82,6 +82,23 @@ class UserService {
 
     return response.data;
   }
+
+  async uploadProfilePicture(file: File) {
+    const formData = new FormData();
+    formData.append("profilePicture", file);
+
+    const response = await this.api.post(
+      `/api/users/profile-picture`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  }
 }
 
 export const userService = new UserService();

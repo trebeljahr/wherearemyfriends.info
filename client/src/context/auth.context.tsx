@@ -4,6 +4,12 @@ import authService from "../services/auth.service";
 export type UserType = {
   email: string;
   username: string;
+  profilePicture: string;
+  location: {
+    coordinates: [number, number];
+    city: [string, [number, number]];
+    country: [string, [number, number]];
+  };
   _id: string;
 };
 

@@ -4,6 +4,7 @@ import { FriendList } from "src/components/FriendsharingList";
 import { MapComponent } from "src/components/MapMarkerComponent";
 import { PendingFriendRequests } from "src/components/PendingFriendRequests";
 import { MapWithMarker } from "src/components/PickLocation";
+import { ProfilePictureUpload } from "src/components/ProfilePictureUpload";
 import { AuthContext } from "src/context/auth.context";
 
 export function ProfilePage() {
@@ -17,6 +18,7 @@ export function ProfilePage() {
       {user && <FriendSearch userId={user._id} />}
       {user && <MapWithMarker userId={user._id} />}
       <PendingFriendRequests />
+      <ProfilePictureUpload />
     </div>
   );
 }

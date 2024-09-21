@@ -1,0 +1,80 @@
+import React, { useContext, useState } from "react";
+import { userService } from "src/services/user.service";
+import { backendURL } from "./FriendsharingList";
+import { AuthContext } from "src/context/auth.context";
+
+export const ProfilePictureUpload = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedFile(e.target?.files?.[0] || null);
+  };
+
+  const handleUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!selectedFile) {
+      alert("Please select a file.");
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const data = await userService.uploadProfilePicture(selectedFile);
+
+      setUploading(false);
+      setProfilePicture(data.profilePicture);
+      alert("Profile picture uploaded successfully.");
+    } catch (error) {
+      setUploading(false);
+      console.error(error);
+      alert("Failed to upload profile picture.");
+    }
+  };
+
+  return (
+    <div>
+      <h3>Upload Profile Picture</h3>
+      {profilePicture && (
+        <img
+          src={`${backendURL}/${profilePicture}`}
+          alt="Profile"
+          className="w-36 h-36 rounded-full"
+        />
+      )}
+      <form onSubmit={handleUpload}>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <button type="submit" disabled={uploading}>
+          {uploading ? "Uploading..." : "Upload"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+type ApplicationUser = {
+  profilePicture: string;
+  username: string;
+  email: string;
+};
+
+export const DisplayUserAvatar = ({ user }: { user: ApplicationUser }) => {
+  const profilePicUrl =
+    user.profilePicture || `${backendURL}/assets/no-user.webp`;
+
+  return (
+    <img
+      src={profilePicUrl}
+      alt={`${user.username}'s Profile`}
+      style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+    />
+  );
+};
+
+export const CurrentUserAvatar = () => {
+  const { user } = useContext(AuthContext);
+
+  return <div>{user && <DisplayUserAvatar user={user} />} </div>;
+};
