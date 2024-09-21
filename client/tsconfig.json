@@ -31,7 +31,10 @@
     "models/**/*", // Include models for the server
     "controllers/**/*", // Include controllers for the server
     "services/**/*", // Include services for the server
-    "client/src/**/*" // Include all React app files in `client/src`
+    "client/src/**/*", // Include all React app files in `client/src`
+    "modules.ts",
+    "*.d.ts",
+    "types.ts"
   ],
   "exclude": [
     "node_modules", // Exclude dependencies

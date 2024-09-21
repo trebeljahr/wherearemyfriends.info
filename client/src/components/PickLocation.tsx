@@ -4,6 +4,24 @@ import React, { useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import { backendURL } from "./FriendsharingList";
 import { createAvatarMarker } from "./MapMarkerComponent";
+import worldGeoJSON from "geojson-world-map";
+import * as turf from "@turf/turf";
+
+// Function to find the country for a given point
+const findCountryByCoordinates = (lat: number, lon: number) => {
+  console.log(worldGeoJSON);
+
+  const point = turf.point([lon, lat]); // [longitude, latitude]
+
+  for (const feature of worldGeoJSON.features) {
+    if (turf.booleanPointInPolygon(point, feature)) {
+      const countryName =
+        feature.properties.name || feature.properties.ADMIN || "Unknown";
+      return countryName;
+    }
+  }
+  return "Unknown";
+};
 
 type LocationMarkerProps = {
   userId: string; // Current user's ID
@@ -20,6 +38,13 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
 
   // Update user's location when the marker is placed or moved
   const updateUserLocation = async (newCoordinates: [number, number]) => {
+    const country = findCountryByCoordinates(
+      newCoordinates[1],
+      newCoordinates[0]
+    );
+
+    console.log(country);
+
     try {
       const response = await axios.put(
         `${backendURL}/api/users/${userId}/location`,
