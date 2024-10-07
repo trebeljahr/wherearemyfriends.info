@@ -7,68 +7,41 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
 import { userService } from "src/services/user.service";
+import { backendURL, Friend } from "./FriendsharingList";
+
+export const assembleImageUrl = (img: string) => {
+  return img.startsWith("/") ? `${backendURL}${img}` : img;
+};
 
 export const createAvatarMarker = (
-  avatarUrl: string,
+  img: string,
   color: string = "cyan-600"
 ): DivIcon => {
+  const imgUrl = assembleImageUrl(img);
+
   return divIcon({
     html: `
       <div class="custom-pin bg-${color}">
-        <div class="avatar-circle" style="background-image: url('${avatarUrl}');"></div>
+        <div class="avatar-circle" style="background-image: url('${imgUrl}');"></div>
       </div>
     `,
     className: "custom-avatar-marker", // Class for the custom marker
-    iconAnchor: [20, 40], // Adjust this based on pin and avatar size
-    popupAnchor: [0, -40], // Adjust for popup placement
-    iconSize: [40, 40], // Size of the overall marker (including pin)
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40],
+    iconSize: [40, 40],
   });
 };
 
-type FriendLocation = {
-  id: string;
-  name: string;
-  avatar: string;
-  location: {
-    coordinates: [number, number]; // [longitude, latitude]
-  };
-};
-
 export const MapComponent: React.FC = () => {
-  const [friends, setFriends] = useState<FriendLocation[]>([]);
+  const [friends, setFriends] = useState<Friend[]>([]);
 
   // Fetch friends' locations from API
   useEffect(() => {
     const fetchFriendsLocations = async () => {
       try {
-        const friendDataFromAPI = await userService.fetchFriends(); // Example API endpoint
-        console.log(friendDataFromAPI);
+        const friendDataFromAPI = await userService.fetchFriends();
 
-        // const data: FriendLocation[] = await response.json();
-
-        // const user = await fetch("https://randomuser.me/api/");
-        // const userData = await user.json();
-
-        const data: FriendLocation[] = [
-          {
-            id: "Sabine",
-            name: "Sabine",
-            avatar: "https://randomuser.me/api/portraits/thumb/women/40.jpg", //userData.results[0].picture.thumbnail,
-            location: {
-              coordinates: [52.52, 13.405], // [longitude, latitude]
-            },
-          },
-          {
-            id: "Marc",
-            name: "Marc",
-            avatar: "https://randomuser.me/api/portraits/thumb/men/40.jpg", //userData.results[0].picture.thumbnail,
-            location: {
-              coordinates: [30.52, 10.405], // [longitude, latitude]
-            },
-          },
-        ];
-
-        setFriends(data);
+        setFriends(friendDataFromAPI);
       } catch (error) {
         console.error("Error fetching friends locations:", error);
       }
@@ -89,27 +62,30 @@ export const MapComponent: React.FC = () => {
       />
       <MapController />
 
-      {friends.map((friend) => (
-        <Marker
-          key={friend.id}
-          position={[
-            friend.location.coordinates[1],
-            friend.location.coordinates[0],
-          ]} // [latitude, longitude]
-          icon={createAvatarMarker(friend.avatar)}
-        >
-          <Popup>
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={friend.avatar}
-                alt={friend.name}
-                style={{ borderRadius: "50%", width: "50px", height: "50px" }}
-              />
-              <p>{friend.name}</p>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+      {friends.map((friend) => {
+        if (!friend.location) {
+          return null;
+        }
+
+        return (
+          <Marker
+            key={friend.id}
+            position={[
+              friend.location.coordinates[1],
+              friend.location.coordinates[0],
+            ]} // [latitude, longitude]
+            icon={createAvatarMarker(friend.profilePicture)}
+          >
+            <Popup>
+              <div style={{ textAlign: "center" }}>
+                <p>{friend.name}</p>
+                <p>{friend.sharingState}</p>
+                <p>{friend.location.name}</p>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 };

@@ -1,10 +1,11 @@
 // models/PrivacySetting.ts
 import { Schema, model, Document } from "mongoose";
+import { SharingState } from "./User";
 
 interface IPrivacySetting extends Document {
   userId: Schema.Types.ObjectId;
   friendId: Schema.Types.ObjectId;
-  visibility: "none" | "country" | "city" | "nearby" | "exact";
+  visibility: SharingState;
 }
 
 const PrivacySettingSchema = new Schema<IPrivacySetting>({
@@ -12,7 +13,7 @@ const PrivacySettingSchema = new Schema<IPrivacySetting>({
   friendId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   visibility: {
     type: String,
-    enum: ["none", "country", "city", "nearby", "exact"],
+    enum: ["none", "country", "city", "exact"],
     default: "none",
   },
 });

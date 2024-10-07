@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { userService } from "src/services/user.service";
-import { backendURL } from "./FriendsharingList";
 import { AuthContext } from "src/context/auth.context";
+import { userService } from "src/services/user.service";
+import { assembleImageUrl } from "./MapMarkerComponent";
 
 export const ProfilePictureUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -37,13 +37,12 @@ export const ProfilePictureUpload = () => {
   return (
     <div>
       <h3>Upload Profile Picture</h3>
-      {profilePicture && (
-        <img
-          src={`${backendURL}/${profilePicture}`}
-          alt="Profile"
-          className="w-36 h-36 rounded-full"
-        />
-      )}
+      <img
+        src={assembleImageUrl(profilePicture || "/assets/no-user.webp")}
+        alt="Profile"
+        className="w-36 h-36 rounded-full"
+      />
+
       <form onSubmit={handleUpload}>
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button type="submit" disabled={uploading}>
@@ -61,8 +60,7 @@ type ApplicationUser = {
 };
 
 export const DisplayUserAvatar = ({ user }: { user: ApplicationUser }) => {
-  const profilePicUrl =
-    user.profilePicture || `${backendURL}/assets/no-user.webp`;
+  const profilePicUrl = assembleImageUrl(user.profilePicture);
 
   return (
     <img

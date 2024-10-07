@@ -1,6 +1,17 @@
 import axios, { Axios } from "axios";
 import { Friend, SharingState } from "src/components/FriendsharingList";
 
+export type SingleLocation = {
+  name: string;
+  coordinates: [number, number];
+};
+
+export interface UserLocationData {
+  country?: SingleLocation;
+  city?: SingleLocation;
+  exact?: SingleLocation;
+}
+
 class UserService {
   api: Axios;
   constructor() {
@@ -61,16 +72,8 @@ class UserService {
     return response.data;
   }
 
-  async updateUserLocation(
-    coords: [number, number],
-    city: { name: string; coords: [number, number] },
-    country: { name: string; coords: [number, number] }
-  ) {
-    const response = await this.api.post(`/api/users/location`, {
-      coords,
-      city,
-      country,
-    });
+  async updateUserLocation(userLocation: UserLocationData) {
+    const response = await this.api.put(`/api/users/location`, userLocation);
     return response.data;
   }
 

@@ -19,8 +19,6 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.log(req);
-
   if (!req.auth) {
     res.status(401).json({ error: "Unauthorized" });
     return;
