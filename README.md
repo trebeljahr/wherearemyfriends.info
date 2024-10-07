@@ -1,7 +1,3 @@
-!IMPORTANT!
-
-This repo and project is still in its infancy and I am building it actively. 
-
 # wherearemyfriends.info
 wherearemyfriends.info is a privacy-focused application that allows users to share their locations with friends at varying levels of detail. Whether you want to share the country you're in, the city, or your exact location, you have full control over how much you disclose. The platform emphasizes user privacy and consent, ensuring that you can stay connected with friends without compromising your personal data.
 
@@ -18,6 +14,7 @@ wherearemyfriends.info is a privacy-focused application that allows users to sha
   - Web Application: Accessible via modern web browsers at wherearemyfriends.info.
   - Mobile Apps: Dedicated Android and iOS apps for seamless mobile experience (coming soon).
 - Secure Data Handling
+
 ## Getting Started
 ### Sign Up and Connect
 1. Create an Account
@@ -35,3 +32,6 @@ wherearemyfriends.info is a privacy-focused application that allows users to sha
 ## Upcoming Features
 - Mobile Apps
   - Native Android and iOS applications with enhanced features and notifications.
+
+## Good to Know
+The whole project is open-source on Github and my plan is to keep it this way! 
