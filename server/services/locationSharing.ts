@@ -28,15 +28,9 @@ export async function getLocationForFriend(
   }
 
   switch (privacySetting.visibility) {
-    case "exact":
+    case "full":
       return {
         coordinates: user.location.coordinates,
-        lastUpdated: user.location.lastUpdated,
-      };
-
-    case "nearby":
-      return {
-        coordinates: randomizeNearby(user.location.coordinates),
         lastUpdated: user.location.lastUpdated,
       };
 

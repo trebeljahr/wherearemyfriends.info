@@ -1,11 +1,10 @@
-import express from "express";
-import { Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/User";
-import { isAuthenticated } from "../middleware/jwt.middleware";
-import { TOKEN_SECRET } from "../config";
+import express, { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
+import jwt from "jsonwebtoken";
+import { TOKEN_SECRET } from "../config";
+import User from "../models/User";
+import { jwtMiddleware } from "../middleware/jwt.middleware";
 
 const router = express.Router();
 const saltRounds = 10;
@@ -107,7 +106,7 @@ router.post(
 // GET  /auth/verify  -  Used to verify JWT stored on the client
 router.get(
   "/verify",
-  isAuthenticated,
+  jwtMiddleware,
   (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json(req.auth);
   }

@@ -7,6 +7,7 @@ import indexRoutes from "./routes/index.routes";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import path from "path";
+import { jwtMiddleware } from "./middleware/jwt.middleware";
 
 connectToDB();
 

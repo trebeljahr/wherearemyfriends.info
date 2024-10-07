@@ -1,11 +1,33 @@
 import { expressjwt as jwt } from "express-jwt";
-import { Request } from "express";
+import { NextFunction, Request, Response } from "express";
 
-const isAuthenticated = jwt({
+export const jwtMiddleware = jwt({
   secret: process.env.TOKEN_SECRET as string,
   algorithms: ["HS256"],
   getToken: getTokenFromHeaders,
 });
+
+export interface AuthenticatedRequest extends Request {
+  auth?: {
+    _id: string;
+  };
+  file?: Express.Multer.File;
+}
+
+export const isAuthenticated = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): void => {
+  console.log(req);
+
+  if (!req.auth) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  next();
+};
 
 function getTokenFromHeaders(req: Request): string | undefined {
   if (
@@ -16,5 +38,3 @@ function getTokenFromHeaders(req: Request): string | undefined {
     return token;
   }
 }
-
-export { isAuthenticated };

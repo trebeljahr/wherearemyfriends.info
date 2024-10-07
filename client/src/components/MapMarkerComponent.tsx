@@ -6,6 +6,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
+import { userService } from "src/services/user.service";
 
 export const createAvatarMarker = (
   avatarUrl: string,
@@ -40,7 +41,8 @@ export const MapComponent: React.FC = () => {
   useEffect(() => {
     const fetchFriendsLocations = async () => {
       try {
-        // const response = await fetch("/api/friends/locations"); // Example API endpoint
+        const friendDataFromAPI = await userService.fetchFriends(); // Example API endpoint
+        console.log(friendDataFromAPI);
 
         // const data: FriendLocation[] = await response.json();
 
@@ -49,7 +51,7 @@ export const MapComponent: React.FC = () => {
 
         const data: FriendLocation[] = [
           {
-            id: "string",
+            id: "Sabine",
             name: "Sabine",
             avatar: "https://randomuser.me/api/portraits/thumb/women/40.jpg", //userData.results[0].picture.thumbnail,
             location: {
@@ -57,7 +59,7 @@ export const MapComponent: React.FC = () => {
             },
           },
           {
-            id: "string",
+            id: "Marc",
             name: "Marc",
             avatar: "https://randomuser.me/api/portraits/thumb/men/40.jpg", //userData.results[0].picture.thumbnail,
             location: {

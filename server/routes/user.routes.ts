@@ -1,15 +1,19 @@
 // routes/userRoutes.ts
 import express from "express";
-import User from "../models/User"; // Import User model
-import mongoose from "mongoose";
-import { isAuthenticated } from "../middleware/jwt.middleware";
 import { Request } from "express-jwt";
 import fs from "fs";
 import multer from "multer";
 import path from "path";
+import {
+  AuthenticatedRequest,
+  isAuthenticated,
+  jwtMiddleware,
+} from "../middleware/jwt.middleware";
+import User, { FriendPrivacy } from "../models/User"; // Import User model
 
 const router = express.Router();
 
+router.use(jwtMiddleware);
 router.use(isAuthenticated);
 
 // Set up storage configuration
@@ -22,7 +26,7 @@ const storage = multer.diskStorage({
 
     if (!req.auth) return cb(new Error("User ID not found"), "");
 
-    const { _id: userId } = req.auth;
+    const { _id: userId } = req.auth as { _id: string };
 
     cb(null, `${userId}${ext}`); // Use user ID as the filename
   },
@@ -42,28 +46,16 @@ const upload = multer({
   },
 });
 
-interface AuthenticatedRequest extends Request {
-  auth?: {
-    _id: string;
-  };
-  file?: Express.Multer.File;
-}
-
 // Upload profile picture
 router.post(
   "/users/profile-picture",
-  isAuthenticated,
   upload.single("profilePicture"),
   async (req: AuthenticatedRequest, res) => {
-    if (!req.auth) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
     if (!req.file) {
       return res.status(400).json({ error: "Please upload a file" });
     }
 
-    const { _id: userId } = req.auth;
+    const { _id: userId } = req.auth as { _id: string };
 
     try {
       const user = await User.findById(userId);
@@ -89,16 +81,12 @@ router.post(
 
 // Get the user's friends and privacy settings
 router.get("/friends", async (req: Request<{ _id: string }>, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   try {
-    const { _id: userId } = req.auth;
+    const { _id: userId } = req.auth as { _id: string };
 
     // Fetch the user with their friends and privacy settings
     const user = await User.findById(userId)
-      .populate("friends", "username avatar") // Populate the friend's username and avatar
+      .populate("friends", "username avatar privacySettings") // Populate the friend's username and avatar
       .lean();
 
     if (!user) {
@@ -106,16 +94,19 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
     }
 
     const friendsWithPrivacy = user.friends.map((friend: any) => {
-      // Find the privacy setting for the current friend
-      const privacySetting = user.privacySettings.find(
-        (privacy: any) => privacy.friendId.toString() === friend._id.toString()
-      ) || { visibility: "none" }; // Default to 'none' if no setting
+      console.log(friend);
+
+      const sharingState = (friend.privacySettings as FriendPrivacy[]).find(
+        (setting) => setting.friendId.toString() === userId.toString()
+      );
+
+      console.log(sharingState, friend.username);
 
       return {
         id: friend._id,
         name: friend.username,
         avatar: friend.avatar || "https://picsum.photos/50/50",
-        sharingState: privacySetting.visibility,
+        sharingState,
       };
     });
 
@@ -126,12 +117,8 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
   }
 });
 
-router.put("/friends/:userId/privacy", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth;
+router.put("/friends/privacy", async (req: Request, res) => {
+  const { _id: userId } = req.auth as { _id: string };
   const { friendId, newVisibility } = req.body;
 
   try {
@@ -165,41 +152,7 @@ router.put("/friends/:userId/privacy", async (req: Request, res) => {
   }
 });
 
-// Add a friend to the user's friends list
-// router.post("/friends/:userId/add", async (req, res) => {
-//   const { userId } = req.params;
-//   const { friendId } = req.body;
-
-//   try {
-//     // Check if both users exist
-//     const user = await User.findById(userId);
-//     const friend = await User.findById(friendId);
-
-//     if (!user || !friend) {
-//       return res.status(404).json({ error: "User or friend not found" });
-//     }
-
-//     // Check if the friend is already in the user's friends list
-//     if (user.friends.includes(friendId)) {
-//       return res.status(400).json({ error: "Friend already added" });
-//     }
-
-//     // Add the friend to the user's friends list
-//     user.friends.push(friendId);
-//     await user.save();
-
-//     return res.status(200).json({ message: "Friend added successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ error: "Server error" });
-//   }
-// });
-
 router.get("/users/search", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   const { username } = req.query;
 
   try {
@@ -223,11 +176,7 @@ router.get("/users/search", async (req: Request, res) => {
 // Send a friend request
 
 router.post("/friends/requests", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth; // ID of the user sending the request
+  const { _id: userId } = req.auth as { _id: string }; // ID of the user sending the request
   const { friendId } = req.body; // ID of the user to send the request to
 
   try {
@@ -268,11 +217,7 @@ router.post("/friends/requests", async (req: Request, res) => {
 
 // Get pending friend requests for a user
 router.get("/friends/requests", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth;
+  const { _id: userId } = req.auth as { _id: string };
   try {
     // Fetch the user and populate the pendingFriendRequests field
     const user = await User.findById(userId)
@@ -302,11 +247,7 @@ router.get("/friends/requests", async (req: Request, res) => {
 
 // Accept a friend request
 router.post("/friends/requests/accept", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth;
+  const { _id: userId } = req.auth as { _id: string };
   const { requesterId } = req.body; // ID of the user who sent the request
 
   try {
@@ -349,11 +290,7 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
 
 // Decline a friend request
 router.post("/friends/requests/decline", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth;
+  const { _id: userId } = req.auth as { _id: string };
   const { requesterId } = req.body; // ID of the user who sent the request
 
   try {
@@ -388,11 +325,7 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
 
 // Update the user's location
 router.put("/users/location", async (req: Request, res) => {
-  if (!req.auth) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  const { _id: userId } = req.auth;
+  const { _id: userId } = req.auth as { _id: string };
   const { coordinates } = req.body;
 
   if (
