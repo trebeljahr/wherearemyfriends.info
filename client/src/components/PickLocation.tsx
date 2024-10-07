@@ -1,13 +1,11 @@
-import axios from "axios";
+import { LatLngBoundsExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import React, { useMemo, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import { backendURL } from "./FriendsharingList";
+import { userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapMarkerComponent";
 import { findCityByCoordinates } from "./findCity";
 import { findCountryByCoordinates } from "./findCountry";
-import { LatLngBoundsExpression } from "leaflet";
-import { userService } from "src/services/user.service";
 
 type LocationMarkerProps = {
   userId: string; // Current user's ID

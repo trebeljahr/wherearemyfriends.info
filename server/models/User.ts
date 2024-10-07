@@ -2,12 +2,12 @@
 import { Schema, model, Document } from "mongoose";
 
 // Define a TypeScript interface for the User document
-interface FriendPrivacy {
+export interface FriendPrivacy {
   friendId: Schema.Types.ObjectId;
-  visibility: "none" | "country" | "city" | "nearby" | "exact";
+  visibility: "full" | "city" | "country" | "none";
 }
 
-interface Location {
+export interface Location {
   type: "Point";
   coordinates: [number, number]; // [longitude, latitude]
   lastUpdated: Date;
@@ -15,7 +15,7 @@ interface Location {
   city: string;
 }
 
-interface IUser extends Document {
+export interface IUser extends Document {
   username: string;
   email: string;
   password: string;

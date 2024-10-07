@@ -1,5 +1,5 @@
 import axios, { Axios } from "axios";
-import { SharingState } from "src/components/FriendsharingList";
+import { Friend, SharingState } from "src/components/FriendsharingList";
 
 class UserService {
   api: Axios;
@@ -25,7 +25,7 @@ class UserService {
 
   async fetchFriends() {
     const response = await this.api.get(`/api/friends`);
-    return response.data;
+    return response.data as Friend[];
   }
 
   async makeFriendRequest(friendId: string) {

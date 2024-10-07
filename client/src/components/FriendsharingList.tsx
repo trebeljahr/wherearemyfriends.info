@@ -42,11 +42,6 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
     newState: SharingState
   ) => {
     try {
-      await axios.put(`${backendURL}/api/friends/${userId}/privacy`, {
-        friendId,
-        newVisibility: newState,
-      });
-
       await userService.updateFriendPrivacy(friendId, newState);
 
       // Update the state locally after the successful API request
