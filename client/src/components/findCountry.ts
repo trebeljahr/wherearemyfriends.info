@@ -82,11 +82,7 @@ const findLabelPoint = (polygonFeature: PolygonFeature) => {
     );
   });
 
-  //   console.log(polygonFeature.properties.ADMIN);
-  //   console.log(foundLabel?.properties.name);
-
   if (!foundLabel) {
-    console.log("No label found");
     return null;
   }
 

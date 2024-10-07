@@ -48,8 +48,6 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
         country,
       };
 
-      console.log(newLocationObject);
-
       await userService.updateUserLocation(newLocationObject);
     } catch (error) {
       console.error("Error updating location:", error);
