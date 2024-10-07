@@ -119,8 +119,6 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
           (setting) => setting.friendId.toString() === userId.toString()
         )?.visibility || "country";
 
-      console.log(typedFriend);
-
       return {
         id: typedFriend._id,
         name: typedFriend.username,
@@ -343,8 +341,6 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
 router.put("/users/location", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   const { country, city, exact } = req.body as UserLocation;
-
-  console.log(req.body);
 
   if (!country) {
     return res
