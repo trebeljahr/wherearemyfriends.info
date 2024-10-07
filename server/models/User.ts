@@ -1,25 +1,53 @@
 // models/User.ts
 import { Schema, model, Document } from "mongoose";
 
+export type SharingState = "full" | "city" | "country" | "none";
 // Define a TypeScript interface for the User document
 export interface FriendPrivacy {
   friendId: Schema.Types.ObjectId;
-  visibility: "full" | "city" | "country" | "none";
+  visibility: SharingState;
 }
 
-export interface Location {
-  type: "Point";
-  coordinates: [number, number]; // [longitude, latitude]
-  lastUpdated: Date;
-  country: string;
-  city: string;
+export interface SingleLocation {
+  name: string;
+  coordinates: [number, number];
 }
+
+export interface UserLocation {
+  lastUpdated: Date;
+  country: SingleLocation;
+  city?: SingleLocation;
+  exact?: SingleLocation;
+}
+
+const SingleLocationSchema = new Schema<SingleLocation>({
+  name: {
+    type: String,
+    required: true,
+  },
+  coordinates: {
+    type: [Number],
+    required: true,
+  },
+  // required: false,
+});
+
+// Define the UserLocation schema
+const UserLocationSchema = new Schema<UserLocation>({
+  lastUpdated: {
+    type: Date,
+    required: true,
+  },
+  country: SingleLocationSchema,
+  city: SingleLocationSchema,
+  exact: SingleLocationSchema,
+});
 
 export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  location: Location;
+  location?: UserLocation;
   friends: Schema.Types.ObjectId[];
   privacySettings: FriendPrivacy[];
   pendingFriendRequests: Schema.Types.ObjectId[];
@@ -47,21 +75,7 @@ const UserSchema = new Schema<IUser>({
     trim: true,
   },
   password: { type: String, required: true },
-  location: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      default: "Point",
-    },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: true,
-      default: [0, 0],
-    },
-    lastUpdated: { type: Date, default: Date.now },
-    country: { type: String, default: "" },
-    city: { type: String, default: "" },
-  },
+  location: UserLocationSchema,
   pendingFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }], // Add this line
   friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
   privacySettings: [FriendPrivacySchema],

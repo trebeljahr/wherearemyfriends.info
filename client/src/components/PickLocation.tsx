@@ -22,14 +22,16 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
 
   const cityPosition = useMemo(() => {
     if (position) {
-      return findCityByCoordinates(position[1], position[0]);
+      const city = findCityByCoordinates(position[1], position[0]);
+      return city?.coordinates;
     }
     return null;
   }, [position]);
 
   const countryPosition = useMemo(() => {
     if (position) {
-      return findCountryByCoordinates(position[1], position[0]);
+      const country = findCountryByCoordinates(position[1], position[0]);
+      return country?.coordinates;
     }
     return null;
   }, [position]);
@@ -39,10 +41,16 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
     const country = findCountryByCoordinates(coords[1], coords[0]);
     const city = findCityByCoordinates(coords[1], coords[0]);
 
-    console.log(country, city);
-
     try {
-      await userService.updateUserLocation(coords, city as any, country as any);
+      const newLocationObject = {
+        exact: { name: "exactLocation", coordinates: coords },
+        city,
+        country,
+      };
+
+      console.log(newLocationObject);
+
+      await userService.updateUserLocation(newLocationObject);
     } catch (error) {
       console.error("Error updating location:", error);
     }
@@ -65,7 +73,7 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
       <MapClickHandler />
       {cityPosition && (
         <Marker
-          position={[cityPosition[1][1], cityPosition[1][0]]}
+          position={[cityPosition[1], cityPosition[0]]}
           icon={createAvatarMarker(
             "https://randomuser.me/api/portraits/men/40.jpg",
             "red-400"
@@ -74,7 +82,7 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
       )}
       {countryPosition && (
         <Marker
-          position={[countryPosition[1][1], countryPosition[1][0]]}
+          position={[countryPosition[1], countryPosition[0]]}
           icon={createAvatarMarker(
             "https://randomuser.me/api/portraits/men/40.jpg",
             "slate-500"

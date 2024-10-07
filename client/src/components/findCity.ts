@@ -48,15 +48,21 @@ export const findCityByCoordinates = (lat: number, lon: number) => {
   if (inCity) {
     const centroid = turf.centroid(inCity);
 
-    return [inCity.properties.name, centroid.geometry.coordinates];
+    return {
+      name: inCity?.properties.name,
+      coordinates: centroid.geometry.coordinates as [number, number],
+    };
   }
 
   const nearestCity = turf.nearestPoint(point, cityCentroidsFeatureCollection);
 
   if (nearestCity) {
     const cityName = nearestCity.properties.name || "Unknown City";
-    return [cityName, nearestCity.geometry.coordinates];
+    return {
+      name: cityName,
+      coordinates: nearestCity.geometry.coordinates as [number, number],
+    };
   }
 
-  return null;
+  return;
 };

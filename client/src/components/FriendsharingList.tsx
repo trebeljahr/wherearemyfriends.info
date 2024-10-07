@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { userService } from "src/services/user.service";
+import React, { useEffect, useState } from "react";
+import { SingleLocation, userService } from "src/services/user.service";
+import { assembleImageUrl } from "./MapMarkerComponent";
 
 export const backendURL = process.env.REACT_APP_SERVER_URL;
 
@@ -9,8 +9,9 @@ export type SharingState = "full" | "city" | "country" | "none";
 export type Friend = {
   id: string;
   name: string;
-  avatar: string;
+  profilePicture: string;
   sharingState: SharingState;
+  location?: SingleLocation;
 };
 
 type FriendListProps = {
@@ -67,7 +68,7 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
           className="flex items-center p-4 border rounded-lg shadow-sm"
         >
           <img
-            src={friend.avatar}
+            src={assembleImageUrl(friend.profilePicture)}
             alt={friend.name}
             className="w-12 h-12 rounded-full mr-4"
           />

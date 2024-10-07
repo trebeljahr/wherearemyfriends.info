@@ -9,7 +9,12 @@ import {
   isAuthenticated,
   jwtMiddleware,
 } from "../middleware/jwt.middleware";
-import User, { FriendPrivacy } from "../models/User"; // Import User model
+import User, {
+  FriendPrivacy,
+  IUser,
+  SharingState,
+  UserLocation,
+} from "../models/User"; // Import User model
 
 const router = express.Router();
 
@@ -79,14 +84,28 @@ router.post(
   }
 );
 
-// Get the user's friends and privacy settings
+function mapSharingStateToLocation(
+  sharingState: SharingState,
+  location?: UserLocation
+) {
+  if (!location) return;
+
+  if (sharingState === "full") {
+    return location.exact;
+  } else if (sharingState === "city") {
+    return location.city;
+  } else if (sharingState === "country") {
+    return location.country;
+  }
+  return;
+}
+
 router.get("/friends", async (req: Request<{ _id: string }>, res) => {
   try {
     const { _id: userId } = req.auth as { _id: string };
 
-    // Fetch the user with their friends and privacy settings
     const user = await User.findById(userId)
-      .populate("friends", "username avatar privacySettings") // Populate the friend's username and avatar
+      .populate("friends", "username profilePicture privacySettings location")
       .lean();
 
     if (!user) {
@@ -94,19 +113,20 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
     }
 
     const friendsWithPrivacy = user.friends.map((friend: any) => {
-      console.log(friend);
+      const typedFriend = friend as IUser;
+      const sharingState =
+        (typedFriend.privacySettings as FriendPrivacy[]).find(
+          (setting) => setting.friendId.toString() === userId.toString()
+        )?.visibility || "country";
 
-      const sharingState = (friend.privacySettings as FriendPrivacy[]).find(
-        (setting) => setting.friendId.toString() === userId.toString()
-      );
-
-      console.log(sharingState, friend.username);
+      console.log(typedFriend);
 
       return {
-        id: friend._id,
-        name: friend.username,
-        avatar: friend.avatar || "https://picsum.photos/50/50",
+        id: typedFriend._id,
+        name: typedFriend.username,
+        profilePicture: typedFriend.profilePicture || "/assets/no-user.webp",
         sharingState,
+        location: mapSharingStateToLocation(sharingState, typedFriend.location),
       };
     });
 
@@ -213,15 +233,11 @@ router.post("/friends/requests", async (req: Request, res) => {
   }
 });
 
-// routes/userRoutes.ts
-
-// Get pending friend requests for a user
 router.get("/friends/requests", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   try {
-    // Fetch the user and populate the pendingFriendRequests field
     const user = await User.findById(userId)
-      .populate("pendingFriendRequests", "username avatar") // Populate username and avatar
+      .populate("pendingFriendRequests", "username profilePicture")
       .lean();
 
     if (!user) {
@@ -232,7 +248,7 @@ router.get("/friends/requests", async (req: Request, res) => {
       (requester: any) => ({
         id: requester._id,
         username: requester.username,
-        avatar: requester.avatar || "https://picsum.photos/50/50",
+        profilePicture: requester.profilePicture || "/assets/no-user.webp",
       })
     );
 
@@ -326,18 +342,14 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
 // Update the user's location
 router.put("/users/location", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
-  const { coordinates } = req.body;
+  const { country, city, exact } = req.body as UserLocation;
 
-  if (
-    typeof coordinates[0] !== "number" ||
-    typeof coordinates[1] !== "number" ||
-    coordinates.length !== 2
-  ) {
-    return res.status(400).json({ error: "Invalid coordinates" });
-  }
+  console.log(req.body);
 
-  if (!Array.isArray(coordinates) || coordinates.length !== 2) {
-    return res.status(400).json({ error: "Invalid coordinates" });
+  if (!country) {
+    return res
+      .status(400)
+      .json({ error: "Need to provide at least country location data" });
   }
 
   try {
@@ -348,7 +360,19 @@ router.put("/users/location", async (req: Request, res) => {
     }
 
     // Update the user's location
-    user.location.coordinates = coordinates as [number, number];
+    if (!user.location) {
+      user.location = {
+        lastUpdated: new Date(),
+        country,
+        city,
+        exact,
+      };
+    } else {
+      user.location.city = city;
+      user.location.country = country;
+      user.location.exact = exact;
+    }
+
     user.location.lastUpdated = new Date();
     await user.save();
 

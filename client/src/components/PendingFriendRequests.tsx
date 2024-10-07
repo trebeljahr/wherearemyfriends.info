@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { backendURL } from "./FriendsharingList";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
+import { assembleImageUrl } from "./MapMarkerComponent";
 
 type UserRequest = {
   id: string;
   username: string;
-  avatar: string;
+  profilePicture: string;
 };
 
 export const PendingFriendRequests = () => {
@@ -84,7 +83,7 @@ export const PendingFriendRequests = () => {
           {pendingRequests.map((request) => (
             <li key={request.id} className="mb-4 flex items-center">
               <img
-                src={request.avatar}
+                src={assembleImageUrl(request.profilePicture)}
                 alt={`${request.username}'s avatar`}
                 className="w-12 h-12 rounded-full"
               />

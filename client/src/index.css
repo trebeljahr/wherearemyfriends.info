@@ -10,24 +10,12 @@ body {
   position: relative;
   width: 40px;
   height: 40px;
-  /* background-color: rgb(25, 134, 171); Color of the pin */
-  border-radius: 50% 50% 50% 0; /* Shape the bottom half like a pin */
-  transform: rotate(-45deg); /* Rotate to create a "pin" shape */
+  border-radius: 50% 50% 50% 0; 
+  transform: rotate(-45deg); 
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* .custom-pin::after {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: red; 
-  border-radius: 50%;
-  bottom: -6px; 
-} 
-*/
 
 .avatar-circle {
   width: 30px;
@@ -35,7 +23,7 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 50%;
-  border: 2px solid white; /* Optional: adds a border around the avatar */
-  z-index: 10; /* Ensures the avatar stays on top */
-  transform: rotate(45deg); /* Cancel the parent pin's rotation */
+  border: 2px solid white; 
+  z-index: 10; 
+  transform: rotate(45deg); 
 }

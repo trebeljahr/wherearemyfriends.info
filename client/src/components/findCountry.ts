@@ -1,8 +1,8 @@
 // import worldGeoJSON from "geojson-world-map";
 import * as turf from "@turf/turf";
 // import polylabel from "polylabel";
-import countryLabels from "./countryLabels.json";
 import countryData from "./countryData.json";
+import countryLabels from "./countryLabels.json";
 
 type PolygonFeature = {
   type: "Feature";
@@ -106,7 +106,10 @@ export const findCountryByCoordinates = (lat: number, lon: number) => {
     const labelPoint = findLabelPoint(inCountry as PolygonFeature);
 
     const output = labelPoint || centroid;
-    return [inCountry.properties.ADMIN, output.geometry.coordinates];
+    return {
+      name: inCountry.properties.ADMIN,
+      coordinates: output.geometry.coordinates as [number, number],
+    };
   }
 
   const nearestCountry = turf.nearestPoint(
@@ -121,10 +124,11 @@ export const findCountryByCoordinates = (lat: number, lon: number) => {
 
     const output = labelPoint || nearestCountry;
 
-    return [nearestCountry.properties.name, output.geometry.coordinates];
+    return {
+      name: nearestCountry.properties.name,
+      coordinates: output.geometry.coordinates as [number, number],
+    };
   }
-
-  return null;
 };
 
 // const calculateVisualCenter = (polygonFeature: PolygonFeature) => {

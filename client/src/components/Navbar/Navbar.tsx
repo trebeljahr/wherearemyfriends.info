@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
-import { backendURL } from "../FriendsharingList";
+import { assembleImageUrl } from "../MapMarkerComponent";
 
 export function Navbar() {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
@@ -19,9 +19,7 @@ export function Navbar() {
           <Link to="/profile">
             <button>Profile</button>
             <img
-              src={`${backendURL}${
-                user.profilePicture || "/assets/no-user.webp"
-              }`}
+              src={assembleImageUrl(user.profilePicture)}
               style={{ width: 50, height: 50, borderRadius: 25 }}
               alt="profile pic"
             />
