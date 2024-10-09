@@ -1,13 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { backendURL } from "./FriendsharingList";
+import { useState } from "react";
 import { userService } from "src/services/user.service";
 
-type FriendSearchProps = {
-  userId: string; // ID of the current user
-};
-
-export const FriendSearch: React.FC<FriendSearchProps> = ({ userId }) => {
+export const FriendSearch = () => {
   const [username, setUsername] = useState("");
   const [friendId, setFriendId] = useState<string | null>(null);
   const [message, setMessage] = useState("");

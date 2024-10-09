@@ -1,17 +1,13 @@
 import React, { useContext } from "react";
 import { AuthContext } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapMarkerComponent";
+import { assembleImageUrl } from "./MapWithFriendMarkers";
 
 export const backendURL = process.env.REACT_APP_SERVER_URL;
 
 export type SharingState = "exact" | "city" | "country" | "none";
 
-type FriendListProps = {
-  userId: string; // User ID of the current user
-};
-
-export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
+export const FriendList = () => {
   const { user, authenticateUser } = useContext(AuthContext);
 
   // Update privacy settings on the server
