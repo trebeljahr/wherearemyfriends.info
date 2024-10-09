@@ -70,7 +70,7 @@ export const PendingFriendRequests = () => {
   };
 
   return (
-    <div className="p-4">
+    <div>
       <h2 className="text-2xl font-bold mb-4">Pending Friend Requests</h2>
       {loading ? (
         <p>Loading...</p>

@@ -1,49 +1,48 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { forwardRef, useState } from "react";
 import { FaBars, FaX } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "src/context/auth.context";
-import { assembleImageUrl } from "../MapWithFriendMarkers";
+import { FoldableUserLogo } from "../FoldableUserLogo";
+import { CustomNavLink } from "./CustomNavlink";
 
 const Navbar = () => {
-  const { user, logOutUser } = useAuth();
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const UserStuff = user && (
-    <div className="mx-2 flex justify-center items-center">
-      <span>Welcome, {user.username}</span>
-      <img
-        className="mx-2 w-10 h-10 rounded-full"
-        src={assembleImageUrl(user.profilePicture)}
-        alt="profile pic"
+  const PreconfiguredNavlink: typeof NavLink = forwardRef(({ ...props }, _) => {
+    return (
+      <CustomNavLink
+        {...props}
+        className="h-fit"
+        onClick={() => setIsOpen(false)}
       />
-      <button onClick={logOutUser}>Logout</button>
-    </div>
-  );
+    );
+  });
 
   const links = (
     <>
       {user ? (
         <>
-          <CustomNavLink to="/">Home</CustomNavLink>
-          <CustomNavLink to="/profile">Profile</CustomNavLink>
-          <CustomNavLink to="/friends">Friends</CustomNavLink>
+          <PreconfiguredNavlink to="/">Home</PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/profile">Profile</PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/friends">Friends</PreconfiguredNavlink>
         </>
       ) : (
         <>
-          <CustomNavLink to="/login">Login</CustomNavLink>
-          <CustomNavLink to="/signup">Signup</CustomNavLink>
+          <PreconfiguredNavlink to="/login">Login</PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/signup">Signup</PreconfiguredNavlink>
         </>
       )}
     </>
   );
 
   return (
-    <nav className="bg-gray-900 text-white shadow-lg w-screen px-4 sm:px-6 lg:px-8 absolute top-0">
+    <nav className="bg-gray-900 text-white shadow-lg w-screen px-4 sm:px-6 lg:px-8 absolute top-0 z-[1200]">
       <div className="flex items-center justify-between h-16">
         <NavLink to="/" className="text-white">
           <div className="flex items-center">
@@ -56,10 +55,12 @@ const Navbar = () => {
           </div>
         </NavLink>
 
-        {UserStuff}
-
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-4">{links}</div>
+        <div className="hidden md:flex space-x-4">
+          <FoldableUserLogo />
+
+          <div className="flex items-center space-x-4">{links}</div>
+        </div>
 
         {/* Mobile Menu Icon */}
         <div className="flex md:hidden">
@@ -73,40 +74,23 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ height: 0 }}
-          animate={{ height: "auto" }}
-          exit={{ height: 0 }}
-          className="md:hidden bg-gray-800"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">{links}</div>
-        </motion.div>
-      )}
-    </nav>
-  );
-};
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="md:hidden bg-gray-800 overflow-hidden z-10"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              <FoldableUserLogo />
 
-const CustomNavLink = ({
-  to,
-  children,
-}: {
-  to: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <NavLink
-      to={to}
-      className={({ isActive }) =>
-        `block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-          isActive
-            ? "text-white bg-blue-600"
-            : "text-gray-300 hover:bg-gray-700 hover:text-white"
-        }`
-      }
-    >
-      {children}
-    </NavLink>
+              {links}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 };
 
