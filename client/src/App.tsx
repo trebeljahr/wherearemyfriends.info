@@ -11,48 +11,50 @@ import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
 
 function App() {
   return (
-    <div className="prose prose-a:no-underline">
+    <div className="prose prose-a:no-underline w-screen h-screen max-w-none">
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
+      <div className="px-4 sm:px-6 lg:px-8 w-screen h-screen bg-gray-100">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
 
-        <Route
-          path="/profile"
-          element={
-            <IsPrivate>
-              <ProfilePage />
-            </IsPrivate>
-          }
-        />
+          <Route
+            path="/profile"
+            element={
+              <IsPrivate>
+                <ProfilePage />
+              </IsPrivate>
+            }
+          />
 
-        <Route
-          path="/friends"
-          element={
-            <IsPrivate>
-              <FriendsPage />
-            </IsPrivate>
-          }
-        />
+          <Route
+            path="/friends"
+            element={
+              <IsPrivate>
+                <FriendsPage />
+              </IsPrivate>
+            }
+          />
 
-        <Route
-          path="/signup"
-          element={
-            <IsAnon>
-              <SignupPage />
-            </IsAnon>
-          }
-        />
+          <Route
+            path="/signup"
+            element={
+              <IsAnon>
+                <SignupPage />
+              </IsAnon>
+            }
+          />
 
-        <Route
-          path="/login"
-          element={
-            <IsAnon>
-              <LoginPage />
-            </IsAnon>
-          }
-        />
-      </Routes>
+          <Route
+            path="/login"
+            element={
+              <IsAnon>
+                <LoginPage />
+              </IsAnon>
+            }
+          />
+        </Routes>
+      </div>
     </div>
   );
 }

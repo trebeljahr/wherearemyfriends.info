@@ -43,9 +43,9 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="bg-gray-900 text-white shadow-lg w-screen px-4 sm:px-6 lg:px-8">
+    <nav className="bg-gray-900 text-white shadow-lg w-screen px-4 sm:px-6 lg:px-8 absolute top-0">
       <div className="flex items-center justify-between h-16">
-        <a href="/" className="text-white">
+        <NavLink to="/" className="text-white">
           <div className="flex items-center">
             <img
               className="w-10 h-10 rounded-full"
@@ -54,7 +54,7 @@ const Navbar = () => {
             />
             <div className="text-xl font-bold mx-2">wherearemyfriends.info</div>
           </div>
-        </a>
+        </NavLink>
 
         {UserStuff}
 

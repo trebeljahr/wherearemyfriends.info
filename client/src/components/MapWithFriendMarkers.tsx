@@ -65,7 +65,7 @@ export const MapWithFriendMarkers: React.FC = () => {
     <MapContainer
       center={[0, 0]}
       zoom={2}
-      style={{ height: "100vh", width: "100vw" }}
+      style={{ height: "80vh", width: "80vw" }}
     >
       <TileLayer
         url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
