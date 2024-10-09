@@ -1,8 +1,6 @@
-// import worldGeoJSON from "geojson-world-map";
 import * as turf from "@turf/turf";
-// import polylabel from "polylabel";
-import countryData from "./countryData.json";
-import countryLabels from "./countryLabels.json";
+import countryData from "../datasets/countryData.json";
+import countryLabels from "../datasets/countryLabels.json";
 
 type PolygonFeature = {
   type: "Feature";
@@ -14,13 +12,17 @@ type PolygonFeature = {
     ADMIN: string;
     ISO_A2: string;
     FIPS_10_: string;
+    ISO_A3: string;
+    CONTINENT: string;
+    REGION_UN: string;
+    SUBREGION: string;
   };
 };
 
 const typedWorldGeoJSON = countryData as unknown as WorldGeoJSON;
 const typedCountryLabelsJSON = countryLabels as unknown as CountryLabelsJSON;
 
-type CountryLabelsJSON = {
+export type CountryLabelsJSON = {
   type: "FeatureCollection";
   features: {
     type: "Feature";
@@ -38,7 +40,7 @@ type CountryLabelsJSON = {
   }[];
 };
 
-type WorldGeoJSON = {
+export type WorldGeoJSON = {
   type: "FeatureCollection";
   features: PolygonFeature[];
 };
@@ -69,7 +71,7 @@ const findCountryThatContainsPoint = (lat: number, lon: number) => {
   return null;
 };
 
-const findLabelPoint = (polygonFeature: PolygonFeature) => {
+export const findLabelPoint = (polygonFeature: PolygonFeature) => {
   const foundLabel = typedCountryLabelsJSON.features.find((feature) => {
     return (
       polygonFeature.properties.ADMIN === feature.properties.int_name ||
