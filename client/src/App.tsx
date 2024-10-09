@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import IsPrivate from "./components/IsPrivate/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
+import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
 
 function App() {
   return (
@@ -26,6 +27,15 @@ function App() {
         />
 
         <Route
+          path="/friends"
+          element={
+            <IsPrivate>
+              <FriendsPage />
+            </IsPrivate>
+          }
+        />
+
+        <Route
           path="/signup"
           element={
             <IsAnon>
@@ -33,6 +43,7 @@ function App() {
             </IsAnon>
           }
         />
+
         <Route
           path="/login"
           element={

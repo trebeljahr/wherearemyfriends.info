@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapMarkerComponent";
+import { assembleImageUrl } from "./MapWithFriendMarkers";
 
 export const ProfilePictureUpload = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

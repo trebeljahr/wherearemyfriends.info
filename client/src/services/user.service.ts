@@ -1,6 +1,6 @@
 import axios, { Axios } from "axios";
 import { SharingState } from "src/components/FriendsharingList";
-import { Friend } from "src/components/MapMarkerComponent";
+import { Friend } from "src/components/MapWithFriendMarkers";
 
 export type SingleLocation = {
   name: string;

@@ -5,13 +5,12 @@ import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import { AuthContext } from "src/context/auth.context";
 import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
-import { createAvatarMarker } from "./MapMarkerComponent";
+import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "./findCity";
 
-const LocationMarker = () => {
+const UserLocationMarkers = () => {
   const { user, authenticateUser } = useContext(AuthContext);
 
-  // Update user's location when the marker is placed or moved
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
     try {
@@ -44,11 +43,6 @@ const LocationMarker = () => {
         };
       }
 
-      console.log(settings.map((s) => s.visibility));
-      console.log(Object.keys(update));
-
-      // console.log("Updating location:", update);
-
       await userService.updateUserLocation(update);
       await authenticateUser();
     } catch (error) {
@@ -56,12 +50,11 @@ const LocationMarker = () => {
     }
   };
 
-  // Leaflet event handler to allow placing the marker by clicking on the map
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
         const newCoordinates: [number, number] = [e.latlng.lng, e.latlng.lat];
-        updateUserLocation(newCoordinates); // Send new location to the server
+        updateUserLocation(newCoordinates);
       },
     });
     return null;
@@ -101,16 +94,6 @@ const LocationMarker = () => {
             user.location.exact.longitude,
           ]}
           draggable={true}
-          eventHandlers={{
-            dragend: (e) => {
-              const marker = e.target;
-              const newPosition: [number, number] = [
-                marker.getLatLng().lng,
-                marker.getLatLng().lat,
-              ];
-              updateUserLocation(newPosition); // Send new location to server
-            },
-          }}
           icon={createAvatarMarker(
             "https://randomuser.me/api/portraits/men/40.jpg"
           )}
@@ -125,10 +108,8 @@ const bounds = [
   [90, 180],
 ] as LatLngBoundsExpression;
 
-export const MapWithMarker: React.FC<{ userId: string }> = ({ userId }) => {
+export const PickLocation = () => {
   const defaultCenter: [number, number] = [0, 0];
-
-  // const aspectRatio = 2.1167;
 
   return (
     <MapContainer
@@ -146,7 +127,7 @@ export const MapWithMarker: React.FC<{ userId: string }> = ({ userId }) => {
         url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
-      <LocationMarker />
+      <UserLocationMarkers />
     </MapContainer>
   );
 };
