@@ -1,53 +1,56 @@
 import { LatLngBoundsExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import React, { useMemo, useState } from "react";
+import React, { useContext } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import { userService } from "src/services/user.service";
+import { AuthContext } from "src/context/auth.context";
+import authService from "src/services/auth.service";
+import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapMarkerComponent";
 import { findCityAndCountryByCoordinates } from "./findCity";
 
-type LocationMarkerProps = {
-  userId: string; // Current user's ID
-  initialCoordinates?: [number, number]; // Optional initial coordinates for the marker
-};
-
-const LocationMarker: React.FC<LocationMarkerProps> = ({
-  initialCoordinates,
-}) => {
-  const [position, setPosition] = useState<[number, number] | null>(
-    initialCoordinates || null
-  );
-
-  const { cityPosition, countryPosition } = useMemo(() => {
-    if (position) {
-      const { city, country } = findCityAndCountryByCoordinates(
-        position[1],
-        position[0]
-      );
-
-      return {
-        cityPosition: city?.coordinates,
-        countryPosition: country?.coordinates,
-      };
-    }
-
-    return { cityPosition: null, countryPosition: null };
-  }, [position]);
+const LocationMarker = () => {
+  const { user, authenticateUser } = useContext(AuthContext);
 
   // Update user's location when the marker is placed or moved
   const updateUserLocation = async (position: [number, number]) => {
+    const currentUser = await authService.verify();
     try {
-      const { city, country } = findCityAndCountryByCoordinates(
-        position[1],
-        position[0]
-      );
-      const newLocationObject = {
-        exact: { name: "exactLocation", coordinates: position },
-        city,
-        country,
-      };
+      const { city, country } = findCityAndCountryByCoordinates({
+        name: "exactLocation",
+        longitude: position[0],
+        latitude: position[1],
+      });
 
-      await userService.updateUserLocation(newLocationObject);
+      const settings = currentUser?.privacySettings;
+      const needsCity = settings?.find((s) => s.visibility === "city");
+      const needsCountry = settings?.find((s) => s.visibility === "country");
+      const needsExact = settings?.find((s) => s.visibility === "exact");
+
+      const update: UserLocationData = {};
+
+      if (needsCity) {
+        update.city = city;
+      }
+
+      if (needsCountry) {
+        update.country = country;
+      }
+
+      if (needsExact) {
+        update.exact = {
+          name: "exactLocation",
+          latitude: position[1],
+          longitude: position[0],
+        };
+      }
+
+      console.log(settings.map((s) => s.visibility));
+      console.log(Object.keys(update));
+
+      // console.log("Updating location:", update);
+
+      await userService.updateUserLocation(update);
+      await authenticateUser();
     } catch (error) {
       console.error("Error updating location:", error);
     }
@@ -58,7 +61,6 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
     useMapEvents({
       click(e) {
         const newCoordinates: [number, number] = [e.latlng.lng, e.latlng.lat];
-        setPosition(newCoordinates); // Update local state
         updateUserLocation(newCoordinates); // Send new location to the server
       },
     });
@@ -68,27 +70,36 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
   return (
     <>
       <MapClickHandler />
-      {cityPosition && (
+      {user?.location?.city && (
         <Marker
-          position={[cityPosition[1], cityPosition[0]]}
+          position={[
+            user?.location.city.latitude,
+            user?.location.city.longitude,
+          ]}
           icon={createAvatarMarker(
             "https://randomuser.me/api/portraits/men/40.jpg",
             "red-400"
           )}
         />
       )}
-      {countryPosition && (
+      {user?.location?.country && (
         <Marker
-          position={[countryPosition[1], countryPosition[0]]}
+          position={[
+            user?.location.country.latitude,
+            user?.location.country.longitude,
+          ]}
           icon={createAvatarMarker(
             "https://randomuser.me/api/portraits/men/40.jpg",
             "slate-500"
           )}
         />
       )}
-      {position && (
+      {user?.location?.exact && (
         <Marker
-          position={[position[1], position[0]]} // Marker expects [latitude, longitude]
+          position={[
+            user.location.exact.latitude,
+            user.location.exact.longitude,
+          ]}
           draggable={true}
           eventHandlers={{
             dragend: (e) => {
@@ -97,7 +108,6 @@ const LocationMarker: React.FC<LocationMarkerProps> = ({
                 marker.getLatLng().lng,
                 marker.getLatLng().lat,
               ];
-              setPosition(newPosition); // Update marker's position
               updateUserLocation(newPosition); // Send new location to server
             },
           }}
@@ -136,7 +146,7 @@ export const MapWithMarker: React.FC<{ userId: string }> = ({ userId }) => {
         url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
-      <LocationMarker userId={userId} />
+      <LocationMarker />
     </MapContainer>
   );
 };

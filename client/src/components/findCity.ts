@@ -32,11 +32,11 @@ interface CountriesById {
 const typedGoodCityData = goodCityData as GeoJsonData<CityProperties>;
 const typedGoodCountryData = goodCountryData as unknown as CountriesById;
 
-export const findCityAndCountryByCoordinates = (
-  lat: number,
-  lon: number
-): { city: SingleLocation; country: SingleLocation } => {
-  const point = turf.point([lon, lat]);
+export const findCityAndCountryByCoordinates = ({
+  latitude,
+  longitude,
+}: SingleLocation): { city: SingleLocation; country: SingleLocation } => {
+  const point = turf.point([longitude, latitude]);
   const city = turf.nearestPoint(
     point,
     typedGoodCityData
@@ -49,11 +49,13 @@ export const findCityAndCountryByCoordinates = (
   return {
     city: {
       name: city.properties.name,
-      coordinates: city.geometry.coordinates as [number, number],
+      latitude: city.geometry.coordinates[1],
+      longitude: city.geometry.coordinates[0],
     },
     country: {
       name: country.name,
-      coordinates: country.labelPoint.coordinates as [number, number],
+      latitude: country.labelPoint.coordinates[1],
+      longitude: country.labelPoint.coordinates[0],
     },
   };
 };

@@ -1,41 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { SingleLocation, userService } from "src/services/user.service";
+import React, { useContext } from "react";
+import { AuthContext } from "src/context/auth.context";
+import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapMarkerComponent";
 
 export const backendURL = process.env.REACT_APP_SERVER_URL;
 
-export type SharingState = "full" | "city" | "country" | "none";
-
-export type Friend = {
-  id: string;
-  name: string;
-  profilePicture: string;
-  sharingState: SharingState;
-  location?: SingleLocation;
-};
+export type SharingState = "exact" | "city" | "country" | "none";
 
 type FriendListProps = {
   userId: string; // User ID of the current user
 };
 
 export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
-  const [friends, setFriends] = useState<Friend[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch friends and their privacy settings from the backend
-  useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const data = await userService.fetchFriends();
-        setFriends(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching friends:", error);
-      }
-    };
-
-    fetchFriends();
-  }, [userId]);
+  const { user, authenticateUser } = useContext(AuthContext);
 
   // Update privacy settings on the server
   const handleSharingStateChange = async (
@@ -44,47 +21,47 @@ export const FriendList: React.FC<FriendListProps> = ({ userId }) => {
   ) => {
     try {
       await userService.updateFriendPrivacy(friendId, newState);
-
-      // Update the state locally after the successful API request
-      setFriends((prevFriends) =>
-        prevFriends.map((friend) =>
-          friend.id === friendId
-            ? { ...friend, sharingState: newState }
-            : friend
-        )
-      );
+      await authenticateUser();
     } catch (error) {
       console.error("Error updating privacy setting:", error);
     }
   };
 
-  if (loading) return <div>Loading friends...</div>;
+  if (!user) {
+    return null;
+  }
+
+  console.log(user.friends);
 
   return (
     <div className="space-y-6">
-      {friends.map((friend) => (
+      {user.friends.map((friend) => (
         <div
-          key={friend.id}
+          key={friend._id}
           className="flex items-center p-4 border rounded-lg shadow-sm"
         >
           <img
             src={assembleImageUrl(friend.profilePicture)}
-            alt={friend.name}
+            alt={friend.username}
             className="w-12 h-12 rounded-full mr-4"
           />
           <div>
-            <h3 className="text-lg font-medium">{friend.name}</h3>
+            <h3 className="text-lg font-medium">{friend.username}</h3>
             <select
-              value={friend.sharingState}
+              value={
+                user.privacySettings.find(
+                  (setting) => setting.friendId === friend._id
+                )?.visibility
+              }
               onChange={(e) =>
                 handleSharingStateChange(
-                  friend.id,
+                  friend._id,
                   e.target.value as SharingState
                 )
               }
               className="mt-2 p-2 border border-gray-300 rounded-lg shadow-sm"
             >
-              <option value="full">Share Full Location</option>
+              <option value="exact">Share Full Location</option>
               <option value="city">Share City</option>
               <option value="country">Share Country</option>
               <option value="none">Share No Data</option>

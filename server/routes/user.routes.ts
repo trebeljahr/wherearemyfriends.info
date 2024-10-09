@@ -90,7 +90,7 @@ function mapSharingStateToLocation(
 ) {
   if (!location) return;
 
-  if (sharingState === "full") {
+  if (sharingState === "exact") {
     return location.exact;
   } else if (sharingState === "city") {
     return location.city;
@@ -342,12 +342,6 @@ router.put("/users/location", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   const { country, city, exact } = req.body as UserLocation;
 
-  if (!country) {
-    return res
-      .status(400)
-      .json({ error: "Need to provide at least country location data" });
-  }
-
   try {
     const user = await User.findById(userId);
 
@@ -356,20 +350,13 @@ router.put("/users/location", async (req: Request, res) => {
     }
 
     // Update the user's location
-    if (!user.location) {
-      user.location = {
-        lastUpdated: new Date(),
-        country,
-        city,
-        exact,
-      };
-    } else {
-      user.location.city = city;
-      user.location.country = country;
-      user.location.exact = exact;
-    }
+    user.location = {
+      lastUpdated: new Date(),
+      country,
+      city,
+      exact,
+    };
 
-    user.location.lastUpdated = new Date();
     await user.save();
 
     return res.status(200).json({ message: "Location updated successfully" });

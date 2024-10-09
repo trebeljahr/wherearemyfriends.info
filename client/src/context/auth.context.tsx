@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
 import authService from "../services/auth.service";
+import { SharingState } from "src/components/FriendsharingList";
+import { SingleLocation } from "src/services/user.service";
 
 export type UserType = {
   email: string;
   username: string;
   profilePicture: string;
   location: {
-    coordinates: [number, number];
-    city: [string, [number, number]];
-    country: [string, [number, number]];
+    exact?: SingleLocation;
+    city?: SingleLocation;
+    country?: SingleLocation;
   };
+  privacySettings: {
+    friendId: string;
+    visibility: SharingState;
+  }[];
+  friends: UserType[];
   _id: string;
 };
 
 export interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
-  user: null | UserType;
+  user: UserType | null;
   authToken: string | null;
   storeToken: (token: string) => void;
-  authenticateUser: () => void;
+  authenticateUser: () => Promise<void>;
   logOutUser: () => void;
 }
 
@@ -28,7 +35,7 @@ const AuthContext = React.createContext({} as AuthContextType);
 function AuthProviderWrapper(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserType | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   const storeToken = (token: string) => {
@@ -40,8 +47,7 @@ function AuthProviderWrapper(props: any) {
 
     if (storedToken) {
       try {
-        const response = await authService.verify();
-        const user = response.data;
+        const user = await authService.verify();
         setIsLoggedIn(true);
         setIsLoading(false);
         setUser(user);
@@ -52,7 +58,6 @@ function AuthProviderWrapper(props: any) {
         setUser(null);
       }
     } else {
-      // If the token is not available
       setIsLoggedIn(false);
       setIsLoading(false);
       setUser(null);
