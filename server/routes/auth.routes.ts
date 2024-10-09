@@ -48,6 +48,7 @@ router.post(
       email,
       password: hashedPassword,
       username,
+      profilePicture: "/assets/no-user.webp",
     });
 
     const user = {
@@ -107,8 +108,27 @@ router.post(
 router.get(
   "/verify",
   jwtMiddleware,
-  (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).json(req.auth);
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.auth?._id)
+      .populate("friends", "username email profilePicture")
+      .populate("pendingFriendRequests privacySettings location");
+
+    console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      _id: user._id,
+      username: user.username,
+      profilePicture: user.profilePicture,
+      location: user.location,
+      friends: user.friends,
+      email: user.email,
+      privacySettings: user.privacySettings,
+      pendingFriendRequests: user.pendingFriendRequests,
+    });
   }
 );
 

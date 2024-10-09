@@ -1,4 +1,5 @@
 import axios, { Axios } from "axios";
+import { UserType } from "src/context/auth.context";
 
 class AuthService {
   api: Axios;
@@ -30,8 +31,10 @@ class AuthService {
     return this.api.post("/auth/signup", requestBody);
   };
 
-  verify = () => {
-    return this.api.get("/auth/verify");
+  verify = async () => {
+    const response = await this.api.get<UserType>("/auth/verify");
+    const user = response.data;
+    return user;
   };
 }
 

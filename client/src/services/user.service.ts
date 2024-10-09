@@ -1,9 +1,11 @@
 import axios, { Axios } from "axios";
-import { Friend, SharingState } from "src/components/FriendsharingList";
+import { SharingState } from "src/components/FriendsharingList";
+import { Friend } from "src/components/MapMarkerComponent";
 
 export type SingleLocation = {
   name: string;
-  coordinates: [number, number];
+  latitude: number;
+  longitude: number;
 };
 
 export interface UserLocationData {

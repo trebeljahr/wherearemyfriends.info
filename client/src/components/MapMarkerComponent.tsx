@@ -7,10 +7,10 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
 import { userService } from "src/services/user.service";
-import { backendURL, Friend } from "./FriendsharingList";
+import { backendURL } from "./FriendsharingList";
 
-export const assembleImageUrl = (img: string) => {
-  return img.startsWith("/") ? `${backendURL}${img}` : img;
+export const assembleImageUrl = (img?: string) => {
+  return img?.startsWith("/") ? `${backendURL}${img}` : img;
 };
 
 export const createAvatarMarker = (
@@ -32,7 +32,19 @@ export const createAvatarMarker = (
   });
 };
 
-export const MapComponent: React.FC = () => {
+export type Friend = {
+  id: string;
+  name: string;
+  profilePicture: string;
+  sharingState: string;
+  location: {
+    name: string;
+    latitude: number;
+    longitude: number;
+  };
+};
+
+export const MapWithFriendMarkers: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
 
   // Fetch friends' locations from API
@@ -40,7 +52,6 @@ export const MapComponent: React.FC = () => {
     const fetchFriendsLocations = async () => {
       try {
         const friendDataFromAPI = await userService.fetchFriends();
-
         setFriends(friendDataFromAPI);
       } catch (error) {
         console.error("Error fetching friends locations:", error);
@@ -63,6 +74,8 @@ export const MapComponent: React.FC = () => {
       <MapController />
 
       {friends.map((friend) => {
+        console.log(friend);
+
         if (!friend.location) {
           return null;
         }
@@ -70,10 +83,7 @@ export const MapComponent: React.FC = () => {
         return (
           <Marker
             key={friend.id}
-            position={[
-              friend.location.coordinates[1],
-              friend.location.coordinates[0],
-            ]} // [latitude, longitude]
+            position={[friend.location.latitude, friend.location.longitude]}
             icon={createAvatarMarker(friend.profilePicture)}
           >
             <Popup>

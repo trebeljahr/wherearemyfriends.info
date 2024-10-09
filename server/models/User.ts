@@ -1,7 +1,7 @@
 // models/User.ts
 import { Schema, model, Document } from "mongoose";
 
-export type SharingState = "full" | "city" | "country" | "none";
+export type SharingState = "exact" | "city" | "country" | "none";
 // Define a TypeScript interface for the User document
 export interface FriendPrivacy {
   friendId: Schema.Types.ObjectId;
@@ -10,12 +10,13 @@ export interface FriendPrivacy {
 
 export interface SingleLocation {
   name: string;
-  coordinates: [number, number];
+  latitude: number;
+  longitude: number;
 }
 
 export interface UserLocation {
   lastUpdated: Date;
-  country: SingleLocation;
+  country?: SingleLocation;
   city?: SingleLocation;
   exact?: SingleLocation;
 }
@@ -25,11 +26,14 @@ const SingleLocationSchema = new Schema<SingleLocation>({
     type: String,
     required: true,
   },
-  coordinates: {
-    type: [Number],
+  latitude: {
+    type: Number,
     required: true,
   },
-  // required: false,
+  longitude: {
+    type: Number,
+    required: true,
+  },
 });
 
 // Define the UserLocation schema
@@ -59,7 +63,7 @@ const FriendPrivacySchema = new Schema<FriendPrivacy>({
   friendId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   visibility: {
     type: String,
-    enum: ["full", "city", "country", "none"],
+    enum: ["exact", "city", "country", "none"],
     default: "none",
   },
 });
@@ -75,15 +79,14 @@ const UserSchema = new Schema<IUser>({
     trim: true,
   },
   password: { type: String, required: true },
-  location: UserLocationSchema,
-  pendingFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User" }], // Add this line
-  friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  privacySettings: [FriendPrivacySchema],
+  location: { type: UserLocationSchema, default: { lastUpdated: new Date() } },
+  pendingFriendRequests: [
+    { type: Schema.Types.ObjectId, ref: "User", default: [] },
+  ],
+  friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  privacySettings: { type: [FriendPrivacySchema], default: [] },
   profilePicture: { type: String, default: "/assets/no-user.webp" },
 });
-
-// Create a geospatial index on the coordinates field
-UserSchema.index({ location: "2dsphere" });
 
 const User = model<IUser>("User", UserSchema);
 
