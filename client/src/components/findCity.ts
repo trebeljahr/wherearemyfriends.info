@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf";
-import citiesGeoJSON from "./citiesData.json";
+import citiesGeoJSON from "../datasets/citiesData.json";
 
 const typedCitiesGeoJSON = citiesGeoJSON as CitiesGeoJSON;
 
@@ -13,7 +13,7 @@ const cityCentroids = typedCitiesGeoJSON.features.map((feature) => {
 
 const cityCentroidsFeatureCollection = turf.featureCollection(cityCentroids);
 
-type CitiesGeoJSON = {
+export type CitiesGeoJSON = {
   type: "FeatureCollection";
   features: {
     type: "Feature";
