@@ -7,26 +7,24 @@ export const FriendSearch = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Search for the friend by username
-  const searchForFriend = async () => {
+  const searchForUser = async () => {
     try {
       setLoading(true);
-      const foundFriend = await userService.searchForFriend(username);
+      const foundFriend = await userService.searchForUser(username);
       if (foundFriend) {
         setFriendId(foundFriend._id);
-        setMessage(`Friend found: ${foundFriend.username}`);
+        setMessage(`User found: ${foundFriend.username}`);
       } else {
-        setMessage("No friend found with that username.");
+        setMessage("No user found with that username.");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error searching for friend:", error);
-      setMessage("Error searching for friend.");
+      setMessage("Error: " + error.response.data.message);
     } finally {
       setLoading(false);
     }
   };
 
-  // Add the friend to the user's friend list
   const addFriend = async () => {
     if (!friendId) return;
 
@@ -34,11 +32,14 @@ export const FriendSearch = () => {
       setLoading(true);
       const data = await userService.makeFriendRequest(friendId);
       setMessage(data.message);
-    } catch (error) {
+      setFriendId(null);
+    } catch (error: any) {
       console.error("Error adding friend:", error);
-      setMessage("Error adding friend.");
+      setMessage("Error: " + error.response.data.message);
+      setFriendId(null);
     } finally {
       setLoading(false);
+      setFriendId(null);
     }
   };
 
@@ -54,7 +55,7 @@ export const FriendSearch = () => {
           className="p-2 border border-gray-300 rounded-lg"
         />
         <button
-          onClick={searchForFriend}
+          onClick={searchForUser}
           disabled={loading}
           className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
         >

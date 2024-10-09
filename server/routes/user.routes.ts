@@ -57,7 +57,7 @@ router.post(
   upload.single("profilePicture"),
   async (req: AuthenticatedRequest, res) => {
     if (!req.file) {
-      return res.status(400).json({ error: "Please upload a file" });
+      return res.status(400).json({ message: "Please upload a file" });
     }
 
     const { _id: userId } = req.auth as { _id: string };
@@ -67,7 +67,7 @@ router.post(
 
       if (!user) {
         if (req.file) fs.unlinkSync(req.file.path);
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({ message: "User not found" });
       }
 
       user.profilePicture = `/uploads/profile_pictures/${req.file.filename}`;
@@ -79,7 +79,7 @@ router.post(
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: "Server error" });
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
@@ -109,7 +109,7 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
       .lean();
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const friendsWithPrivacy = user.friends.map((friend: any) => {
@@ -131,19 +131,23 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
     return res.json(friendsWithPrivacy);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
 router.put("/friends/privacy", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: currentUserId } = req.auth as { _id: string };
   const { friendId, newVisibility } = req.body;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findById(currentUserId);
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    if (
+      !user ||
+      !user.friends.includes(friendId) ||
+      user.id === currentUserId
+    ) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Find the privacy setting for this friend
@@ -166,59 +170,69 @@ router.put("/friends/privacy", async (req: Request, res) => {
     return res.json({ message: "Privacy settings updated successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
 router.get("/users/search", async (req: Request, res) => {
   const { username } = req.query;
-
+  const { _id: currentUserId } = req.auth as { _id: string };
   try {
-    const user = await User.findOne({
+    const friend = await User.findOne({
       username: new RegExp(`^${username}$`, "i"),
     });
+    const user = await User.findById(currentUserId);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User not found." });
     }
 
-    return res.json(user);
+    if (friend.id === currentUserId) {
+      return res
+        .status(400)
+        .json({ message: "You cannot add yourself as a friend." });
+    }
+
+    if (friend.friends.includes(user.id) || user.friends.includes(friend.id)) {
+      return res.status(400).json({ message: "User is already your friend." });
+    }
+
+    if (
+      friend.pendingFriendRequests.includes(user.id) ||
+      user.pendingFriendRequests.includes(friend.id)
+    ) {
+      return res.status(400).json({ message: "Friend request already sent." });
+    }
+
+    return res.json(friend);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
-// routes/userRoutes.ts
-
-// Send a friend request
-
 router.post("/friends/requests", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string }; // ID of the user sending the request
-  const { friendId } = req.body; // ID of the user to send the request to
+  const { _id: userId } = req.auth as { _id: string };
+  const { friendId } = req.body;
 
   try {
-    // Check if both users exist
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
     if (!user || !friend) {
-      return res.status(404).json({ error: "User or friend not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if they are already friends
     if (user.friends.includes(friendId)) {
       return res
         .status(400)
-        .json({ error: "You are already friends with this user" });
+        .json({ message: "You are already friends with this user" });
     }
 
-    // Check if a friend request has already been sent
     if (friend.pendingFriendRequests.includes(user.id)) {
-      return res.status(400).json({ error: "Friend request already sent" });
+      return res.status(400).json({ message: "Friend request already sent" });
     }
 
-    // Add the friend request to the recipient's pending requests
     friend.pendingFriendRequests.push(user.id);
     await friend.save();
 
@@ -227,7 +241,7 @@ router.post("/friends/requests", async (req: Request, res) => {
       .json({ message: "Friend request sent successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -239,7 +253,7 @@ router.get("/friends/requests", async (req: Request, res) => {
       .lean();
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const pendingRequests = user.pendingFriendRequests.map(
@@ -253,91 +267,80 @@ router.get("/friends/requests", async (req: Request, res) => {
     return res.json(pendingRequests);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
-// routes/userRoutes.ts
-
-// Accept a friend request
 router.post("/friends/requests/accept", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
-  const { requesterId } = req.body; // ID of the user who sent the request
+  const { requesterId } = req.body;
 
   try {
-    // Fetch both users
     const user = await User.findById(userId);
     const requester = await User.findById(requesterId);
 
-    if (!user || !requester) {
-      return res.status(404).json({ error: "User not found" });
+    if (
+      !user ||
+      !requester ||
+      user.friends.includes(requesterId) ||
+      user.id === requesterId
+    ) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if there is a pending friend request from requesterId
     if (!user.pendingFriendRequests.includes(requesterId)) {
       return res
         .status(400)
-        .json({ error: "No pending friend request from this user" });
+        .json({ message: "No pending friend request from this user" });
     }
 
-    // Remove the requesterId from pendingFriendRequests
     user.pendingFriendRequests = user.pendingFriendRequests.filter(
       (id) => id.toString() !== requesterId
     );
 
-    // Add each other to friends list
     user.friends.push(requesterId);
     requester.friends.push(user.id);
 
-    // Save both users
     await user.save();
     await requester.save();
 
     return res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
-// routes/userRoutes.ts
-
-// Decline a friend request
 router.post("/friends/requests/decline", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
-  const { requesterId } = req.body; // ID of the user who sent the request
+  const { requesterId } = req.body;
 
   try {
-    // Fetch the user
     const user = await User.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    if (!user || user.id === requesterId) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if there is a pending friend request from requesterId
     if (!user.pendingFriendRequests.includes(requesterId)) {
       return res
         .status(400)
-        .json({ error: "No pending friend request from this user" });
+        .json({ message: "No pending friend request from this user" });
     }
 
-    // Remove the requesterId from pendingFriendRequests
     user.pendingFriendRequests = user.pendingFriendRequests.filter(
       (id) => id.toString() !== requesterId
     );
 
-    // Save the user
     await user.save();
 
     return res.status(200).json({ message: "Friend request declined" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 
-// Update the user's location
 router.put("/users/location", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   const { country, city, exact } = req.body as UserLocation;
@@ -346,10 +349,9 @@ router.put("/users/location", async (req: Request, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Update the user's location
     user.location = {
       lastUpdated: new Date(),
       country,
@@ -362,7 +364,7 @@ router.put("/users/location", async (req: Request, res) => {
     return res.status(200).json({ message: "Location updated successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 });
 

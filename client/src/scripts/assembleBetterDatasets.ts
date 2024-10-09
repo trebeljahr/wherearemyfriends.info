@@ -1,23 +1,11 @@
+import * as turf from "@turf/turf";
+import { writeFileSync } from "fs";
+import { MultiPolygon, Point, Polygon } from "geojson";
+import { nanoid } from "nanoid";
+import path from "path";
+import cities500 from "../datasets/cities500.json";
 import countryData from "../datasets/countryData.json";
 import countryLabels from "../datasets/countryLabels.json";
-import cities500 from "../datasets/cities500.json";
-import cityData from "../datasets/citiesData.json";
-import * as turf from "@turf/turf";
-import { Polygon, MultiPolygon, Point } from "geojson";
-import { nanoid } from "nanoid";
-import { writeFileSync } from "fs";
-import path from "path";
-// const jsonToWrite = {
-//   type: "FeatureCollection",
-//   features: assembledData,
-// };
-
-// writeFileSync(
-//   "countryDataWithLabels.json",
-//   JSON.stringify(jsonToWrite, null, 2)
-// );
-
-// console.log(assembledData);
 
 const typedCountryLabelsJSON = countryLabels as unknown as CountryLabelsJSON;
 
@@ -35,7 +23,7 @@ type PolygonFeature = {
   };
 };
 
-export const findLabelPoint = (polygonFeature: PolygonFeature) => {
+const findLabelPoint = (polygonFeature: PolygonFeature) => {
   const foundLabel = typedCountryLabelsJSON.features.find((feature) => {
     return (
       polygonFeature.properties.ADMIN === feature.properties.int_name ||
@@ -60,7 +48,7 @@ export const findLabelPoint = (polygonFeature: PolygonFeature) => {
 
 const typedWorldGeoJSON = countryData as unknown as WorldGeoJSON;
 
-export type CountryLabelsJSON = {
+type CountryLabelsJSON = {
   type: "FeatureCollection";
   features: {
     type: "Feature";
@@ -77,21 +65,15 @@ export type CountryLabelsJSON = {
   }[];
 };
 
-export type WorldGeoJSON = {
+type WorldGeoJSON = {
   type: "FeatureCollection";
   features: PolygonFeature[];
 };
-
-// const typedCountryLabelsJSON = countryLabels as unknown as CountryLabelsJSON;
-
-// const typedCitiesGeoJSON = citiesGeoJSON as CitiesGeoJSON;
 
 const goodCountriesData = typedWorldGeoJSON.features
   .map((feature) => {
     const label = findLabelPoint(feature);
 
-    // label?.geometry.
-    // const name = label?.properties.int_name;
     const name = feature.properties.ADMIN;
     const iso2 = feature.properties.ISO_A2;
     const iso3 = feature.properties.ISO_A3;
@@ -137,19 +119,6 @@ const goodCountriesData = typedWorldGeoJSON.features
   })
   .filter(({ properties: { labelPoint } }) => labelPoint);
 
-const typedCities1000 = cityData as CityData;
-
-export type CityData = {
-  type: "FeatureCollection";
-  features: [
-    {
-      type: "Feature";
-      properties: { name: string };
-      geometry: Polygon | MultiPolygon;
-    }
-  ];
-};
-
 function findCountry(point: Point) {
   for (const feature of goodCountriesData) {
     if (turf.booleanPointInPolygon(point, feature)) {
@@ -181,8 +150,6 @@ const countriesByFIPS_10_ = typedWorldGeoJSON.features.reduce(
   {} as Record<string, PolygonFeature>
 );
 
-// console.log(countriesByISO2);
-
 function findInCountryLabels(country: string) {
   const foundCountry = typedCountryLabelsJSON.features.find((feature) => {
     return (
@@ -196,20 +163,8 @@ function findInCountryLabels(country: string) {
 }
 
 const typedCities500 = cities500 as City[];
-console.log(typedCities1000.features.length);
-console.log(typedCities500.length);
 
-// const cityCentroids = typedCities1000.features.map((feature) => {
-//   const centroid = turf.centroid(feature);
-//   if (centroid.properties) {
-//     centroid.properties.name = feature.properties.name;
-//   }
-//   return centroid;
-// });
-
-// const cityCentroidsFeatureCollection = turf.featureCollection(cityCentroids);
-
-export const countriesById = goodCountriesData.reduce((acc, feature) => {
+const countriesById = goodCountriesData.reduce((acc, feature) => {
   acc[feature.properties.id] = {
     name: feature.properties.name,
     labelPoint: feature.properties.labelPoint as Point,
@@ -220,11 +175,6 @@ export const countriesById = goodCountriesData.reduce((acc, feature) => {
 const goodCitiesData = typedCities500.map((city) => {
   const point = turf.point([parseFloat(city.lon), parseFloat(city.lat)]);
   const withinCountry = findCountry(point.geometry);
-
-  // const nearestCity = turf.nearestPoint(
-  //   point,
-  //   cityCentroidsFeatureCollection
-  // );
 
   const otherWaysToFindCountry =
     countriesByISO2[city.country] ||
@@ -249,10 +199,6 @@ const goodCitiesData = typedCities500.map((city) => {
   };
   return cityData;
 });
-
-// console.log(goodCitiesData);
-// console.log(goodCitiesData.length);
-// console.log(goodCitiesData.filter((city) => !city.country.id).length);
 
 const datasetPath = "./src/datasets/";
 
@@ -280,19 +226,3 @@ writeFileSync(
   path.join(datasetPath, "good-countries-data.json"),
   JSON.stringify(countriesById, null, 2)
 );
-
-// const codes = moreCities.reduce((acc, city) => {
-//   acc.add(city[3]);
-//   return acc;
-// }, new Set());
-
-// console.log([...codes]);
-
-// const countries = typedCities1000.features.map((feature) => {
-//   const centroid = turf.centroid(feature);
-
-//   const country = findCountry(centroid.geometry);
-//   return [country?.properties.ADMIN, feature.properties.name];
-// });
-
-// console.log(countries);

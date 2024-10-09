@@ -62,7 +62,7 @@ class UserService {
     return response.data;
   }
 
-  async searchForFriend(username: string) {
+  async searchForUser(username: string) {
     const response = await this.api.get(
       `/api/users/search?username=${username}`
     );

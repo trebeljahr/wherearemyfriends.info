@@ -18,7 +18,6 @@ export const findCityAndCountryByCoordinates = (
 
   const countryId = city.properties.country.id;
   const country = typedGoodCountryData[countryId];
-  console.log(city, country);
 
   return {
     city: {

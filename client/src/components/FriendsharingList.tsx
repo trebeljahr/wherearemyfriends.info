@@ -26,8 +26,6 @@ export const FriendList = () => {
     return null;
   }
 
-  console.log(user.friends);
-
   return (
     <div className="space-y-6">
       {user.friends.map((friend) => (

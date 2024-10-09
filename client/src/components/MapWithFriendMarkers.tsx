@@ -74,8 +74,6 @@ export const MapWithFriendMarkers: React.FC = () => {
       <MapController />
 
       {friends.map((friend) => {
-        console.log(friend);
-
         if (!friend.location) {
           return null;
         }
