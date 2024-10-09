@@ -16,6 +16,30 @@ const assembledData = typedWorldGeoJSON.features.map((feature) => {
   const iso2 = feature.properties.ISO_A2;
   const iso3 = feature.properties.ISO_A3;
 
+  const continent = feature.properties.CONTINENT;
+  const region = feature.properties.REGION_UN;
+  const subregion = feature.properties.SUBREGION;
+
+  if (
+    !name ||
+    !iso2 ||
+    !iso3 ||
+    !continent ||
+    !region ||
+    !subregion ||
+    !label
+  ) {
+    console.log("Missing data for", {
+      name,
+      iso2,
+      iso3,
+      continent,
+      region,
+      subregion,
+      label,
+    });
+  }
+
   return {
     type: "Feature",
     geometry: {
@@ -27,9 +51,9 @@ const assembledData = typedWorldGeoJSON.features.map((feature) => {
       labelPoint: label?.geometry,
       iso2,
       iso3,
-      continent: feature.properties.CONTINENT,
-      region: feature.properties.REGION_UN,
-      subregion: feature.properties.SUBREGION,
+      continent,
+      region,
+      subregion,
     },
   };
 });
@@ -44,4 +68,4 @@ writeFileSync(
   JSON.stringify(jsonToWrite, null, 2)
 );
 
-console.log(assembledData);
+// console.log(assembledData);

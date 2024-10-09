@@ -36,6 +36,8 @@ export type CountryLabelsJSON = {
       int_name: string;
       country_code_iso3166_1_alpha_2: string;
       country_code_fips: string;
+      "ISO3166-1:alpha2": string;
+      "name:en": string;
     };
   }[];
 };
@@ -80,7 +82,10 @@ export const findLabelPoint = (polygonFeature: PolygonFeature) => {
       polygonFeature.properties.ISO_A2 ===
         feature.properties.country_code_iso3166_1_alpha_2 ||
       polygonFeature.properties.FIPS_10_ ===
-        feature.properties.country_code_fips
+        feature.properties.country_code_fips ||
+      polygonFeature.properties.ISO_A2 ===
+        feature.properties["ISO3166-1:alpha2"] ||
+      polygonFeature.properties.ADMIN === feature.properties["name:en"]
     );
   });
 
