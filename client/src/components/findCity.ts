@@ -1,68 +1,59 @@
 import * as turf from "@turf/turf";
-import citiesGeoJSON from "../datasets/citiesData.json";
+import { Point } from "geojson";
+import goodCityData from "../datasets/good-cities-data.json";
+import goodCountryData from "../datasets/good-countries-data.json";
+import { SingleLocation } from "src/services/user.service";
 
-const typedCitiesGeoJSON = citiesGeoJSON as CitiesGeoJSON;
-
-const cityCentroids = typedCitiesGeoJSON.features.map((feature) => {
-  const centroid = turf.centroid(feature);
-  if (centroid.properties) {
-    centroid.properties.name = feature.properties.name;
-  }
-  return centroid;
-});
-
-const cityCentroidsFeatureCollection = turf.featureCollection(cityCentroids);
-
-export type CitiesGeoJSON = {
+interface GeoJsonData<T> {
   type: "FeatureCollection";
-  features: {
-    type: "Feature";
-    geometry: {
-      type: "Polygon";
-      coordinates: [number, number][][];
-    };
-    properties: {
-      name: string;
-    };
-  }[];
-};
+  features: Feature<T>[];
+}
 
-const findCityThatContainsPoint = (lat: number, lon: number) => {
+interface Feature<T> {
+  type: "Feature";
+  geometry: Point;
+  properties: T;
+}
+
+interface CountryProperties {
+  id: string;
+  name: string;
+}
+
+interface CityProperties {
+  name: string;
+  country: CountryProperties;
+}
+
+interface CountriesById {
+  [id: string]: CountryProperties & { labelPoint: Point };
+}
+
+const typedGoodCityData = goodCityData as GeoJsonData<CityProperties>;
+const typedGoodCountryData = goodCountryData as unknown as CountriesById;
+
+export const findCityAndCountryByCoordinates = (
+  lat: number,
+  lon: number
+): { city: SingleLocation; country: SingleLocation } => {
   const point = turf.point([lon, lat]);
+  const city = turf.nearestPoint(
+    point,
+    typedGoodCityData
+  ) as unknown as Feature<CityProperties>;
 
-  for (const feature of typedCitiesGeoJSON.features) {
-    if (feature.geometry) {
-      const inside = turf.booleanPointInPolygon(point, feature);
-      if (inside) {
-        return feature;
-      }
-    }
-  }
-  return null;
-};
+  const countryId = city.properties.country.id;
+  const country = typedGoodCountryData[countryId];
+  console.log(city, country);
 
-export const findCityByCoordinates = (lat: number, lon: number) => {
-  const point = turf.point([lon, lat]);
-
-  const inCity = findCityThatContainsPoint(lat, lon);
-  if (inCity) {
-    const centroid = turf.centroid(inCity);
-
-    return {
-      name: inCity?.properties.name,
-      coordinates: centroid.geometry.coordinates as [number, number],
-    };
-  }
-
-  const nearestCity = turf.nearestPoint(point, cityCentroidsFeatureCollection);
-
-  if (nearestCity) {
-    const cityName = nearestCity.properties.name || "Unknown City";
-    return {
-      name: cityName,
-      coordinates: nearestCity.geometry.coordinates as [number, number],
-    };
-  }
-
-  return;
+  return {
+    city: {
+      name: city.properties.name,
+      coordinates: city.geometry.coordinates as [number, number],
+    },
+    country: {
+      name: country.name,
+      coordinates: country.labelPoint.coordinates as [number, number],
+    },
+  };
 };

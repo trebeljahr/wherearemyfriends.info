@@ -6,6 +6,7 @@ import * as turf from "@turf/turf";
 import { Polygon, MultiPolygon, Point } from "geojson";
 import { nanoid } from "nanoid";
 import { writeFileSync } from "fs";
+import path from "path";
 // const jsonToWrite = {
 //   type: "FeatureCollection",
 //   features: assembledData,
@@ -85,54 +86,56 @@ export type WorldGeoJSON = {
 
 // const typedCitiesGeoJSON = citiesGeoJSON as CitiesGeoJSON;
 
-const goodCountriesData = typedWorldGeoJSON.features.map((feature) => {
-  const label = findLabelPoint(feature);
+const goodCountriesData = typedWorldGeoJSON.features
+  .map((feature) => {
+    const label = findLabelPoint(feature);
 
-  // label?.geometry.
-  // const name = label?.properties.int_name;
-  const name = feature.properties.ADMIN;
-  const iso2 = feature.properties.ISO_A2;
-  const iso3 = feature.properties.ISO_A3;
+    // label?.geometry.
+    // const name = label?.properties.int_name;
+    const name = feature.properties.ADMIN;
+    const iso2 = feature.properties.ISO_A2;
+    const iso3 = feature.properties.ISO_A3;
 
-  const continent = feature.properties.CONTINENT;
-  const region = feature.properties.REGION_UN;
-  const subregion = feature.properties.SUBREGION;
+    const continent = feature.properties.CONTINENT;
+    const region = feature.properties.REGION_UN;
+    const subregion = feature.properties.SUBREGION;
 
-  if (
-    !name ||
-    !iso2 ||
-    !iso3 ||
-    !continent ||
-    !region ||
-    !subregion ||
-    !label
-  ) {
-    console.log("Missing data for", {
-      name,
-      iso2,
-      iso3,
-      continent,
-      region,
-      subregion,
-      label,
-    });
-  }
+    if (
+      !name ||
+      !iso2 ||
+      !iso3 ||
+      !continent ||
+      !region ||
+      !subregion ||
+      !label
+    ) {
+      console.log("Missing data for", {
+        name,
+        iso2,
+        iso3,
+        continent,
+        region,
+        subregion,
+        label,
+      });
+    }
 
-  return {
-    type: "Feature" as const,
-    geometry: feature.geometry,
-    properties: {
-      id: nanoid(),
-      name,
-      labelPoint: label?.geometry,
-      iso2,
-      iso3,
-      continent,
-      region,
-      subregion,
-    },
-  };
-});
+    return {
+      type: "Feature" as const,
+      geometry: feature.geometry,
+      properties: {
+        id: nanoid(),
+        name,
+        labelPoint: label?.geometry,
+        iso2,
+        iso3,
+        continent,
+        region,
+        subregion,
+      },
+    };
+  })
+  .filter(({ properties: { labelPoint } }) => labelPoint);
 
 const typedCities1000 = cityData as CityData;
 
@@ -207,9 +210,12 @@ console.log(typedCities500.length);
 // const cityCentroidsFeatureCollection = turf.featureCollection(cityCentroids);
 
 export const countriesById = goodCountriesData.reduce((acc, feature) => {
-  acc[feature.properties.id] = feature;
+  acc[feature.properties.id] = {
+    name: feature.properties.name,
+    labelPoint: feature.properties.labelPoint as Point,
+  };
   return acc;
-}, {} as Record<string, (typeof goodCountriesData)[0]>);
+}, {} as Record<string, { name: string; labelPoint: Point }>);
 
 const goodCitiesData = typedCities500.map((city) => {
   const point = turf.point([parseFloat(city.lon), parseFloat(city.lat)]);
@@ -248,18 +254,31 @@ const goodCitiesData = typedCities500.map((city) => {
 // console.log(goodCitiesData.length);
 // console.log(goodCitiesData.filter((city) => !city.country.id).length);
 
-writeFileSync(
-  "good-cities-data.json",
-  JSON.stringify(
-    goodCitiesData.filter((city) => city.country.id),
-    null,
-    2
-  )
+const datasetPath = "./src/datasets/";
+
+const filteredCities = goodCitiesData.filter((city) => city.country.id);
+
+const cityFeatureCollection = turf.featureCollection(
+  filteredCities.map((city) => {
+    return {
+      type: "Feature" as const,
+      geometry: city.point.geometry,
+      properties: {
+        name: city.name,
+        country: city.country,
+      },
+    };
+  })
 );
 
 writeFileSync(
-  "good-countries-data.json",
-  JSON.stringify(goodCountriesData, null, 2)
+  path.join(datasetPath, "good-cities-data.json"),
+  JSON.stringify(cityFeatureCollection, null, 2)
+);
+
+writeFileSync(
+  path.join(datasetPath, "good-countries-data.json"),
+  JSON.stringify(countriesById, null, 2)
 );
 
 // const codes = moreCities.reduce((acc, city) => {

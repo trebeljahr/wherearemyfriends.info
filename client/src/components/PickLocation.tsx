@@ -4,8 +4,7 @@ import React, { useMemo, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import { userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapMarkerComponent";
-import { findCityByCoordinates } from "./findCity";
-import { findCountryByCoordinates } from "./findCountry";
+import { findCityAndCountryByCoordinates } from "./findCity";
 
 type LocationMarkerProps = {
   userId: string; // Current user's ID
@@ -13,37 +12,37 @@ type LocationMarkerProps = {
 };
 
 const LocationMarker: React.FC<LocationMarkerProps> = ({
-  userId,
   initialCoordinates,
 }) => {
   const [position, setPosition] = useState<[number, number] | null>(
     initialCoordinates || null
   );
 
-  const cityPosition = useMemo(() => {
+  const { cityPosition, countryPosition } = useMemo(() => {
     if (position) {
-      const city = findCityByCoordinates(position[1], position[0]);
-      return city?.coordinates;
-    }
-    return null;
-  }, [position]);
+      const { city, country } = findCityAndCountryByCoordinates(
+        position[1],
+        position[0]
+      );
 
-  const countryPosition = useMemo(() => {
-    if (position) {
-      const country = findCountryByCoordinates(position[1], position[0]);
-      return country?.coordinates;
+      return {
+        cityPosition: city?.coordinates,
+        countryPosition: country?.coordinates,
+      };
     }
-    return null;
+
+    return { cityPosition: null, countryPosition: null };
   }, [position]);
 
   // Update user's location when the marker is placed or moved
-  const updateUserLocation = async (coords: [number, number]) => {
-    const country = findCountryByCoordinates(coords[1], coords[0]);
-    const city = findCityByCoordinates(coords[1], coords[0]);
-
+  const updateUserLocation = async (position: [number, number]) => {
     try {
+      const { city, country } = findCityAndCountryByCoordinates(
+        position[1],
+        position[0]
+      );
       const newLocationObject = {
-        exact: { name: "exactLocation", coordinates: coords },
+        exact: { name: "exactLocation", coordinates: position },
         city,
         country,
       };
