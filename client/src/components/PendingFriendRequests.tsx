@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "src/context/auth.context";
+import { useEffect, useState } from "react";
+import { useAuth } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapWithFriendMarkers";
 
@@ -10,7 +10,7 @@ type UserRequest = {
 };
 
 export const PendingFriendRequests = () => {
-  const { user, authToken } = useContext(AuthContext);
+  const { user, authToken } = useAuth();
 
   const [pendingRequests, setPendingRequests] = useState<UserRequest[]>([]);
   const [loading, setLoading] = useState(true);

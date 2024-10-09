@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import authService from "../services/auth.service";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { SharingState } from "src/components/FriendsharingList";
 import { SingleLocation } from "src/services/user.service";
+import authService from "../services/auth.service";
 
 export type UserType = {
   email: string;
@@ -30,7 +30,7 @@ export interface AuthContextType {
   logOutUser: () => void;
 }
 
-const AuthContext = React.createContext({} as AuthContextType);
+const AuthContext = createContext({} as AuthContextType);
 
 function AuthProviderWrapper(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -97,4 +97,8 @@ function AuthProviderWrapper(props: any) {
   );
 }
 
-export { AuthProviderWrapper, AuthContext };
+function useAuth() {
+  return useContext(AuthContext);
+}
+
+export { AuthContext, AuthProviderWrapper, useAuth };

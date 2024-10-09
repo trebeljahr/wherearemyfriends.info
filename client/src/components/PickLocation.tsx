@@ -1,15 +1,14 @@
 import { LatLngBoundsExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import React, { useContext } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import { AuthContext } from "src/context/auth.context";
+import { useAuth } from "src/context/auth.context";
 import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "./findCity";
 
 const UserLocationMarkers = () => {
-  const { user, authenticateUser } = useContext(AuthContext);
+  const { user, authenticateUser } = useAuth();
 
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
