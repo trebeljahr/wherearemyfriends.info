@@ -1,60 +1,9 @@
 import * as turf from "@turf/turf";
-import countryData from "../datasets/countryData.json";
-import countryLabels from "../datasets/countryLabels.json";
+import countryData from "../datasets/countryDataWithLabels.json";
 
-type PolygonFeature = {
-  type: "Feature";
-  geometry: {
-    type: "Polygon";
-    coordinates: [number, number][][];
-  };
-  properties: {
-    ADMIN: string;
-    ISO_A2: string;
-    FIPS_10_: string;
-    ISO_A3: string;
-    CONTINENT: string;
-    REGION_UN: string;
-    SUBREGION: string;
-  };
-};
-
-const typedWorldGeoJSON = countryData as unknown as WorldGeoJSON;
-const typedCountryLabelsJSON = countryLabels as unknown as CountryLabelsJSON;
-
-export type CountryLabelsJSON = {
-  type: "FeatureCollection";
-  features: {
-    type: "Feature";
-    geometry: {
-      type: "Point";
-      coordinates: [number, number];
-    };
-    properties: {
-      name: string;
-      "ISO3166-1": string;
-      int_name: string;
-      country_code_iso3166_1_alpha_2: string;
-      country_code_fips: string;
-      "ISO3166-1:alpha2": string;
-      "name:en": string;
-    };
-  }[];
-};
-
-export type WorldGeoJSON = {
-  type: "FeatureCollection";
-  features: PolygonFeature[];
-};
-
-const countryCentroids = typedWorldGeoJSON.features.map((feature) => {
-  const centroid = turf.centroid(feature);
-  if (centroid.properties) {
-    centroid.properties.ADMIN = feature.properties.ADMIN;
-    centroid.properties.ISO_A2 = feature.properties.ISO_A2;
-    centroid.properties.FIPS_10_ = feature.properties.FIPS_10_;
-  }
-  return centroid;
+const countryCentroids = countryData.features.map((feature: any) => {
+  const centroid = turf.centroid(feature.geometry);
+  return centroid as GeoJSON.Feature<GeoJSON.Point, GeoJSON.GeoJsonProperties>;
 });
 
 const countryCentroidsFeatureCollection =
@@ -64,36 +13,13 @@ const countryCentroidsFeatureCollection =
 const findCountryThatContainsPoint = (lat: number, lon: number) => {
   const point = turf.point([lon, lat]); // [longitude, latitude]
 
-  for (const feature of typedWorldGeoJSON.features) {
+  for (const feature of countryData.features as any) {
     if (turf.booleanPointInPolygon(point, feature)) {
       return feature;
     }
   }
 
   return null;
-};
-
-export const findLabelPoint = (polygonFeature: PolygonFeature) => {
-  const foundLabel = typedCountryLabelsJSON.features.find((feature) => {
-    return (
-      polygonFeature.properties.ADMIN === feature.properties.int_name ||
-      polygonFeature.properties.ISO_A2 === feature.properties["ISO3166-1"] ||
-      polygonFeature.properties.ADMIN === feature.properties.name ||
-      polygonFeature.properties.ISO_A2 ===
-        feature.properties.country_code_iso3166_1_alpha_2 ||
-      polygonFeature.properties.FIPS_10_ ===
-        feature.properties.country_code_fips ||
-      polygonFeature.properties.ISO_A2 ===
-        feature.properties["ISO3166-1:alpha2"] ||
-      polygonFeature.properties.ADMIN === feature.properties["name:en"]
-    );
-  });
-
-  if (!foundLabel) {
-    return null;
-  }
-
-  return foundLabel;
 };
 
 export const findCountryByCoordinates = (lat: number, lon: number) => {
@@ -106,7 +32,7 @@ export const findCountryByCoordinates = (lat: number, lon: number) => {
     // const labelPoint = turf.pointOnFeature(inCountry);
     // const labelPoint = turf.centerOfMass(inCountry);
 
-    const labelPoint = findLabelPoint(inCountry as PolygonFeature);
+    const labelPoint = inCountry.properties.labelPoint;
 
     const output = labelPoint || centroid;
     return {
@@ -121,10 +47,7 @@ export const findCountryByCoordinates = (lat: number, lon: number) => {
   );
 
   if (nearestCountry) {
-    const labelPoint = findLabelPoint(
-      nearestCountry as unknown as PolygonFeature
-    );
-
+    const labelPoint = nearestCountry.properties.labelPoint;
     const output = labelPoint || nearestCountry;
 
     return {
