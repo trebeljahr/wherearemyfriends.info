@@ -4,9 +4,10 @@ import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapWithFriendMarkers";
 
 export const ProfilePictureUpload = () => {
+  const { user } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState(user?.profilePicture);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFile(e.target?.files?.[0] || null);
@@ -36,7 +37,7 @@ export const ProfilePictureUpload = () => {
 
   return (
     <div>
-      <h3>Upload Profile Picture</h3>
+      <h3>Upload New Profile Picture</h3>
       <img
         src={assembleImageUrl(profilePicture || "/assets/no-user.webp")}
         alt="Profile"

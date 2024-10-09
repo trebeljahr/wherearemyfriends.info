@@ -68,10 +68,7 @@ const UserLocationMarkers = () => {
             user?.location.city.latitude,
             user?.location.city.longitude,
           ]}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg",
-            "red-400"
-          )}
+          icon={createAvatarMarker(user.profilePicture, "red-400")}
         />
       )}
       {user?.location?.country && (
@@ -80,10 +77,7 @@ const UserLocationMarkers = () => {
             user?.location.country.latitude,
             user?.location.country.longitude,
           ]}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg",
-            "slate-500"
-          )}
+          icon={createAvatarMarker(user.profilePicture, "slate-500")}
         />
       )}
       {user?.location?.exact && (
@@ -93,9 +87,7 @@ const UserLocationMarkers = () => {
             user.location.exact.longitude,
           ]}
           draggable={true}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg"
-          )}
+          icon={createAvatarMarker(user.profilePicture)}
         />
       )}
     </>
