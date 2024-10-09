@@ -1,6 +1,6 @@
-import { useState, useContext, ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/auth.context";
+import { useAuth } from "../../context/auth.context";
 import authService from "../../services/auth.service";
 
 export function LoginPage() {
@@ -10,7 +10,7 @@ export function LoginPage() {
 
   const navigate = useNavigate();
 
-  const { storeToken, authenticateUser } = useContext(AuthContext);
+  const { storeToken, authenticateUser } = useAuth();
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
     setEmailOrUsername(e.target.value);

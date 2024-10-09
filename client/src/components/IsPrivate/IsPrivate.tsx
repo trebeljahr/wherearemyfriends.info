@@ -1,6 +1,6 @@
-import { ReactElement, useContext } from "react";
-import { AuthContext } from "../../context/auth.context";
+import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../../context/auth.context";
 import Loading from "../Loading/Loading";
 
 interface IsPrivateProps {
@@ -8,7 +8,7 @@ interface IsPrivateProps {
 }
 
 function IsPrivate({ children }: IsPrivateProps) {
-  const { isLoggedIn, isLoading } = useContext(AuthContext);
+  const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
     return <Loading />;

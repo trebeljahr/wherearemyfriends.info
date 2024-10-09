@@ -11,7 +11,7 @@ import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
 
 function App() {
   return (
-    <div className="prose">
+    <div className="prose prose-a:no-underline">
       <Navbar />
 
       <Routes>

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { AuthContext } from "src/context/auth.context";
+import React, { useState } from "react";
+import { useAuth } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapWithFriendMarkers";
 
@@ -72,7 +72,7 @@ export const DisplayUserAvatar = ({ user }: { user: ApplicationUser }) => {
 };
 
 export const CurrentUserAvatar = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   return <div>{user && <DisplayUserAvatar user={user} />} </div>;
 };

@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { AuthContext } from "src/context/auth.context";
+import { useAuth } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapWithFriendMarkers";
 
@@ -8,7 +7,7 @@ export const backendURL = process.env.REACT_APP_SERVER_URL;
 export type SharingState = "exact" | "city" | "country" | "none";
 
 export const FriendList = () => {
-  const { user, authenticateUser } = useContext(AuthContext);
+  const { user, authenticateUser } = useAuth();
 
   // Update privacy settings on the server
   const handleSharingStateChange = async (
