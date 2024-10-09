@@ -12,7 +12,7 @@ function HomePageForNonLoggedInUsers() {
 export function HomePage() {
   const { isLoggedIn } = useAuth();
   return (
-    <div>
+    <div className="pt-24">
       <h1>Home page</h1>
       {isLoggedIn ? <MapWithFriendMarkers /> : <HomePageForNonLoggedInUsers />}
     </div>

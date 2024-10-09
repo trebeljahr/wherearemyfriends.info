@@ -3,7 +3,7 @@ import { ProfilePictureUpload } from "src/components/ProfilePictureUpload";
 
 export function ProfilePage() {
   return (
-    <div>
+    <div className="pt-24">
       <h1>Profile page</h1>
       <PickLocation />
       <ProfilePictureUpload />

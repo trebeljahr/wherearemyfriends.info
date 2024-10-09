@@ -4,12 +4,12 @@ import { PendingFriendRequests } from "src/components/PendingFriendRequests";
 
 export const FriendsPage = () => {
   return (
-    <>
-      <h1>Profile page</h1>
+    <div className="pt-24">
+      <h1>Friends page</h1>
 
       <FriendList />
       <FriendSearch />
       <PendingFriendRequests />
-    </>
+    </div>
   );
 };

@@ -6,7 +6,7 @@ import authService from "../../services/auth.service";
 export function LoginPage() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(undefined);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -33,32 +33,60 @@ export function LoginPage() {
   };
 
   return (
-    <div className="LoginPage">
-      <h1>Login</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center text-gray-800">Login</h1>
 
-      <form onSubmit={handleLoginSubmit}>
-        <label>Email or Username:</label>
-        <input
-          type="text"
-          name="emailOrUsername"
-          value={emailOrUsername}
-          onChange={handleEmail}
-        />
+        {errorMessage && (
+          <div className="p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-md">
+            {errorMessage}
+          </div>
+        )}
 
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handlePassword}
-        />
+        <form onSubmit={handleLoginSubmit} className="space-y-5">
+          <div>
+            <label className="block mb-1 text-gray-600">
+              Email or Username
+            </label>
+            <input
+              type="text"
+              name="emailOrUsername"
+              value={emailOrUsername}
+              onChange={handleEmail}
+              className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              placeholder="Enter your email or username"
+              required
+            />
+          </div>
 
-        <button type="submit">Login</button>
-      </form>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <div>
+            <label className="block mb-1 text-gray-600">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={password}
+              onChange={handlePassword}
+              className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
 
-      <p>Don't have an account yet?</p>
-      <Link to={"/signup"}> Sign Up</Link>
+          <button
+            type="submit"
+            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+            Login
+          </button>
+        </form>
+
+        <p className="text-sm text-center text-gray-600">
+          Don't have an account yet?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
