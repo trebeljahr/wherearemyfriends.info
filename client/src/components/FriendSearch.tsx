@@ -1,11 +1,10 @@
 import debounce from "lodash/debounce";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { cityData, countryData } from "../datasets/datasets";
 import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
 import { SharingState } from "./FriendsharingList";
-import { filter } from "lodash";
 
 type OptionType = {
   value: string;
@@ -33,6 +32,7 @@ function getCountryAndCityNameFromFriend(friend: Friend) {
 export const FriendSearch = () => {
   const friends = useFriends();
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [filteredFriends, setFilteredFriends] = useState<Friend[]>([]);
 
   const loadOptions = (
     inputValue: string,
@@ -93,14 +93,13 @@ export const FriendSearch = () => {
 
   const handleSelect = (option: OptionType | null) => {
     setSelectedOption(option);
-  };
 
-  const filteredFriends = useMemo(() => {
-    if (!selectedOption) {
-      return friends;
+    if (!option) {
+      setFilteredFriends([]);
+      return;
     }
 
-    const optionValueLower = normalizeName(selectedOption.value);
+    const optionValueLower = normalizeName(option.value);
 
     const filtered =
       friends.filter((friend) => {
@@ -110,16 +109,16 @@ export const FriendSearch = () => {
         const { countryName, cityName } =
           getCountryAndCityNameFromFriend(friend);
 
-        if (selectedOption.type === "country") {
+        if (option.type === "country") {
           return countryName === optionValueLower;
-        } else if (selectedOption.type === "city") {
+        } else if (option.type === "city") {
           return cityName === optionValueLower;
         }
         return false;
       }) || [];
 
-    return filtered;
-  }, [friends, selectedOption]);
+    setFilteredFriends(filtered);
+  };
 
   return (
     <div>
