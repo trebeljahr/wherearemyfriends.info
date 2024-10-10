@@ -17,4 +17,4 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-export { TOKEN_SECRET, MONGODB_URI };
+export { TOKEN_SECRET, MONGODB_URI, PORT };

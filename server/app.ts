@@ -18,6 +18,7 @@ app.use("/api", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/api", userRoutes);
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 addErrorHandlingToApp(app);
 
