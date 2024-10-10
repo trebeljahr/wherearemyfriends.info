@@ -62,7 +62,9 @@ export const Navbar = () => {
               src="/favicon/android-chrome-192x192.png"
               alt="logo favicon"
             />
-            <div className="text-xl font-bold mx-2">wherearemyfriends.info</div>
+            <div className="text-sm sm:text-base md:text-xl font-bold mx-2">
+              wherearemyfriends.info
+            </div>
           </div>
         </NavLink>
 

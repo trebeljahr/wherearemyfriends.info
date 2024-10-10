@@ -44,7 +44,7 @@ export type Friend = {
   };
 };
 
-export const MapWithFriendMarkers: React.FC = () => {
+export function useFriends() {
   const [friends, setFriends] = useState<Friend[]>([]);
 
   // Fetch friends' locations from API
@@ -60,6 +60,12 @@ export const MapWithFriendMarkers: React.FC = () => {
 
     fetchFriendsLocations();
   }, []);
+
+  return friends;
+}
+
+export const MapWithFriendMarkers: React.FC = () => {
+  const friends = useFriends();
 
   return (
     <MapContainer

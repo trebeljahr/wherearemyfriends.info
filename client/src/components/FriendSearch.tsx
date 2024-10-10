@@ -1,8 +1,8 @@
+import debounce from "lodash.debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
-import debounce from "lodash.debounce";
-import { useAuth, UserType } from "../context/auth.context";
 import { cityData, countryData } from "../datasets/datasets";
+import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
 
 type OptionType = {
   value: string;
@@ -11,10 +11,9 @@ type OptionType = {
 };
 
 export const FriendSearch = () => {
-  const { user } = useAuth();
-
+  const friends = useFriends();
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
-  const [filteredUsers, setFilteredUsers] = useState<UserType[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<Friend[]>([]);
 
   const normalizeName = (name: string) => name.trim().toLowerCase();
 
@@ -90,12 +89,16 @@ export const FriendSearch = () => {
     const optionValueLower = normalizeName(option.value);
 
     const filtered =
-      user?.friends.filter((user) => {
-        const countryName = user.location.country?.name
-          ? normalizeName(user.location.country.name)
+      friends.filter((friend) => {
+        if (!friend.location) {
+          return false;
+        }
+
+        const countryName = friend.location.name
+          ? normalizeName(friend.location.name)
           : "";
-        const cityName = user.location.city?.name
-          ? normalizeName(user.location.city.name)
+        const cityName = friend.location.name
+          ? normalizeName(friend.location.name)
           : "";
 
         if (option.type === "country") {
@@ -130,15 +133,13 @@ export const FriendSearch = () => {
       {filteredUsers.length > 0 ? (
         <ul className="list-none p-0">
           {filteredUsers.map((user) => (
-            <li key={user._id} className="flex items-center mb-3">
+            <li key={user.id} className="flex items-center mb-3">
               <img
-                src={user.profilePicture}
-                alt={`${user.username}'s profile`}
-                width="50"
-                height="50"
-                className="rounded-full mr-3 object-cover"
+                src={assembleImageUrl(user.profilePicture)}
+                alt={`${user.name}'s profile`}
+                className="rounded-full w-10 h-10 mr-3 object-cover"
               />
-              <span className="text-lg">{user.username}</span>
+              <span className="text-lg">{user.name}</span>
             </li>
           ))}
         </ul>
