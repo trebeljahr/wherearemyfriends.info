@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 
 import Navbar from "./components/Navbar";
 import IsPrivate from "./components/IsPrivate";
-import IsAnon from "./components/IsAnon/IsAnon";
+import IsAnon from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
 
 function App() {

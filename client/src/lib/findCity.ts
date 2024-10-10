@@ -13,11 +13,11 @@ export const findCityAndCountryByCoordinates = (
   const point = turf.point([longitude, latitude]);
   const city = turf.nearestPoint(
     point,
-    typedGoodCityData
+    cityData
   ) as unknown as Feature<CityProperties>;
 
   const countryId = city.properties.country.id;
-  const country = typedGoodCountryData[countryId];
+  const country = countryData[countryId];
 
   return {
     city: {
