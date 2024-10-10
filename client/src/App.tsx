@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-
 import Navbar from "./components/Navbar";
 import IsPrivate from "./components/IsPrivate";
 import IsAnon from "./components/IsAnon";
-import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
+import { FriendsPage } from "./pages/FriendsPage";
 
 function App() {
   return (
