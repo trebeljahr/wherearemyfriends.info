@@ -2,9 +2,9 @@ import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
-import { cityData, countryData } from "../datasets/datasets";
 import { SharingState } from "./FriendsharingList";
 import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
+import { CityAndCountryData, useData } from "src/context/DataContext";
 
 type OptionType = {
   value: string;
@@ -20,8 +20,14 @@ function resolveSharingState(sharingState: SharingState) {
   return { shareCountry, shareCity };
 }
 
-function getCountryAndCityNameFromFriend(friend: Friend) {
-  const { country, city } = findCityAndCountryByCoordinates(friend.location);
+function getCountryAndCityNameFromFriend(
+  data: CityAndCountryData,
+  friend: Friend
+) {
+  const { country, city } = findCityAndCountryByCoordinates(
+    data,
+    friend.location
+  );
 
   return {
     countryName: normalizeName(country.name),
@@ -30,7 +36,12 @@ function getCountryAndCityNameFromFriend(friend: Friend) {
 }
 
 export const SharingInformation = ({ friend }: { friend: Friend }) => {
-  const { countryName, cityName } = getCountryAndCityNameFromFriend(friend);
+  const data = useData();
+
+  const { countryName, cityName } = getCountryAndCityNameFromFriend(
+    data,
+    friend
+  );
   const { shareCountry, shareCity } = resolveSharingState(friend.sharingState);
 
   return (
@@ -54,8 +65,15 @@ export const SharingInformation = ({ friend }: { friend: Friend }) => {
 
 export const FriendSearch = () => {
   const friends = useFriends();
+  const { cityData, countryData } = useData();
+  const data = { cityData, countryData };
+
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [filteredFriends, setFilteredFriends] = useState<Friend[]>([]);
+
+  if (!cityData || !countryData) {
+    return null;
+  }
 
   const loadOptions = (
     inputValue: string,
@@ -129,8 +147,10 @@ export const FriendSearch = () => {
         if (!friend.location) {
           return false;
         }
-        const { countryName, cityName } =
-          getCountryAndCityNameFromFriend(friend);
+        const { countryName, cityName } = getCountryAndCityNameFromFriend(
+          data,
+          friend
+        );
 
         if (option.type === "country") {
           return countryName === optionValueLower;

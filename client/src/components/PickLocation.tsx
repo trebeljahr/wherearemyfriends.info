@@ -7,14 +7,16 @@ import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
+import { useData } from "src/context/DataContext";
 
 const UserLocationMarkers = () => {
   const { user, refreshUser } = useAuth();
+  const data =  useData();
 
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
     try {
-      const { city, country } = findCityAndCountryByCoordinates({
+      const { city, country } = findCityAndCountryByCoordinates(data, {
         name: "exactLocation",
         longitude: position[0],
         latitude: position[1],

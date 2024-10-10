@@ -7,7 +7,7 @@ import {
 import { SingleLocation } from "src/services/user.service";
 
 export const findCityAndCountryByCoordinates = (
-  data: CityAndCountryData,
+  { cityData, countryData }: CityAndCountryData,
   { latitude, longitude }: SingleLocation
 ): { city: SingleLocation; country: SingleLocation } => {
   const point = turf.point([longitude, latitude]);
