@@ -14,7 +14,6 @@ function HomePageForLoggedInUsers() {
   return (
     <div>
       <FriendSearch />
-      <MapWithFriendMarkers />
     </div>
   );
 }

@@ -63,9 +63,7 @@ export function useFriends() {
   return friends;
 }
 
-export const MapWithFriendMarkers: React.FC = () => {
-  const friends = useFriends();
-
+export const MapWithFriendMarkers = ({ friends }: { friends: Friend[] }) => {
   return (
     <MapContainer
       center={[0, 0]}

@@ -2,7 +2,12 @@ import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { cityData, countryData } from "../datasets/datasets";
-import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
+import {
+  assembleImageUrl,
+  Friend,
+  MapWithFriendMarkers,
+  useFriends,
+} from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
 import { SharingState } from "./FriendsharingList";
 
@@ -121,63 +126,71 @@ export const FriendSearch = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Search Users by Location</h2>
-      <AsyncSelect
-        cacheOptions
-        loadOptions={debouncedLoadOptions}
-        defaultOptions={false}
-        value={selectedOption}
-        openMenuOnClick={false}
-        onChange={handleSelect}
-        placeholder="Type a city or country name"
-        isClearable={true}
-        className="w-72 mb-5 relative z-[1100]"
-      />
-      {selectedOption && (
-        <h3 className="text-xl font-medium mb-3">
-          Users in {selectedOption.label}:
-        </h3>
-      )}
-      {filteredFriends.length > 0 ? (
-        <ul className="list-none p-0">
-          {filteredFriends.map((friend) => {
-            const { countryName, cityName } =
-              getCountryAndCityNameFromFriend(friend);
-            const { shareCountry, shareCity } = resolveSharingState(
-              friend.sharingState
-            );
-            return (
-              <li
-                key={friend.id}
-                className="flex items-center my-6 not-prose space-x-4"
-              >
-                <img
-                  src={assembleImageUrl(friend.profilePicture)}
-                  alt={`${friend.name}'s profile`}
-                  className="rounded-full w-10 h-10 object-cover"
-                />
-                <div className="text-lg">
-                  <p>
-                    <b>{friend.name}</b> is sharing {friend.sharingState}{" "}
-                    location:
-                  </p>
-                  {shareCountry && <p>Country: {countryName}</p>}
-                  {shareCity && <p>City: {cityName}</p>}
-                  {friend.sharingState === "exact" && (
+    <>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">
+          Search Users by Location
+        </h2>
+        <AsyncSelect
+          cacheOptions
+          loadOptions={debouncedLoadOptions}
+          defaultOptions={false}
+          value={selectedOption}
+          openMenuOnClick={false}
+          onChange={handleSelect}
+          placeholder="Type a city or country name"
+          isClearable={true}
+          className="w-72 mb-5 relative z-[1100]"
+        />
+        {selectedOption && (
+          <h3 className="text-xl font-medium mb-3">
+            Users in {selectedOption.label}:
+          </h3>
+        )}
+
+        {filteredFriends.length > 0 ? (
+          <ul className="list-none p-0">
+            {filteredFriends.map((friend) => {
+              const { countryName, cityName } =
+                getCountryAndCityNameFromFriend(friend);
+              const { shareCountry, shareCity } = resolveSharingState(
+                friend.sharingState
+              );
+              return (
+                <li
+                  key={friend.id}
+                  className="flex items-center my-6 not-prose space-x-4"
+                >
+                  <img
+                    src={assembleImageUrl(friend.profilePicture)}
+                    alt={`${friend.name}'s profile`}
+                    className="rounded-full w-10 h-10 object-cover"
+                  />
+                  <div className="text-lg">
                     <p>
-                      Lat: {friend.location.latitude}, Lon:{" "}
-                      {friend.location.longitude}
+                      <b>{friend.name}</b> is sharing {friend.sharingState}{" "}
+                      location:
                     </p>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        selectedOption && <p>No users found in this location.</p>
-      )}
-    </div>
+                    {shareCountry && <p>Country: {countryName}</p>}
+                    {shareCity && <p>City: {cityName}</p>}
+                    {friend.sharingState === "exact" && (
+                      <p>
+                        Lat: {friend.location.latitude}, Lon:{" "}
+                        {friend.location.longitude}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          selectedOption && <p>No users found in this location.</p>
+        )}
+      </div>
+      <MapWithFriendMarkers
+        friends={selectedOption ? filteredFriends : friends}
+      />
+    </>
   );
 };
