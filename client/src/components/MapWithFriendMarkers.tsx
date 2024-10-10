@@ -36,7 +36,7 @@ const createClusterCustomIcon = function (cluster: MarkerCluster) {
 
   return L.divIcon({
     html: `
-      <div class="font-bold w-10 h-10 flex items-center justify-center text-white bg-slate-500 rounded-full">
+      <div class="font-bold w-10 h-10 flex items-center justify-center text-white bg-slate-900 rounded-full">
         ${count}
       </div>
     `,
@@ -89,7 +89,9 @@ export function useFriends() {
   return friends;
 }
 
-export const MapWithFriendMarkers = ({ friends }: { friends: Friend[] }) => {
+export const MapWithFriendMarkers = () => {
+  const friends = useFriends();
+
   return (
     <MapContainer
       center={[0, 0]}

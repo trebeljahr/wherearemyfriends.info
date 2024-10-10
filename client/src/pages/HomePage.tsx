@@ -1,4 +1,5 @@
 import { FriendSearch } from "src/components/FriendSearch";
+import { MapWithFriendMarkers } from "src/components/MapWithFriendMarkers";
 import { useAuth } from "src/context/auth.context";
 
 function HomePageForNonLoggedInUsers() {
@@ -13,6 +14,7 @@ function HomePageForLoggedInUsers() {
   return (
     <div>
       <FriendSearch />
+      <MapWithFriendMarkers />
     </div>
   );
 }

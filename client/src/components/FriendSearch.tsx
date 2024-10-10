@@ -1,15 +1,10 @@
 import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
-import { cityData, countryData } from "../datasets/datasets";
-import {
-  assembleImageUrl,
-  Friend,
-  MapWithFriendMarkers,
-  useFriends,
-} from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
+import { cityData, countryData } from "../datasets/datasets";
 import { SharingState } from "./FriendsharingList";
+import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
 
 type OptionType = {
   value: string;
@@ -188,9 +183,6 @@ export const FriendSearch = () => {
           selectedOption && <p>No users found in this location.</p>
         )}
       </div>
-      <MapWithFriendMarkers
-        friends={selectedOption ? filteredFriends : friends}
-      />
     </>
   );
 };
