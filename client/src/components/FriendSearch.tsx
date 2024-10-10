@@ -1,8 +1,10 @@
-import debounce from "lodash.debounce";
+import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { cityData, countryData } from "../datasets/datasets";
 import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
+import { findCityAndCountryByCoordinates } from "src/lib/findCity";
+import { SharingState } from "./FriendsharingList";
 
 type OptionType = {
   value: string;
@@ -10,14 +12,28 @@ type OptionType = {
   type: "city" | "country";
 };
 
+const normalizeName = (name: string) => name.trim();
+
+function resolveSharingState(sharingState: SharingState) {
+  const shareCountry = sharingState !== "none";
+  const shareCity = sharingState !== "country" && shareCountry;
+  return { shareCountry, shareCity };
+}
+
+function getCountryAndCityNameFromFriend(friend: Friend) {
+  const { country, city } = findCityAndCountryByCoordinates(friend.location);
+
+  return {
+    countryName: normalizeName(country.name),
+    cityName: normalizeName(city.name),
+  };
+}
+
 export const FriendSearch = () => {
   const friends = useFriends();
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
-  const [filteredUsers, setFilteredUsers] = useState<Friend[]>([]);
+  const [filteredFriends, setFilteredFriends] = useState<Friend[]>([]);
 
-  const normalizeName = (name: string) => name.trim().toLowerCase();
-
-  // Function to load options asynchronously
   const loadOptions = (
     inputValue: string,
     callback: (options: OptionType[]) => void
@@ -29,7 +45,6 @@ export const FriendSearch = () => {
 
     const inputLower = inputValue.toLowerCase();
 
-    // Filter country options
     const countryOptions: OptionType[] = Object.keys(countryData)
       .filter((countryId) => {
         const countryName = countryData[countryId].name;
@@ -44,7 +59,6 @@ export const FriendSearch = () => {
         };
       });
 
-    // Filter city options with a limit
     const maxCities = 50;
     const cityOptions: OptionType[] = [];
     let cityCount = 0;
@@ -75,14 +89,13 @@ export const FriendSearch = () => {
     callback(options);
   };
 
-  // Debounce the loadOptions function
   const debouncedLoadOptions = debounce(loadOptions, 300);
 
   const handleSelect = (option: OptionType | null) => {
     setSelectedOption(option);
 
     if (!option) {
-      setFilteredUsers([]);
+      setFilteredFriends([]);
       return;
     }
 
@@ -93,13 +106,8 @@ export const FriendSearch = () => {
         if (!friend.location) {
           return false;
         }
-
-        const countryName = friend.location.name
-          ? normalizeName(friend.location.name)
-          : "";
-        const cityName = friend.location.name
-          ? normalizeName(friend.location.name)
-          : "";
+        const { countryName, cityName } =
+          getCountryAndCityNameFromFriend(friend);
 
         if (option.type === "country") {
           return countryName === optionValueLower;
@@ -109,7 +117,7 @@ export const FriendSearch = () => {
         return false;
       }) || [];
 
-    setFilteredUsers(filtered);
+    setFilteredFriends(filtered);
   };
 
   return (
@@ -120,6 +128,7 @@ export const FriendSearch = () => {
         loadOptions={debouncedLoadOptions}
         defaultOptions={false}
         value={selectedOption}
+        openMenuOnClick={false}
         onChange={handleSelect}
         placeholder="Type a city or country name"
         isClearable={true}
@@ -130,18 +139,41 @@ export const FriendSearch = () => {
           Users in {selectedOption.label}:
         </h3>
       )}
-      {filteredUsers.length > 0 ? (
+      {filteredFriends.length > 0 ? (
         <ul className="list-none p-0">
-          {filteredUsers.map((user) => (
-            <li key={user.id} className="flex items-center mb-3">
-              <img
-                src={assembleImageUrl(user.profilePicture)}
-                alt={`${user.name}'s profile`}
-                className="rounded-full w-10 h-10 mr-3 object-cover"
-              />
-              <span className="text-lg">{user.name}</span>
-            </li>
-          ))}
+          {filteredFriends.map((friend) => {
+            const { countryName, cityName } =
+              getCountryAndCityNameFromFriend(friend);
+            const { shareCountry, shareCity } = resolveSharingState(
+              friend.sharingState
+            );
+            return (
+              <li
+                key={friend.id}
+                className="flex items-center my-6 not-prose space-x-4"
+              >
+                <img
+                  src={assembleImageUrl(friend.profilePicture)}
+                  alt={`${friend.name}'s profile`}
+                  className="rounded-full w-10 h-10 object-cover"
+                />
+                <div className="text-lg">
+                  <p>
+                    <b>{friend.name}</b> is sharing {friend.sharingState}{" "}
+                    location:
+                  </p>
+                  {shareCountry && <p>Country: {countryName}</p>}
+                  {shareCity && <p>City: {cityName}</p>}
+                  {friend.sharingState === "exact" && (
+                    <p>
+                      Lat: {friend.location.latitude}, Lon:{" "}
+                      {friend.location.longitude}
+                    </p>
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       ) : (
         selectedOption && <p>No users found in this location.</p>

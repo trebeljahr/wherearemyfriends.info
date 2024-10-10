@@ -7,7 +7,7 @@ import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import { useMap } from "react-leaflet";
 import { userService } from "src/services/user.service";
-import { backendURL } from "./FriendsharingList";
+import { backendURL, SharingState } from "./FriendsharingList";
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;
@@ -36,7 +36,7 @@ export type Friend = {
   id: string;
   name: string;
   profilePicture: string;
-  sharingState: string;
+  sharingState: SharingState;
   location: {
     name: string;
     latitude: number;
@@ -82,8 +82,6 @@ export const MapWithFriendMarkers: React.FC = () => {
         if (!friend.location) {
           return null;
         }
-
-        console.log(friend);
 
         return (
           <Marker

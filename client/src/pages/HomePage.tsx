@@ -18,6 +18,7 @@ function HomePageForLoggedInUsers() {
     </div>
   );
 }
+
 export function HomePage() {
   const { isLoggedIn } = useAuth();
   return (
