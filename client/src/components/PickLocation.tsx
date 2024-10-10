@@ -68,7 +68,7 @@ const UserLocationMarkers = () => {
             user?.location.city.latitude,
             user?.location.city.longitude,
           ]}
-          icon={createAvatarMarker(user.profilePicture, "red-400")}
+          icon={createAvatarMarker(user.profilePicture, "bg-slate-500")}
         />
       )}
       {user?.location?.country && (
@@ -77,7 +77,7 @@ const UserLocationMarkers = () => {
             user?.location.country.latitude,
             user?.location.country.longitude,
           ]}
-          icon={createAvatarMarker(user.profilePicture, "slate-500")}
+          icon={createAvatarMarker(user.profilePicture, "bg-green-500")}
         />
       )}
       {user?.location?.exact && (
@@ -87,7 +87,7 @@ const UserLocationMarkers = () => {
             user.location.exact.longitude,
           ]}
           draggable={true}
-          icon={createAvatarMarker(user.profilePicture)}
+          icon={createAvatarMarker(user.profilePicture, "bg-red-400")}
         />
       )}
     </>
@@ -100,25 +100,41 @@ const bounds = [
 ] as LatLngBoundsExpression;
 
 export const PickLocation = () => {
+  const { user } = useAuth();
   const defaultCenter: [number, number] = [0, 0];
 
   return (
-    <MapContainer
-      center={defaultCenter}
-      zoom={2}
-      minZoom={2}
-      maxZoom={18}
-      style={{ height: "80vh", width: "80vw" }}
-      maxBounds={bounds}
-      maxBoundsViscosity={1.0}
-      worldCopyJump={false}
-      inertia={false}
-    >
-      <TileLayer
-        url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-        attribution="&copy; OpenStreetMap contributors"
-      />
-      <UserLocationMarkers />
-    </MapContainer>
+    <>
+      <div>
+        {user?.location.city && <p>City: {user?.location.city?.name}</p>}
+        {user?.location.country && (
+          <p>Country: {user?.location.country?.name}</p>
+        )}
+        {user?.location.exact && (
+          <p>
+            Lat: {user?.location.exact?.latitude}, Lon:{" "}
+            {user?.location.exact?.latitude}
+          </p>
+        )}
+      </div>
+
+      <MapContainer
+        center={defaultCenter}
+        zoom={2}
+        minZoom={2}
+        maxZoom={18}
+        style={{ height: "80vh", width: "80vw" }}
+        maxBounds={bounds}
+        maxBoundsViscosity={1.0}
+        worldCopyJump={false}
+        inertia={false}
+      >
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
+        <UserLocationMarkers />
+      </MapContainer>
+    </>
   );
 };

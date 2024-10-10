@@ -72,7 +72,7 @@ export const FriendList = () => {
           </div>
           <div className="flex items-center">
             <button
-              className="w-10 self-start h-10 bg-red-500 text-white p-1 rounded-full flex justify-center items-center"
+              className="w-10 self-start h-10 bg-red-400 text-white p-1 rounded-full flex justify-center items-center"
               onClick={() => handleRemoveFriend(friend._id)}
             >
               <FaTrash />

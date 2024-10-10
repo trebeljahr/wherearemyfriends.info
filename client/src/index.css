@@ -10,6 +10,10 @@ body {
   margin: 0;
 }
 
+.leaflet-control-attribution {
+  display: none;
+}
+
 .custom-pin {
   position: relative;
   width: 40px;
