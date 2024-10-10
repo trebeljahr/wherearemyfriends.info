@@ -7,7 +7,7 @@ interface IsAnonProps {
   children: ReactElement;
 }
 
-function IsAnon({ children }: IsAnonProps) {
+export function IsAnon({ children }: IsAnonProps) {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
@@ -20,5 +20,3 @@ function IsAnon({ children }: IsAnonProps) {
 
   return children;
 }
-
-export default IsAnon;

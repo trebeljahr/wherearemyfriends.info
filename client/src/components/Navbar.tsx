@@ -9,7 +9,7 @@ import {
 } from "./FoldableUserLogo";
 import { CustomNavLink } from "./CustomNavlink";
 
-const Navbar = () => {
+export const Navbar = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,13 +66,11 @@ const Navbar = () => {
           </div>
         </NavLink>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
           <div className="flex items-center space-x-4">{links}</div>
           <FoldableUserLogo />
         </div>
 
-        {/* Mobile Menu Icon */}
         <div className="flex md:hidden">
           <FoldableUserLogo />
 
@@ -85,7 +83,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -96,8 +93,6 @@ const Navbar = () => {
             className="md:hidden bg-gray-800 overflow-hidden z-10"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-              {/* <div className="self-end mr-2 mt-2"></div> */}
-
               {links}
             </div>
           </motion.div>
@@ -106,5 +101,3 @@ const Navbar = () => {
     </nav>
   );
 };
-
-export default Navbar;

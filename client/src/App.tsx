@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ProfilePage from "./pages/ProfilePage";
-import SignupPage from "./pages/SignupPage/SignupPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import Navbar from "./components/Navbar";
-import IsPrivate from "./components/IsPrivate";
-import IsAnon from "./components/IsAnon";
+import { HomePage } from "./pages/HomePage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { SignupPage } from "./pages/SignupPage";
+import { LoginPage } from "./pages/LoginPage";
+import { Navbar } from "./components/Navbar";
+import { IsPrivate } from "./components/IsPrivate";
+import { IsAnon } from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage";
 
-function App() {
+export function App() {
   return (
     <div className="prose prose-a:no-underline w-screen min-h-screen max-w-none flex flex-col">
       <Navbar />
@@ -60,5 +60,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

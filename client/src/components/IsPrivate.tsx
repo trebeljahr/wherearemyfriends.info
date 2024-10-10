@@ -7,7 +7,7 @@ interface IsPrivateProps {
   children: ReactElement;
 }
 
-function IsPrivate({ children }: IsPrivateProps) {
+export function IsPrivate({ children }: IsPrivateProps) {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
@@ -19,5 +19,3 @@ function IsPrivate({ children }: IsPrivateProps) {
   }
   return children;
 }
-
-export default IsPrivate;
