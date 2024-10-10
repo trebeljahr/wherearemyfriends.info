@@ -1,6 +1,9 @@
+import path from "path";
+
 const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 const MONGODB_URI = process.env.MONGODB_URI as string;
 const PORT = process.env.PORT as string;
+const FRONTEND_URL = process.env.FRONTEND_URL as string;
 
 if (!process.env.TOKEN_SECRET) {
   console.error("TOKEN_SECRET not provided in the environment");
@@ -17,4 +20,9 @@ if (!MONGODB_URI) {
   process.exit(1);
 }
 
-export { TOKEN_SECRET, MONGODB_URI, PORT };
+const CORRECT_PATH =
+  process.env.NODE_ENV === "production"
+    ? path.resolve(__dirname, "../..")
+    : path.resolve(__dirname, "..");
+
+export { TOKEN_SECRET, MONGODB_URI, PORT, FRONTEND_URL, CORRECT_PATH };

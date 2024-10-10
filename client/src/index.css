@@ -2,8 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background-color: rgb(17 24 39);
+}
+
 body {
   margin: 0;
+}
+
+.leaflet-control-attribution {
+  display: none;
 }
 
 .custom-pin {
@@ -23,7 +31,7 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 50%;
-  border: 2px solid white; 
+  border: 1px solid white; 
   z-index: 10; 
   transform: rotate(45deg); 
 }

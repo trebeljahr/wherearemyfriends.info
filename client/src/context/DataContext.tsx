@@ -22,9 +22,11 @@ export interface CityProperties {
 
 export type CityData = GeoJsonData<CityProperties>;
 
+export type CountryData = CountriesById;
+
 export type CityAndCountryData = {
-  cityData: CityData | null;
-  countryData: CountriesById | null;
+  cityData: CityData;
+  countryData: CountryData;
 };
 
 interface GeoJsonData<T> {
@@ -42,27 +44,24 @@ interface CountriesById {
 }
 
 export const DataContext = createContext<CityAndCountryData>({
-  cityData: null,
-  countryData: null,
+  cityData: null!,
+  countryData: null!,
 });
 
 export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [data, setData] = useState({ cityData: null, countryData: null });
+  const [data, setData] = useState<CityAndCountryData>({
+    cityData: null!,
+    countryData: null!,
+  });
 
   useEffect(() => {
     async function fetchData() {
-      console.log("PUBLIC_URL", process.env.PUBLIC_URL);
-
       try {
-        const cityDataResponse = await fetch(
-          `${process.env.PUBLIC_URL}/data/cityData.json`
-        );
-        const cityData = await cityDataResponse.json();
+        const cityDataResponse = await fetch("/data/cityData.json");
+        const cityData = (await cityDataResponse.json()) as CityData;
 
-        const countryDataResponse = await fetch(
-          `${process.env.PUBLIC_URL}/data/countryData.json`
-        );
-        const countryData = await countryDataResponse.json();
+        const countryDataResponse = await fetch("/data/countryData.json");
+        const countryData = (await countryDataResponse.json()) as CountryData;
 
         setData({ cityData, countryData });
       } catch (error) {

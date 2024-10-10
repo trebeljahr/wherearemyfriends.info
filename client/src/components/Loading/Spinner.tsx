@@ -1,6 +1,6 @@
 import "./Loading.css";
 
-const Loading = () => {
+export const LoadingSpinner = () => {
   return (
     <div className="wrapper">
       <div className="spinner">
@@ -11,5 +11,3 @@ const Loading = () => {
     </div>
   );
 };
-
-export default Loading;

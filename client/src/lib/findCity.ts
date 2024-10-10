@@ -7,18 +7,17 @@ import {
 import { SingleLocation } from "src/services/user.service";
 
 export const findCityAndCountryByCoordinates = (
-  data: CityAndCountryData,
+  { cityData, countryData }: CityAndCountryData,
   { latitude, longitude }: SingleLocation
 ): { city: SingleLocation; country: SingleLocation } => {
   const point = turf.point([longitude, latitude]);
   const city = turf.nearestPoint(
     point,
-    typedGoodCityData
+    cityData
   ) as unknown as Feature<CityProperties>;
 
   const countryId = city.properties.country.id;
-  const country = typedGoodCountryData[countryId];
-  console.log(city, country);
+  const country = countryData[countryId];
 
   return {
     city: {

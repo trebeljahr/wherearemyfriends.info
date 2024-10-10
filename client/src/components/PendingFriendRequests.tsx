@@ -10,7 +10,7 @@ type UserRequest = {
 };
 
 export const PendingFriendRequests = () => {
-  const { user, authToken } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const [pendingRequests, setPendingRequests] = useState<UserRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export const PendingFriendRequests = () => {
     };
 
     fetchPendingRequests();
-  }, [user, authToken]);
+  }, [user]);
 
   const handleAccept = async (requesterId: string) => {
     if (!user) {
@@ -42,11 +42,10 @@ export const PendingFriendRequests = () => {
 
     try {
       await userService.acceptFriendRequest(requesterId);
-
-      // Remove the accepted request from the state
       setPendingRequests((prevRequests) =>
         prevRequests.filter((request) => request.id !== requesterId)
       );
+      await refreshUser();
     } catch (err) {
       alert("Failed to accept friend request.");
     }
@@ -70,7 +69,7 @@ export const PendingFriendRequests = () => {
   };
 
   return (
-    <div className="p-4">
+    <div>
       <h2 className="text-2xl font-bold mb-4">Pending Friend Requests</h2>
       {loading ? (
         <p>Loading...</p>
@@ -97,7 +96,7 @@ export const PendingFriendRequests = () => {
                 </button>
                 <button
                   onClick={() => handleDecline(request.id)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  className="px-4 py-2 bg-red-400 text-white rounded hover:bg-red-600"
                 >
                   Decline
                 </button>

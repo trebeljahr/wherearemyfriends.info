@@ -5,15 +5,22 @@ import { useAuth } from "src/context/auth.context";
 import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapWithFriendMarkers";
-import { findCityAndCountryByCoordinates } from "./findCity";
+import { findCityAndCountryByCoordinates } from "../lib/findCity";
+import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
+import { useData } from "src/context/DataContext";
 
 const UserLocationMarkers = () => {
-  const { user, authenticateUser } = useAuth();
+  const { user, refreshUser } = useAuth();
+  const data = useData();
+
+  if (!user || !data.cityData || !data.countryData) {
+    return null;
+  }
 
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
     try {
-      const { city, country } = findCityAndCountryByCoordinates({
+      const { city, country } = findCityAndCountryByCoordinates(data, {
         name: "exactLocation",
         longitude: position[0],
         latitude: position[1],
@@ -43,7 +50,7 @@ const UserLocationMarkers = () => {
       }
 
       await userService.updateUserLocation(update);
-      await authenticateUser();
+      await refreshUser();
     } catch (error) {
       console.error("Error updating location:", error);
     }
@@ -68,10 +75,7 @@ const UserLocationMarkers = () => {
             user?.location.city.latitude,
             user?.location.city.longitude,
           ]}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg",
-            "red-400"
-          )}
+          icon={createAvatarMarker(user.profilePicture, "bg-slate-500")}
         />
       )}
       {user?.location?.country && (
@@ -80,10 +84,7 @@ const UserLocationMarkers = () => {
             user?.location.country.latitude,
             user?.location.country.longitude,
           ]}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg",
-            "slate-500"
-          )}
+          icon={createAvatarMarker(user.profilePicture, "bg-green-500")}
         />
       )}
       {user?.location?.exact && (
@@ -93,9 +94,7 @@ const UserLocationMarkers = () => {
             user.location.exact.longitude,
           ]}
           draggable={true}
-          icon={createAvatarMarker(
-            "https://randomuser.me/api/portraits/men/40.jpg"
-          )}
+          icon={createAvatarMarker(user.profilePicture, "bg-red-400")}
         />
       )}
     </>
@@ -108,25 +107,73 @@ const bounds = [
 ] as LatLngBoundsExpression;
 
 export const PickLocation = () => {
+  const { user } = useAuth();
   const defaultCenter: [number, number] = [0, 0];
 
   return (
-    <MapContainer
-      center={defaultCenter}
-      zoom={2}
-      minZoom={2}
-      maxZoom={18}
-      style={{ height: "80vh", width: "80vw" }}
-      maxBounds={bounds}
-      maxBoundsViscosity={1.0}
-      worldCopyJump={false}
-      inertia={false}
-    >
-      <TileLayer
-        url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-        attribution="&copy; OpenStreetMap contributors"
-      />
-      <UserLocationMarkers />
-    </MapContainer>
+    <div className="prose-p:m-0 mb-5">
+      <div className="mt-2 flex bg-slate-200 p-5 mb-5">
+        <FaLocationCrosshairs className="mt-[6px] inline mr-2 rounded-full bg-green-400 w-5 h-5 p-[3px]" />
+
+        <div>
+          {user?.location.country ? (
+            <p>
+              <b>Country: </b>
+              {user?.location.country?.name}
+            </p>
+          ) : (
+            "You are not sharing your country location with anybody at the moment."
+          )}
+
+          {user?.location.city ? (
+            <p>
+              <b>City: </b>
+              {user?.location.city?.name}
+            </p>
+          ) : (
+            "You are not sharing your city location with anybody at the moment."
+          )}
+
+          {user?.location.exact ? (
+            <p>
+              <b>Lat:</b> {user?.location.exact?.latitude}, <b>Lon:</b>{" "}
+              {user?.location.exact?.latitude}
+            </p>
+          ) : (
+            "You are not sharing your exact location with anybody at the moment."
+          )}
+        </div>
+      </div>
+
+      <MapContainer
+        center={defaultCenter}
+        zoom={2}
+        minZoom={2}
+        maxZoom={18}
+        style={{ height: "80vh" }}
+        maxBounds={bounds}
+        maxBoundsViscosity={1.0}
+        worldCopyJump={false}
+        inertia={false}
+      >
+        <TileLayer
+          url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
+        <UserLocationMarkers />
+      </MapContainer>
+
+      <div className="mt-5 flex bg-slate-200 p-5">
+        <FaInfo className="mt-[6px] inline mr-2 rounded-full bg-yellow-400 w-5 h-5 p-[3px]" />
+
+        <p>
+          <b>Click on the map to update your location.</b>
+          <br />
+          Your location will be calculated and shared based on your privacy
+          settings and it's easier to share your exact location when you are
+          further zoomed in.
+        </p>
+      </div>
+    </div>
   );
 };

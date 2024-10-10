@@ -1,4 +1,4 @@
-import { FriendSearch } from "src/components/FriendSearch";
+import { UserSearch } from "src/components/UserSearch";
 import { FriendList } from "src/components/FriendsharingList";
 import { PendingFriendRequests } from "src/components/PendingFriendRequests";
 
@@ -8,7 +8,7 @@ export const FriendsPage = () => {
       <h1>Friends page</h1>
 
       <FriendList />
-      <FriendSearch />
+      <UserSearch />
       <PendingFriendRequests />
     </div>
   );

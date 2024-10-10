@@ -1,13 +1,15 @@
-// import "leaflet/dist/leaflet.css";
-import { DivIcon, divIcon } from "leaflet";
-import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-
+import L, { DivIcon, divIcon, MarkerCluster } from "leaflet";
 import { GestureHandling } from "leaflet-gesture-handling";
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
-import { useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import { userService } from "src/services/user.service";
-import { backendURL } from "./FriendsharingList";
+import { SharingState } from "./FriendsharingList";
+import { SharingInformation } from "./FriendSearch";
+
+export const backendURL = process.env.REACT_APP_SERVER_URL;
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;
@@ -15,28 +17,55 @@ export const assembleImageUrl = (img?: string) => {
 
 export const createAvatarMarker = (
   img: string,
-  color: string = "cyan-600"
+  color: string = "bg-slate-500"
 ): DivIcon => {
   const imgUrl = assembleImageUrl(img);
 
   return divIcon({
     html: `
-      <div class="custom-pin bg-${color}">
+      <div class="custom-pin ${color}">
         <div class="avatar-circle" style="background-image: url('${imgUrl}');"></div>
       </div>
     `,
-    className: "custom-avatar-marker", // Class for the custom marker
+    className: "",
     iconAnchor: [20, 40],
     popupAnchor: [0, -40],
     iconSize: [40, 40],
   });
 };
 
+const createClusterCustomIcon = function (cluster: MarkerCluster) {
+  const count = cluster.getChildCount();
+
+  return L.divIcon({
+    html: `
+      <div class="font-bold w-10 h-10 flex items-center justify-center text-white bg-slate-900 rounded-full">
+        ${count}
+      </div>
+    `,
+    className: "custom-cluster-icon",
+    iconSize: [40, 40],
+  });
+};
+
+function mapSharingStateToMarkerColor(sharingState: SharingState) {
+  switch (sharingState) {
+    case "exact":
+      return "bg-red-400";
+    case "city":
+      return "bg-cyan-600";
+    case "country":
+      return "bg-green-500";
+    default:
+      return undefined;
+  }
+}
+
 export type Friend = {
   id: string;
   name: string;
   profilePicture: string;
-  sharingState: string;
+  sharingState: SharingState;
   location: {
     name: string;
     latitude: number;
@@ -44,10 +73,9 @@ export type Friend = {
   };
 };
 
-export const MapWithFriendMarkers: React.FC = () => {
+export function useFriends() {
   const [friends, setFriends] = useState<Friend[]>([]);
 
-  // Fetch friends' locations from API
   useEffect(() => {
     const fetchFriendsLocations = async () => {
       try {
@@ -61,41 +89,51 @@ export const MapWithFriendMarkers: React.FC = () => {
     fetchFriendsLocations();
   }, []);
 
+  return friends;
+}
+
+export const MapWithFriendMarkers = () => {
+  const friends = useFriends();
+
   return (
     <MapContainer
       center={[0, 0]}
       zoom={2}
-      style={{ height: "80vh", width: "80vw" }}
+      style={{ height: "80vh", width: "calc(100vw-10px)" }}
     >
       <TileLayer
         url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution="&copy; OpenStreetMap contributors"
       />
       <MapController />
 
-      {friends.map((friend) => {
-        console.log(friend);
-
-        if (!friend.location) {
-          return null;
-        }
-
-        return (
-          <Marker
-            key={friend.id}
-            position={[friend.location.latitude, friend.location.longitude]}
-            icon={createAvatarMarker(friend.profilePicture)}
-          >
-            <Popup>
-              <div style={{ textAlign: "center" }}>
-                <p>{friend.name}</p>
-                <p>{friend.sharingState}</p>
-                <p>{friend.location.name}</p>
-              </div>
-            </Popup>
-          </Marker>
-        );
-      })}
+      <MarkerClusterGroup
+        chunkedLoading
+        iconCreateFunction={createClusterCustomIcon}
+        spiderfyOnMaxZoom={false}
+        showCoverageOnHover={false}
+      >
+        {friends
+          .filter((friend) => friend.location)
+          .map((friend) => {
+            return (
+              <Marker
+                key={friend.id}
+                position={[friend.location.latitude, friend.location.longitude]}
+                icon={createAvatarMarker(
+                  friend.profilePicture,
+                  mapSharingStateToMarkerColor(friend.sharingState)
+                )}
+              >
+                <Popup>
+                  <div style={{ textAlign: "center" }}>
+                    <SharingInformation friend={friend} />
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
+      </MarkerClusterGroup>
     </MapContainer>
   );
 };
@@ -105,7 +143,7 @@ export const MapController = () => {
 
   useEffect(() => {
     map.addHandler("gestureHandling", GestureHandling);
-    // @ts-expect-error typescript does not see additional handler here
+    // @ts-expect-error
     map.gestureHandling.enable();
   }, [map]);
 

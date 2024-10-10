@@ -1,20 +1,19 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import SignupPage from "./pages/SignupPage/SignupPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
+import { HomePage } from "./pages/HomePage";
+import { ProfilePage } from "./pages/ProfilePage";
+import { SignupPage } from "./pages/SignupPage";
+import { LoginPage } from "./pages/LoginPage";
+import { Navbar } from "./components/Navbar";
+import { IsPrivate } from "./components/IsPrivate";
+import { IsAnon } from "./components/IsAnon";
+import { FriendsPage } from "./pages/FriendsPage";
 
-import Navbar from "./components/Navbar/Navbar";
-import IsPrivate from "./components/IsPrivate/IsPrivate";
-import IsAnon from "./components/IsAnon/IsAnon";
-import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
-
-function App() {
+export function App() {
   return (
-    <div className="prose prose-a:no-underline w-screen h-screen max-w-none">
+    <div className="prose prose-a:no-underline w-screen min-h-screen max-w-none flex flex-col">
       <Navbar />
 
-      <div className="px-4 sm:px-6 lg:px-8 w-screen h-screen bg-gray-100">
+      <main className="px-4 sm:px-6 lg:px-8 w-screen min-h-screen bg-gray-100 flex-grow pb-24">
         <Routes>
           <Route path="/" element={<HomePage />} />
 
@@ -54,9 +53,10 @@ function App() {
             }
           />
         </Routes>
-      </div>
+      </main>
+      <footer className="text-center text-white py-4 bg-gray-900">
+        <p>&copy; {new Date().getFullYear()} wherearemyfriends.info</p>
+      </footer>
     </div>
   );
 }
-
-export default App;

@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../../services/auth.service";
+import authService from "../services/auth.service";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
@@ -115,5 +115,3 @@ export function SignupPage() {
     </div>
   );
 }
-
-export default SignupPage;

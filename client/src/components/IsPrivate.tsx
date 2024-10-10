@@ -1,17 +1,17 @@
 import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../context/auth.context";
-import Loading from "../Loading/Loading";
+import { useAuth } from "../context/auth.context";
+import { LoadingSpinner } from "./Loading/Spinner";
 
 interface IsPrivateProps {
   children: ReactElement;
 }
 
-function IsPrivate({ children }: IsPrivateProps) {
+export function IsPrivate({ children }: IsPrivateProps) {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
-    return <Loading />;
+    return <LoadingSpinner />;
   }
 
   if (!isLoggedIn) {
@@ -19,5 +19,3 @@ function IsPrivate({ children }: IsPrivateProps) {
   }
   return children;
 }
-
-export default IsPrivate;
