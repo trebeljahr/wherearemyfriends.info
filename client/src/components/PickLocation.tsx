@@ -11,7 +11,11 @@ import { useData } from "src/context/DataContext";
 
 const UserLocationMarkers = () => {
   const { user, refreshUser } = useAuth();
-  const data =  useData();
+  const data = useData();
+
+  if (!user || !data.cityData || !data.countryData) {
+    return null;
+  }
 
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
