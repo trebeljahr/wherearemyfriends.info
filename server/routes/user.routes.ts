@@ -135,6 +135,46 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
   }
 });
 
+router.delete("/friends", async (req: Request, res) => {
+  const { _id: userId } = req.auth as { _id: string };
+  const { friendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (
+      !user.friends.includes(friend.id) ||
+      !friend.friends.includes(user.id)
+    ) {
+      return res.status(400).json({ message: "User is not your friend" });
+    }
+
+    user.friends = user.friends.filter((id) => id.toString() !== friendId);
+    friend.friends = friend.friends.filter((id) => id.toString() !== userId);
+
+    user.privacySettings = user.privacySettings.filter(
+      (setting) => setting.friendId.toString() !== friendId
+    );
+
+    friend.privacySettings = friend.privacySettings.filter(
+      (setting) => setting.friendId.toString() !== userId
+    );
+
+    await user.save();
+    await friend.save();
+
+    return res.status(200).json({ message: "Friend removed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.put("/friends/privacy", async (req: Request, res) => {
   const { _id: currentUserId } = req.auth as { _id: string };
   const { friendId, newVisibility } = req.body;
