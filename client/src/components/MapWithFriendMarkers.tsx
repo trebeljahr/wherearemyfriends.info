@@ -7,6 +7,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { userService } from "src/services/user.service";
 import { backendURL, SharingState } from "./FriendsharingList";
+import { SharingInformation } from "./FriendSearch";
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;
@@ -96,7 +97,7 @@ export const MapWithFriendMarkers = () => {
     <MapContainer
       center={[0, 0]}
       zoom={2}
-      style={{ height: "80vh", width: "80vw" }}
+      style={{ height: "80vh", width: "calc(100vw-10px)" }}
     >
       <TileLayer
         url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
@@ -124,9 +125,7 @@ export const MapWithFriendMarkers = () => {
               >
                 <Popup>
                   <div style={{ textAlign: "center" }}>
-                    <p>{friend.name}</p>
-                    <p>{friend.sharingState}</p>
-                    <p>{friend.location.name}</p>
+                    <SharingInformation friend={friend} />
                   </div>
                 </Popup>
               </Marker>

@@ -29,6 +29,29 @@ function getCountryAndCityNameFromFriend(friend: Friend) {
   };
 }
 
+export const SharingInformation = ({ friend }: { friend: Friend }) => {
+  const { countryName, cityName } = getCountryAndCityNameFromFriend(friend);
+  const { shareCountry, shareCity } = resolveSharingState(friend.sharingState);
+
+  return (
+    <div className="prose prose-p:!m-0 !text-left">
+      <p className="leading-snug">
+        <b>{friend.name}</b> is sharing their {friend.sharingState} location.
+      </p>
+      <div className="mt-4">
+        {shareCountry && <p>Country: {countryName}</p>}
+        {shareCity && <p>City: {cityName}</p>}
+        {friend.sharingState === "exact" && (
+          <p>
+            Lat: {friend.location.latitude.toFixed(4)}, Lon:{" "}
+            {friend.location.longitude.toFixed(4)}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const FriendSearch = () => {
   const friends = useFriends();
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
@@ -146,11 +169,6 @@ export const FriendSearch = () => {
         {filteredFriends.length > 0 ? (
           <ul className="list-none p-0">
             {filteredFriends.map((friend) => {
-              const { countryName, cityName } =
-                getCountryAndCityNameFromFriend(friend);
-              const { shareCountry, shareCity } = resolveSharingState(
-                friend.sharingState
-              );
               return (
                 <li
                   key={friend.id}
@@ -161,20 +179,7 @@ export const FriendSearch = () => {
                     alt={`${friend.name}'s profile`}
                     className="rounded-full w-10 h-10 object-cover"
                   />
-                  <div className="text-lg">
-                    <p>
-                      <b>{friend.name}</b> is sharing {friend.sharingState}{" "}
-                      location:
-                    </p>
-                    {shareCountry && <p>Country: {countryName}</p>}
-                    {shareCity && <p>City: {cityName}</p>}
-                    {friend.sharingState === "exact" && (
-                      <p>
-                        Lat: {friend.location.latitude}, Lon:{" "}
-                        {friend.location.longitude}
-                      </p>
-                    )}
-                  </div>
+                  <SharingInformation friend={friend} />
                 </li>
               );
             })}

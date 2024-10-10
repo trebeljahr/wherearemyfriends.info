@@ -6,6 +6,7 @@ import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
+import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
 
 const UserLocationMarkers = () => {
   const { user, refreshUser } = useAuth();
@@ -104,18 +105,38 @@ export const PickLocation = () => {
   const defaultCenter: [number, number] = [0, 0];
 
   return (
-    <>
-      <div>
-        {user?.location.city && <p>City: {user?.location.city?.name}</p>}
-        {user?.location.country && (
-          <p>Country: {user?.location.country?.name}</p>
-        )}
-        {user?.location.exact && (
-          <p>
-            Lat: {user?.location.exact?.latitude}, Lon:{" "}
-            {user?.location.exact?.latitude}
-          </p>
-        )}
+    <div className="prose-p:m-0 mb-5">
+      <div className="mt-2 flex bg-slate-200 p-5 mb-5">
+        <FaLocationCrosshairs className="mt-[6px] inline mr-2 rounded-full bg-green-400 w-5 h-5 p-[3px]" />
+
+        <div>
+          {user?.location.country ? (
+            <p>
+              <b>Country: </b>
+              {user?.location.country?.name}
+            </p>
+          ) : (
+            "You are not sharing your country location with anybody at the moment."
+          )}
+
+          {user?.location.city ? (
+            <p>
+              <b>City: </b>
+              {user?.location.city?.name}
+            </p>
+          ) : (
+            "You are not sharing your city location with anybody at the moment."
+          )}
+
+          {user?.location.exact ? (
+            <p>
+              <b>Lat:</b> {user?.location.exact?.latitude}, <b>Lon:</b>{" "}
+              {user?.location.exact?.latitude}
+            </p>
+          ) : (
+            "You are not sharing your exact location with anybody at the moment."
+          )}
+        </div>
       </div>
 
       <MapContainer
@@ -123,7 +144,7 @@ export const PickLocation = () => {
         zoom={2}
         minZoom={2}
         maxZoom={18}
-        style={{ height: "80vh", width: "80vw" }}
+        style={{ height: "80vh" }}
         maxBounds={bounds}
         maxBoundsViscosity={1.0}
         worldCopyJump={false}
@@ -135,6 +156,18 @@ export const PickLocation = () => {
         />
         <UserLocationMarkers />
       </MapContainer>
-    </>
+
+      <div className="mt-5 flex bg-slate-200 p-5">
+        <FaInfo className="mt-[6px] inline mr-2 rounded-full bg-yellow-400 w-5 h-5 p-[3px]" />
+
+        <p>
+          <b>Click on the map to update your location.</b>
+          <br />
+          Your location will be calculated and shared based on your privacy
+          settings and it's easier to share your exact location when you are
+          further zoomed in.
+        </p>
+      </div>
+    </div>
   );
 };

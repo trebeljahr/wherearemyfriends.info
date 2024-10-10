@@ -5,6 +5,7 @@ import { useAuth } from "src/context/auth.context";
 function HomePageForNonLoggedInUsers() {
   return (
     <div>
+      <h1>Home page</h1>
       <h2>Log in to see your friends on the map</h2>
     </div>
   );
@@ -13,8 +14,11 @@ function HomePageForNonLoggedInUsers() {
 function HomePageForLoggedInUsers() {
   return (
     <div>
-      <FriendSearch />
+      <h1>Home page</h1>
+      <h2>Here are your friends on the map</h2>
+
       <MapWithFriendMarkers />
+      <FriendSearch />
     </div>
   );
 }
@@ -23,7 +27,6 @@ export function HomePage() {
   const { isLoggedIn } = useAuth();
   return (
     <div className="pt-24">
-      <h1>Home page</h1>
       {isLoggedIn ? (
         <HomePageForLoggedInUsers />
       ) : (
