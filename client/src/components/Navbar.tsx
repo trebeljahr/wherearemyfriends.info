@@ -6,7 +6,7 @@ import { useAuth } from "src/context/auth.context";
 import {
   FoldableUserLogo,
   useCloseWhenClickedOutside,
-} from "../FoldableUserLogo";
+} from "./FoldableUserLogo";
 import { CustomNavLink } from "./CustomNavlink";
 
 const Navbar = () => {

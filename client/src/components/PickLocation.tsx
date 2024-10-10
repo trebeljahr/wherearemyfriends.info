@@ -5,7 +5,7 @@ import { useAuth } from "src/context/auth.context";
 import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
 import { createAvatarMarker } from "./MapWithFriendMarkers";
-import { findCityAndCountryByCoordinates } from "./findCity";
+import { findCityAndCountryByCoordinates } from "../lib/findCity";
 
 const UserLocationMarkers = () => {
   const { user, authenticateUser } = useAuth();

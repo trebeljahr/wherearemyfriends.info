@@ -4,8 +4,8 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import SignupPage from "./pages/SignupPage/SignupPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 
-import Navbar from "./components/Navbar/Navbar";
-import IsPrivate from "./components/IsPrivate/IsPrivate";
+import Navbar from "./components/Navbar";
+import IsPrivate from "./components/IsPrivate";
 import IsAnon from "./components/IsAnon/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage/FriendsPage";
 
