@@ -1,41 +1,15 @@
 import * as turf from "@turf/turf";
-import { Point } from "geojson";
-import goodCityData from "../datasets/good-cities-data.json";
-import goodCountryData from "../datasets/good-countries-data.json";
+import {
+  CityProperties,
+  Feature,
+  CityAndCountryData,
+} from "src/context/DataContext";
 import { SingleLocation } from "src/services/user.service";
 
-interface GeoJsonData<T> {
-  type: "FeatureCollection";
-  features: Feature<T>[];
-}
-
-interface Feature<T> {
-  type: "Feature";
-  geometry: Point;
-  properties: T;
-}
-
-interface CountryProperties {
-  id: string;
-  name: string;
-}
-
-interface CityProperties {
-  name: string;
-  country: CountryProperties;
-}
-
-interface CountriesById {
-  [id: string]: CountryProperties & { labelPoint: Point };
-}
-
-const typedGoodCityData = goodCityData as GeoJsonData<CityProperties>;
-const typedGoodCountryData = goodCountryData as unknown as CountriesById;
-
-export const findCityAndCountryByCoordinates = ({
-  latitude,
-  longitude,
-}: SingleLocation): { city: SingleLocation; country: SingleLocation } => {
+export const findCityAndCountryByCoordinates = (
+  data: CityAndCountryData,
+  { latitude, longitude }: SingleLocation
+): { city: SingleLocation; country: SingleLocation } => {
   const point = turf.point([longitude, latitude]);
   const city = turf.nearestPoint(
     point,
