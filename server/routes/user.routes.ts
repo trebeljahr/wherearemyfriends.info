@@ -145,7 +145,7 @@ router.put("/friends/privacy", async (req: Request, res) => {
     if (
       !user ||
       !user.friends.includes(friendId) ||
-      user.id === currentUserId
+      friendId === currentUserId
     ) {
       return res.status(404).json({ message: "User not found" });
     }
