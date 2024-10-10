@@ -10,7 +10,7 @@ type UserRequest = {
 };
 
 export const PendingFriendRequests = () => {
-  const { user, authToken } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const [pendingRequests, setPendingRequests] = useState<UserRequest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ export const PendingFriendRequests = () => {
     };
 
     fetchPendingRequests();
-  }, [user, authToken]);
+  }, [user]);
 
   const handleAccept = async (requesterId: string) => {
     if (!user) {
@@ -42,11 +42,10 @@ export const PendingFriendRequests = () => {
 
     try {
       await userService.acceptFriendRequest(requesterId);
-
-      // Remove the accepted request from the state
       setPendingRequests((prevRequests) =>
         prevRequests.filter((request) => request.id !== requesterId)
       );
+      await refreshUser();
     } catch (err) {
       alert("Failed to accept friend request.");
     }

@@ -37,26 +37,26 @@ class UserService {
   }
 
   async fetchFriends() {
-    const response = await this.api.get(`/friends`);
+    const response = await this.api.get("/friends");
     return response.data as Friend[];
   }
 
   async makeFriendRequest(friendId: string) {
-    const response = await this.api.post(`/friends/requests`, {
+    const response = await this.api.post("/friends/requests", {
       friendId,
     });
     return response.data;
   }
 
   async acceptFriendRequest(requesterId: string) {
-    const response = await this.api.post(`/friends/requests/accept`, {
+    const response = await this.api.post("/friends/requests/accept", {
       requesterId,
     });
     return response.data;
   }
 
   async declineFriendRequest(requesterId: string) {
-    const response = await this.api.post(`/friends/requests/decline`, {
+    const response = await this.api.post("/friends/requests/decline", {
       requesterId,
     });
     return response.data;
@@ -68,17 +68,17 @@ class UserService {
   }
 
   async fetchPendingRequests() {
-    const response = await this.api.get(`/friends/requests`);
+    const response = await this.api.get("/friends/requests");
     return response.data;
   }
 
   async updateUserLocation(userLocation: UserLocationData) {
-    const response = await this.api.put(`/users/location`, userLocation);
+    const response = await this.api.put("/users/location", userLocation);
     return response.data;
   }
 
   async updateFriendPrivacy(friendId: string, newVisibility: SharingState) {
-    const response = await this.api.put(`/friends/privacy`, {
+    const response = await this.api.put("/friends/privacy", {
       friendId,
       newVisibility,
     });
@@ -87,7 +87,7 @@ class UserService {
   }
 
   async removeFriend(friendId: string) {
-    const response = await this.api.delete(`/friends`, {
+    const response = await this.api.delete("/friends", {
       data: { friendId },
     });
     return response.data;
@@ -97,7 +97,7 @@ class UserService {
     const formData = new FormData();
     formData.append("profilePicture", file);
 
-    const response = await this.api.post(`/users/profile-picture`, formData, {
+    const response = await this.api.post("/users/profile-picture", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

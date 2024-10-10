@@ -47,7 +47,6 @@ export type Friend = {
 export function useFriends() {
   const [friends, setFriends] = useState<Friend[]>([]);
 
-  // Fetch friends' locations from API
   useEffect(() => {
     const fetchFriendsLocations = async () => {
       try {
@@ -83,6 +82,8 @@ export const MapWithFriendMarkers: React.FC = () => {
         if (!friend.location) {
           return null;
         }
+
+        console.log(friend);
 
         return (
           <Marker

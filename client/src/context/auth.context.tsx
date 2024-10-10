@@ -27,6 +27,7 @@ export interface AuthContextType {
   authToken: string | null;
   storeToken: (token: string) => void;
   authenticateUser: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   logOutUser: () => void;
 }
 
@@ -69,14 +70,11 @@ function AuthProviderWrapper(props: any) {
   };
 
   const logOutUser = () => {
-    // Upon logout, remove the token from the localStorage
     removeToken();
     authenticateUser();
   };
 
   useEffect(() => {
-    // Run this code once the AuthProviderWrapper component in the App loads for the first time.
-    // This effect runs when the application and the AuthProviderWrapper component load for the first time.
     authenticateUser();
   }, []);
 
@@ -89,6 +87,7 @@ function AuthProviderWrapper(props: any) {
         authToken,
         storeToken,
         authenticateUser,
+        refreshUser: authenticateUser,
         logOutUser,
       }}
     >

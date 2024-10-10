@@ -190,16 +190,13 @@ router.put("/friends/privacy", async (req: Request, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Find the privacy setting for this friend
     const friendPrivacy = user.privacySettings.find(
       (privacy: any) => privacy.friendId.toString() === friendId
     );
 
     if (friendPrivacy) {
-      // Update the existing privacy setting
       friendPrivacy.visibility = newVisibility;
     } else {
-      // Add a new privacy setting for this friend
       user.privacySettings.push({
         friendId: friendId,
         visibility: newVisibility,
@@ -340,6 +337,16 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
 
     user.friends.push(requesterId);
     requester.friends.push(user.id);
+
+    user.privacySettings.push({
+      friendId: requesterId,
+      visibility: "city",
+    });
+
+    requester.privacySettings.push({
+      friendId: user.id,
+      visibility: "city",
+    });
 
     await user.save();
     await requester.save();

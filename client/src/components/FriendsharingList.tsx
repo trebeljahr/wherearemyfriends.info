@@ -8,7 +8,7 @@ export const backendURL = process.env.REACT_APP_SERVER_URL;
 export type SharingState = "exact" | "city" | "country" | "none";
 
 export const FriendList = () => {
-  const { user, authenticateUser } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   // Update privacy settings on the server
   const handleSharingStateChange = async (
@@ -17,7 +17,7 @@ export const FriendList = () => {
   ) => {
     try {
       await userService.updateFriendPrivacy(friendId, newState);
-      await authenticateUser();
+      await refreshUser();
     } catch (error) {
       console.error("Error updating privacy setting:", error);
     }
@@ -30,7 +30,7 @@ export const FriendList = () => {
   const handleRemoveFriend = async (friendId: string) => {
     try {
       await userService.removeFriend(friendId);
-      await authenticateUser();
+      await refreshUser();
     } catch (error) {
       console.error("Error removing friend:", error);
     }

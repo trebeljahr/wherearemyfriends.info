@@ -8,7 +8,7 @@ import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 
 const UserLocationMarkers = () => {
-  const { user, authenticateUser } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   const updateUserLocation = async (position: [number, number]) => {
     const currentUser = await authService.verify();
@@ -43,7 +43,7 @@ const UserLocationMarkers = () => {
       }
 
       await userService.updateUserLocation(update);
-      await authenticateUser();
+      await refreshUser();
     } catch (error) {
       console.error("Error updating location:", error);
     }
