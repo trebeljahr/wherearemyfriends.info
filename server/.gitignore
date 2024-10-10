@@ -15,4 +15,6 @@ ehthumbs.db
 
 .vscode/*
 
+dist/*
+
 public/uploads/profile_pictures/*
