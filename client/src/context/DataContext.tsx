@@ -56,17 +56,11 @@ export const DataProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("PUBLIC_URL", process.env.PUBLIC_URL);
-
       try {
-        const cityDataResponse = await fetch(
-          `${process.env.PUBLIC_URL}/data/cityData.json`
-        );
+        const cityDataResponse = await fetch("/data/cityData.json");
         const cityData = (await cityDataResponse.json()) as CityData;
 
-        const countryDataResponse = await fetch(
-          `${process.env.PUBLIC_URL}/data/countryData.json`
-        );
+        const countryDataResponse = await fetch("/data/countryData.json");
         const countryData = (await countryDataResponse.json()) as CountryData;
 
         setData({ cityData, countryData });

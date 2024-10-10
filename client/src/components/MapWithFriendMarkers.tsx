@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { userService } from "src/services/user.service";
-import { backendURL, SharingState } from "./FriendsharingList";
+import { SharingState } from "./FriendsharingList";
 import { SharingInformation } from "./FriendSearch";
+
+export const backendURL = process.env.REACT_APP_SERVER_URL;
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;

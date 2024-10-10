@@ -3,8 +3,6 @@ import { userService } from "src/services/user.service";
 import { assembleImageUrl } from "./MapWithFriendMarkers";
 import { FaTrash } from "react-icons/fa6";
 
-export const backendURL = process.env.REACT_APP_SERVER_URL;
-
 export type SharingState = "exact" | "city" | "country" | "none";
 
 export const FriendList = () => {

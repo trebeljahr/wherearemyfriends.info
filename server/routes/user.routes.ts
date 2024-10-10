@@ -15,6 +15,7 @@ import User, {
   SharingState,
   UserLocation,
 } from "../models/User"; // Import User model
+import { CORRECT_PATH } from "../config/envVars";
 
 const router = express.Router();
 
@@ -24,7 +25,13 @@ router.use(isAuthenticated);
 // Set up storage configuration
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, path.join(__dirname, "../public/uploads/profile_pictures/"));
+    const dest = path.resolve(CORRECT_PATH, "public/uploads/profile_pictures/");
+
+    console.log({ CORRECT_PATH });
+
+    console.log({ dest });
+
+    cb(null, dest);
   },
   filename: (req: Request<{ _id: string }>, file, cb) => {
     const ext = path.extname(file.originalname);
