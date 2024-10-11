@@ -1,11 +1,12 @@
 import axios, { Axios } from "axios";
 import { UserType } from "src/context/auth.context";
+import { backendURL } from "src/lib/consts";
 
 class AuthService {
   api: Axios;
   constructor() {
     this.api = axios.create({
-      baseURL: process.env.REACT_APP_SERVER_URL || "http://localhost:5005",
+      baseURL: backendURL,
     });
 
     this.api.interceptors.request.use((config) => {

@@ -1,6 +1,7 @@
 import axios, { Axios } from "axios";
 import { SharingState } from "src/components/FriendsharingList";
 import { Friend } from "src/components/MapWithFriendMarkers";
+import { backendURL } from "src/lib/consts";
 
 export type SingleLocation = {
   name: string;
@@ -17,12 +18,8 @@ export interface UserLocationData {
 class UserService {
   api: Axios;
   constructor() {
-    if (!process.env.REACT_APP_SERVER_URL) {
-      throw new Error("REACT_APP_SERVER_URL is not set in the environment");
-    }
-
     this.api = axios.create({
-      baseURL: process.env.REACT_APP_SERVER_URL + "/api",
+      baseURL: backendURL + "/api",
     });
 
     this.api.interceptors.request.use((config) => {

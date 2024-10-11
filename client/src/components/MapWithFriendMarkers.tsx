@@ -8,8 +8,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { userService } from "src/services/user.service";
 import { SharingState } from "./FriendsharingList";
 import { SharingInformation } from "./FriendSearch";
-
-export const backendURL = process.env.REACT_APP_SERVER_URL;
+import { backendURL } from "src/lib/consts";
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;
