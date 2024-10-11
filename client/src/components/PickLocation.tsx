@@ -8,6 +8,7 @@ import { createAvatarMarker } from "./MapWithFriendMarkers";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
 import { useData } from "src/context/DataContext";
+import { tileServerURL } from "src/lib/consts";
 
 const UserLocationMarkers = () => {
   const { user, refreshUser } = useAuth();
@@ -157,7 +158,7 @@ export const PickLocation = () => {
         inertia={false}
       >
         <TileLayer
-          url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+          url={tileServerURL}
           attribution="&copy; OpenStreetMap contributors"
         />
         <UserLocationMarkers />

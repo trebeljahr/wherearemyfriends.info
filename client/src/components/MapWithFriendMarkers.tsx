@@ -8,7 +8,7 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import { userService } from "src/services/user.service";
 import { SharingState } from "./FriendsharingList";
 import { SharingInformation } from "./FriendSearch";
-import { backendURL } from "src/lib/consts";
+import { backendURL, tileServerURL } from "src/lib/consts";
 
 export const assembleImageUrl = (img?: string) => {
   return img?.startsWith("/") ? `${backendURL}${img}` : img;
@@ -101,7 +101,7 @@ export const MapWithFriendMarkers = () => {
       style={{ height: "80vh", width: "calc(100vw-10px)" }}
     >
       <TileLayer
-        url="https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png"
+        url={tileServerURL}
         attribution="&copy; OpenStreetMap contributors"
       />
       <MapController />
