@@ -1,6 +1,13 @@
+import React, { useState, useEffect } from "react";
 import { LatLngBoundsExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  TileLayer,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import { useAuth } from "src/context/auth.context";
 import authService from "src/services/auth.service";
 import { UserLocationData, userService } from "src/services/user.service";
@@ -10,9 +17,71 @@ import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
 import { useData } from "src/context/DataContext";
 import { tileServerURL } from "src/lib/consts";
 
-const UserLocationMarkers = () => {
+const UserLocationMarkers = ({
+  updateUserLocation,
+}: {
+  updateUserLocation: (newLocation: [number, number]) => void;
+}) => {
+  const { user } = useAuth();
+
+  if (!user) {
+    return null;
+  }
+
+  const MapClickHandler = () => {
+    useMapEvents({
+      click(e) {
+        const newCoordinates: [number, number] = [e.latlng.lng, e.latlng.lat];
+        updateUserLocation(newCoordinates);
+      },
+    });
+    return null;
+  };
+
+  return (
+    <>
+      <MapClickHandler />
+      {user?.location?.city && (
+        <Marker
+          position={[user.location.city.latitude, user.location.city.longitude]}
+          icon={createAvatarMarker(user.profilePicture, "bg-slate-500")}
+        />
+      )}
+      {user?.location?.country && (
+        <Marker
+          position={[
+            user.location.country.latitude,
+            user.location.country.longitude,
+          ]}
+          icon={createAvatarMarker(user.profilePicture, "bg-green-500")}
+        />
+      )}
+      {user?.location?.exact && (
+        <Marker
+          position={[
+            user.location.exact.latitude,
+            user.location.exact.longitude,
+          ]}
+          draggable={true}
+          icon={createAvatarMarker(user.profilePicture, "bg-red-400")}
+        />
+      )}
+    </>
+  );
+};
+
+const bounds = [
+  [-90, -180],
+  [90, 180],
+] as LatLngBoundsExpression;
+
+export const PickLocation = () => {
   const { user, refreshUser } = useAuth();
   const data = useData();
+  const defaultCenter: [number, number] = [0, 0];
+  const [currentPosition, setCurrentPosition] = useState<
+    [number, number] | null
+  >(null);
 
   if (!user || !data.cityData || !data.countryData) {
     return null;
@@ -57,59 +126,44 @@ const UserLocationMarkers = () => {
     }
   };
 
-  const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        const newCoordinates: [number, number] = [e.latlng.lng, e.latlng.lat];
-        updateUserLocation(newCoordinates);
-      },
-    });
-    return null;
+  const handleUseCurrentLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Success callback
+          const { latitude, longitude } = position.coords;
+          const userPosition: [number, number] = [longitude, latitude];
+          // Update user location
+          updateUserLocation(userPosition);
+          // Center map on user's current location
+          setCurrentPosition([latitude, longitude]);
+        },
+        (error) => {
+          // Error callback
+          console.error("Error getting current position", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 
-  return (
-    <>
-      <MapClickHandler />
-      {user?.location?.city && (
-        <Marker
-          position={[
-            user?.location.city.latitude,
-            user?.location.city.longitude,
-          ]}
-          icon={createAvatarMarker(user.profilePicture, "bg-slate-500")}
-        />
-      )}
-      {user?.location?.country && (
-        <Marker
-          position={[
-            user?.location.country.latitude,
-            user?.location.country.longitude,
-          ]}
-          icon={createAvatarMarker(user.profilePicture, "bg-green-500")}
-        />
-      )}
-      {user?.location?.exact && (
-        <Marker
-          position={[
-            user.location.exact.latitude,
-            user.location.exact.longitude,
-          ]}
-          draggable={true}
-          icon={createAvatarMarker(user.profilePicture, "bg-red-400")}
-        />
-      )}
-    </>
-  );
-};
+  // Component to center the map on the user's current location
+  const SetViewOnPositionChange = ({
+    position,
+  }: {
+    position: [number, number];
+  }) => {
+    const map = useMap();
 
-const bounds = [
-  [-90, -180],
-  [90, 180],
-] as LatLngBoundsExpression;
+    useEffect(() => {
+      if (position) {
+        map.setView(position, 13);
+      }
+    }, [map, position]);
 
-export const PickLocation = () => {
-  const { user } = useAuth();
-  const defaultCenter: [number, number] = [0, 0];
+    return null;
+  };
 
   return (
     <div className="prose-p:m-0 mb-5">
@@ -120,7 +174,7 @@ export const PickLocation = () => {
           {user?.location.country ? (
             <p>
               <b>Country: </b>
-              {user?.location.country?.name}
+              {user.location.country.name}
             </p>
           ) : (
             "You are not sharing your country location with anybody at the moment."
@@ -129,7 +183,7 @@ export const PickLocation = () => {
           {user?.location.city ? (
             <p>
               <b>City: </b>
-              {user?.location.city?.name}
+              {user.location.city.name}
             </p>
           ) : (
             "You are not sharing your city location with anybody at the moment."
@@ -137,14 +191,21 @@ export const PickLocation = () => {
 
           {user?.location.exact ? (
             <p>
-              <b>Lat:</b> {user?.location.exact?.latitude}, <b>Lon:</b>{" "}
-              {user?.location.exact?.latitude}
+              <b>Lat:</b> {user.location.exact.latitude}, <b>Lon:</b>{" "}
+              {user.location.exact.longitude}
             </p>
           ) : (
             "You are not sharing your exact location with anybody at the moment."
           )}
         </div>
       </div>
+
+      <button
+        onClick={handleUseCurrentLocation}
+        className="mb-4 p-2 bg-blue-500 text-white rounded"
+      >
+        Use My Current Location
+      </button>
 
       <MapContainer
         center={defaultCenter}
@@ -161,7 +222,10 @@ export const PickLocation = () => {
           url={tileServerURL}
           attribution="&copy; OpenStreetMap contributors"
         />
-        <UserLocationMarkers />
+        {currentPosition && (
+          <SetViewOnPositionChange position={currentPosition} />
+        )}
+        <UserLocationMarkers updateUserLocation={updateUserLocation} />
       </MapContainer>
 
       <div className="mt-5 flex bg-slate-200 p-5">
@@ -171,7 +235,7 @@ export const PickLocation = () => {
           <b>Click on the map to update your location.</b>
           <br />
           Your location will be calculated and shared based on your privacy
-          settings and it's easier to share your exact location when you are
+          settings, and it's easier to share your exact location when you are
           further zoomed in.
         </p>
       </div>
