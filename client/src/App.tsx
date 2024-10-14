@@ -13,7 +13,7 @@ export function App() {
     <div className="prose prose-a:no-underline w-screen min-h-screen max-w-none flex flex-col">
       <Navbar />
 
-      <main className="px-4 sm:px-6 lg:px-8 w-screen min-h-screen bg-gray-100 flex-grow pb-24">
+      <main className="w-screen min-h-screen bg-gray-100 flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
 

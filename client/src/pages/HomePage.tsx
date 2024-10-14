@@ -5,7 +5,7 @@ import { useAuth } from "src/context/auth.context";
 
 function HomePageForLoggedInUsers() {
   return (
-    <div>
+    <div className="pt-24">
       <h1>Home page</h1>
       <h2>Here are your friends on the map</h2>
 
@@ -17,9 +17,5 @@ function HomePageForLoggedInUsers() {
 
 export function HomePage() {
   const { isLoggedIn } = useAuth();
-  return (
-    <div className="pt-24">
-      {isLoggedIn ? <HomePageForLoggedInUsers /> : <LandingPage />}
-    </div>
-  );
+  return isLoggedIn ? <HomePageForLoggedInUsers /> : <LandingPage />;
 }
