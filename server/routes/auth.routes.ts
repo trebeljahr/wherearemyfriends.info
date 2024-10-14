@@ -160,6 +160,12 @@ router.post("/login", async (req: Request, res: Response) => {
   try {
     const { emailOrUsername, password } = req.body;
 
+    const solution = await verifyAltchaChallenge(req, res);
+
+    if (!solution) {
+      return;
+    }
+
     if (emailOrUsername === "" || password === "") {
       res.status(400).json({ message: "Provide email and password." });
       return;
@@ -189,6 +195,8 @@ router.post("/login", async (req: Request, res: Response) => {
         algorithm: "HS256",
         expiresIn: "6h",
       });
+
+      solution.markAsSolved();
 
       res.status(200).json({ authToken: authToken });
     } else {

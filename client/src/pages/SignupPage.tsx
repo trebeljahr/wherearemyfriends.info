@@ -67,7 +67,7 @@ export function SignupPage() {
         )}
 
         <form onSubmit={handleSignupSubmit} className="space-y-5">
-          <div>
+          <fieldset>
             <label className="block mb-1 text-gray-600">Email</label>
             <input
               type="email"
@@ -78,8 +78,8 @@ export function SignupPage() {
               placeholder="Enter your email"
               required
             />
-          </div>
-          <div>
+          </fieldset>
+          <fieldset>
             <label className="block mb-1 text-gray-600">Username</label>
             <input
               type="text"
@@ -90,7 +90,7 @@ export function SignupPage() {
               placeholder="Choose a username"
               required
             />
-          </div>
+          </fieldset>
           <PasswordFieldComponent
             password={password}
             setPassword={setPassword}

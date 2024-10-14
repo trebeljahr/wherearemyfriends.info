@@ -1,12 +1,16 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import authService from "../services/auth.service";
+import { Altcha } from "src/components/Altcha";
 
 export function LoginPage() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [altchaValue, setAltchaValue] = useState<string | null>(null);
+  const altchaRef = useRef<{ value: string | null }>(null);
 
   const navigate = useNavigate();
 
@@ -18,10 +22,16 @@ export function LoginPage() {
     setPassword(e.target.value);
 
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const requestBody = { emailOrUsername, password };
-
     try {
+      e.preventDefault();
+      if (!altchaValue) return;
+
+      const requestBody = {
+        emailOrUsername,
+        password,
+        altchaPayload: altchaValue,
+      };
+
       const response = await authService.login(requestBody);
       storeToken(response.data.authToken);
       authenticateUser();
@@ -44,7 +54,7 @@ export function LoginPage() {
         )}
 
         <form onSubmit={handleLoginSubmit} className="space-y-5">
-          <div>
+          <fieldset>
             <label className="block mb-1 text-gray-600">
               Email or Username
             </label>
@@ -57,9 +67,9 @@ export function LoginPage() {
               placeholder="Enter your email or username"
               required
             />
-          </div>
+          </fieldset>
 
-          <div>
+          <fieldset>
             <label className="block mb-1 text-gray-600">Password</label>
             <input
               type="password"
@@ -70,7 +80,16 @@ export function LoginPage() {
               placeholder="Enter your password"
               required
             />
-          </div>
+          </fieldset>
+
+          <fieldset>
+            <Altcha
+              ref={altchaRef}
+              onStateChange={(ev: any) => {
+                setAltchaValue(ev.detail.payload);
+              }}
+            />
+          </fieldset>
 
           <button
             type="submit"

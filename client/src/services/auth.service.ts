@@ -20,7 +20,11 @@ class AuthService {
     });
   }
 
-  login = (requestBody: { emailOrUsername: string; password: string }) => {
+  login = (requestBody: {
+    emailOrUsername: string;
+    password: string;
+    altchaPayload: string;
+  }) => {
     return this.api.post("/login", requestBody);
   };
 
