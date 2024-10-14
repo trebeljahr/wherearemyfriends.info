@@ -1,87 +1,86 @@
-import React, { useState, useEffect } from "react";
-import { LatLngBoundsExpression } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  useMapEvents,
-  useMap,
-} from "react-leaflet";
-import { useAuth } from "src/context/auth.context";
-import authService from "src/services/auth.service";
-import { UserLocationData, userService } from "src/services/user.service";
-import { createAvatarMarker } from "./MapWithFriendMarkers";
-import { findCityAndCountryByCoordinates } from "../lib/findCity";
+// PickLocation.tsx
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { useState } from "react";
 import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
-import { useData } from "src/context/DataContext";
-import { tileServerURL } from "src/lib/consts";
+import Map, {
+  MapLayerMouseEvent,
+  Marker,
+  NavigationControl,
+  ViewState,
+} from "react-map-gl/maplibre";
+import { useAuth } from "../context/auth.context";
+import { useData } from "../context/DataContext";
+import { tileServerURL } from "../lib/consts";
+import { createAvatarMarkerMapLibreGL } from "../lib/createAvatarMarkerMaplibreGL";
+import { findCityAndCountryByCoordinates } from "../lib/findCity";
+import authService from "../services/auth.service";
+import { UserLocationData, userService } from "../services/user.service";
 
-const UserLocationMarkers = ({
-  updateUserLocation,
-}: {
+type MarkerProps = {
   updateUserLocation: (newLocation: [number, number]) => void;
-}) => {
+};
+
+const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
   const { user } = useAuth();
 
   if (!user) {
     return null;
   }
 
-  const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        const newCoordinates: [number, number] = [e.latlng.lng, e.latlng.lat];
-        updateUserLocation(newCoordinates);
-      },
-    });
-    return null;
-  };
+  const markers: React.ReactNode[] = [];
 
-  return (
-    <>
-      <MapClickHandler />
-      {user?.location?.city && (
-        <Marker
-          position={[user.location.city.latitude, user.location.city.longitude]}
-          icon={createAvatarMarker(user.profilePicture, "bg-slate-500")}
-        />
-      )}
-      {user?.location?.country && (
-        <Marker
-          position={[
-            user.location.country.latitude,
-            user.location.country.longitude,
-          ]}
-          icon={createAvatarMarker(user.profilePicture, "bg-green-500")}
-        />
-      )}
-      {user?.location?.exact && (
-        <Marker
-          position={[
-            user.location.exact.latitude,
-            user.location.exact.longitude,
-          ]}
-          draggable={true}
-          icon={createAvatarMarker(user.profilePicture, "bg-red-400")}
-        />
-      )}
-    </>
-  );
+  if (user.location.city) {
+    markers.push(
+      <Marker
+        key="city"
+        longitude={user.location.city.longitude}
+        latitude={user.location.city.latitude}
+        anchor="bottom"
+      >
+        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-slate-500")}
+      </Marker>
+    );
+  }
+
+  if (user.location.country) {
+    markers.push(
+      <Marker
+        key="country"
+        longitude={user.location.country.longitude}
+        latitude={user.location.country.latitude}
+        anchor="bottom"
+      >
+        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-green-500")}
+      </Marker>
+    );
+  }
+
+  if (user.location.exact) {
+    markers.push(
+      <Marker
+        key="exact"
+        longitude={user.location.exact.longitude}
+        latitude={user.location.exact.latitude}
+        anchor="bottom"
+        draggable
+        onDragEnd={(event: any) => {
+          const { lng, lat } = event.lngLat;
+          const newCoordinates: [number, number] = [lng, lat];
+          updateUserLocation(newCoordinates);
+        }}
+      >
+        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-red-400")}
+      </Marker>
+    );
+  }
+
+  return <>{markers}</>;
 };
 
-const bounds = [
-  [-90, -180],
-  [90, 180],
-] as LatLngBoundsExpression;
-
-export const PickLocation = () => {
+export const PickLocation: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const data = useData();
-  const defaultCenter: [number, number] = [0, 0];
-  const [currentPosition, setCurrentPosition] = useState<
-    [number, number] | null
-  >(null);
 
   if (!user || !data.cityData || !data.countryData) {
     return null;
@@ -97,9 +96,9 @@ export const PickLocation = () => {
       });
 
       const settings = currentUser?.privacySettings;
-      const needsCity = settings?.find((s) => s.visibility === "city");
-      const needsCountry = settings?.find((s) => s.visibility === "country");
-      const needsExact = settings?.find((s) => s.visibility === "exact");
+      const needsCity = settings?.some((s) => s.visibility === "city");
+      const needsCountry = settings?.some((s) => s.visibility === "country");
+      const needsExact = settings?.some((s) => s.visibility === "exact");
 
       const update: UserLocationData = {};
 
@@ -130,16 +129,13 @@ export const PickLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // Success callback
+          console.log(position);
+
           const { latitude, longitude } = position.coords;
           const userPosition: [number, number] = [longitude, latitude];
-          // Update user location
           updateUserLocation(userPosition);
-          // Center map on user's current location
-          setCurrentPosition([latitude, longitude]);
         },
         (error) => {
-          // Error callback
           console.error("Error getting current position", error);
         }
       );
@@ -148,21 +144,11 @@ export const PickLocation = () => {
     }
   };
 
-  // Component to center the map on the user's current location
-  const SetViewOnPositionChange = ({
-    position,
-  }: {
-    position: [number, number];
-  }) => {
-    const map = useMap();
-
-    useEffect(() => {
-      if (position) {
-        map.setView(position, 13);
-      }
-    }, [map, position]);
-
-    return null;
+  const handleMapClick = (event: MapLayerMouseEvent) => {
+    console.log(event);
+    const { lng, lat } = event.lngLat;
+    const newCoordinates: [number, number] = [lng, lat];
+    updateUserLocation(newCoordinates);
   };
 
   return (
@@ -207,26 +193,15 @@ export const PickLocation = () => {
         Use My Current Location
       </button>
 
-      <MapContainer
-        center={defaultCenter}
-        zoom={2}
-        minZoom={2}
-        maxZoom={18}
-        style={{ height: "80vh" }}
-        maxBounds={bounds}
-        maxBoundsViscosity={1.0}
-        worldCopyJump={false}
-        inertia={false}
+      <Map
+        style={{ width: "100%", height: "80vh" }}
+        mapLib={maplibregl}
+        mapStyle={tileServerURL}
+        onClick={handleMapClick}
       >
-        <TileLayer
-          url={tileServerURL}
-          attribution="&copy; OpenStreetMap contributors"
-        />
-        {currentPosition && (
-          <SetViewOnPositionChange position={currentPosition} />
-        )}
+        <NavigationControl position="top-left" />
         <UserLocationMarkers updateUserLocation={updateUserLocation} />
-      </MapContainer>
+      </Map>
 
       <div className="mt-5 flex bg-slate-200 p-5">
         <FaInfo className="mt-[6px] inline mr-2 rounded-full bg-yellow-400 w-5 h-5 p-[3px]" />

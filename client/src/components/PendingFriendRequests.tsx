@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "src/context/auth.context";
+import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapWithFriendMarkers";
 
 type UserRequest = {
   id: string;

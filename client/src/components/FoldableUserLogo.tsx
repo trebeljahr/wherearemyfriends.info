@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuth } from "src/context/auth.context";
-import { assembleImageUrl } from "./MapWithFriendMarkers";
+import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
 
 export const useCloseWhenClickedOutside = ({
   ref,

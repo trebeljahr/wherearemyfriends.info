@@ -1,7 +1,7 @@
 import { useAuth } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapWithFriendMarkers";
 import { FaTrash } from "react-icons/fa6";
+import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
 
 export type SharingState = "exact" | "city" | "country" | "none";
 

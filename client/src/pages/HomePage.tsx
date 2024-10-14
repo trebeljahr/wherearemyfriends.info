@@ -1,5 +1,7 @@
 import { FriendSearch } from "src/components/FriendSearch";
 import { MapWithFriendMarkers } from "src/components/MapWithFriendMarkers";
+// import { MapComponent } from "src/components/WorkingMapExample";
+import { MapComponentReact } from "src/components/WorkingMapExampleReact";
 import { useAuth } from "src/context/auth.context";
 
 function HomePageForNonLoggedInUsers() {
@@ -7,6 +9,8 @@ function HomePageForNonLoggedInUsers() {
     <div>
       <h1>Home page</h1>
       <h2>Log in to see your friends on the map</h2>
+      {/* <MapComponent /> */}
+      <MapComponentReact />
     </div>
   );
 }

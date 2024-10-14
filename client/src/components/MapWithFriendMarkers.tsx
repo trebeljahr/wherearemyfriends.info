@@ -1,64 +1,26 @@
-import L, { DivIcon, divIcon, MarkerCluster } from "leaflet";
-import { GestureHandling } from "leaflet-gesture-handling";
-import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
-import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-cluster";
+// MapWithFriendMarkers.tsx
+import maplibregl, { Popup } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import React, {
+  forwardRef,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import Map, {
+  Layer,
+  Marker,
+  NavigationControl,
+  Source,
+} from "react-map-gl/maplibre";
+import { tileServerURL } from "src/lib/consts";
 import { userService } from "src/services/user.service";
+import {
+  assembleImageUrl,
+  createAvatarMarkerMapLibreGL,
+} from "../lib/createAvatarMarkerMaplibreGL";
 import { SharingState } from "./FriendsharingList";
-import { SharingInformation } from "./FriendSearch";
-import { backendURL, tileServerURL } from "src/lib/consts";
-
-export const assembleImageUrl = (img?: string) => {
-  return img?.startsWith("/") ? `${backendURL}${img}` : img;
-};
-
-export const createAvatarMarker = (
-  img: string,
-  color: string = "bg-slate-500"
-): DivIcon => {
-  const imgUrl = assembleImageUrl(img);
-
-  return divIcon({
-    html: `
-      <div class="custom-pin ${color}">
-        <div class="avatar-circle" style="background-image: url('${imgUrl}');"></div>
-      </div>
-    `,
-    className: "",
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
-    iconSize: [40, 40],
-  });
-};
-
-const createClusterCustomIcon = function (cluster: MarkerCluster) {
-  const count = cluster.getChildCount();
-
-  return L.divIcon({
-    html: `
-      <div class="font-bold w-10 h-10 flex items-center justify-center text-white bg-slate-900 rounded-full">
-        ${count}
-      </div>
-    `,
-    className: "custom-cluster-icon",
-    iconSize: [40, 40],
-  });
-};
-
-function mapSharingStateToMarkerColor(sharingState: SharingState) {
-  switch (sharingState) {
-    case "exact":
-      return "bg-red-400";
-    case "city":
-      return "bg-cyan-600";
-    case "country":
-      return "bg-green-500";
-    default:
-      return undefined;
-  }
-}
 
 export type Friend = {
   id: string;
@@ -71,6 +33,19 @@ export type Friend = {
     longitude: number;
   };
 };
+
+function mapSharingStateToMarkerColor(sharingState: SharingState): string {
+  switch (sharingState) {
+    case "exact":
+      return "bg-red-400";
+    case "city":
+      return "bg-cyan-600";
+    case "country":
+      return "bg-green-500";
+    default:
+      return "bg-gray-500";
+  }
+}
 
 export function useFriends() {
   const [friends, setFriends] = useState<Friend[]>([]);
@@ -91,60 +66,128 @@ export function useFriends() {
   return friends;
 }
 
-export const MapWithFriendMarkers = () => {
-  const friends = useFriends();
+const CustomFriendMarker = ({ friend }: { friend: any }) => {
+  const popup = useMemo(() => {
+    return new maplibregl.Popup().setText("Hello world!").setOffset([0, -40]);
+  }, []);
+
+  if (!friend.properties) return null;
+
+  const { id, profilePicture, sharingState } = friend.properties;
+  const [longitude, latitude] = friend.geometry.coordinates;
 
   return (
-    <MapContainer
-      center={[0, 0]}
-      zoom={2}
-      style={{ height: "80vh", width: "calc(100vw-10px)" }}
+    <Marker
+      key={id}
+      longitude={longitude}
+      latitude={latitude}
+      anchor="bottom"
+      popup={popup}
     >
-      <TileLayer
-        url={tileServerURL}
-        attribution="&copy; OpenStreetMap contributors"
-      />
-      <MapController />
-
-      <MarkerClusterGroup
-        chunkedLoading
-        iconCreateFunction={createClusterCustomIcon}
-        spiderfyOnMaxZoom={false}
-        showCoverageOnHover={false}
-      >
-        {friends
-          .filter((friend) => friend.location)
-          .map((friend) => {
-            return (
-              <Marker
-                key={friend.id}
-                position={[friend.location.latitude, friend.location.longitude]}
-                icon={createAvatarMarker(
-                  friend.profilePicture,
-                  mapSharingStateToMarkerColor(friend.sharingState)
-                )}
-              >
-                <Popup>
-                  <div style={{ textAlign: "center" }}>
-                    <SharingInformation friend={friend} />
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-      </MarkerClusterGroup>
-    </MapContainer>
+      {createAvatarMarkerMapLibreGL(
+        profilePicture,
+        mapSharingStateToMarkerColor(sharingState as SharingState)
+      )}
+    </Marker>
   );
 };
 
-export const MapController = () => {
-  const map = useMap();
+export const MapWithFriendMarkers: React.FC = () => {
+  const friends = useFriends();
 
-  useEffect(() => {
-    map.addHandler("gestureHandling", GestureHandling);
-    // @ts-expect-error
-    map.gestureHandling.enable();
-  }, [map]);
+  const friendsAsGeojsonData = useMemo(
+    () => ({
+      type: "FeatureCollection" as const,
+      features: friends
+        .filter((friend) => friend.location)
+        .map((friend) => ({
+          type: "Feature" as const,
+          properties: {
+            id: friend.id,
+            name: friend.name,
+            profilePicture: friend.profilePicture,
+            sharingState: friend.sharingState,
+            locationName: friend.location.name,
+          },
+          geometry: {
+            type: "Point" as const,
+            coordinates: [friend.location.longitude, friend.location.latitude],
+          },
+        })),
+    }),
+    [friends]
+  );
 
-  return null;
+  return (
+    <div style={{ height: "80vh", width: "100%" }}>
+      <Map
+        initialViewState={{
+          longitude: 0,
+          latitude: 0,
+          zoom: 0,
+        }}
+        style={{ width: "100%", height: "100vh" }}
+        mapStyle={tileServerURL}
+      >
+        <NavigationControl position="top-left" />
+        <Source
+          id="friends"
+          type="geojson"
+          data={friendsAsGeojsonData}
+          cluster={true}
+          clusterMaxZoom={14}
+          clusterRadius={50}
+        >
+          <Layer
+            id="clusters"
+            type="circle"
+            source="friends"
+            filter={["has", "point_count"]}
+            paint={{
+              "circle-color": "#1E3A8A",
+              "circle-radius": [
+                "step",
+                ["get", "point_count"],
+                50,
+                10,
+                100,
+                30,
+                750,
+              ],
+              "circle-opacity": 1,
+            }}
+          />
+          <Layer
+            id="cluster-count"
+            type="symbol"
+            source="friends"
+            filter={["has", "point_count"]}
+            layout={{
+              "text-field": "{point_count_abbreviated}",
+              "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+              "text-size": 14,
+            }}
+            paint={{
+              "text-color": "#FFFFFF",
+            }}
+          />
+          <Layer
+            id="unclustered-point"
+            type="symbol"
+            source="friends"
+            filter={["!", ["has", "point_count"]]}
+            layout={{
+              "icon-image": "custom-marker",
+              "icon-size": 1,
+              "icon-allow-overlap": true,
+            }}
+          />
+        </Source>
+
+        {friendsAsGeojsonData.features.map((friend) => (
+          <CustomFriendMarker friend={friend} />
+        ))}
+      </Map>
+    </div>
+  );
 };

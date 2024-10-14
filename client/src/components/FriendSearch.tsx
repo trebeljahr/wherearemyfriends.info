@@ -1,66 +1,19 @@
 import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
-import { findCityAndCountryByCoordinates } from "src/lib/findCity";
-import { SharingState } from "./FriendsharingList";
-import { assembleImageUrl, Friend, useFriends } from "./MapWithFriendMarkers";
-import { CityAndCountryData, useData } from "src/context/DataContext";
+import { useData } from "src/context/DataContext";
+import { normalizeName } from "src/lib/consts";
+import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
+import { Friend, useFriends } from "./MapWithFriendMarkers";
+import {
+  getCountryAndCityNameFromFriend,
+  SharingInformation,
+} from "./SharingInformation";
 
 type OptionType = {
   value: string;
   label: string;
   type: "city" | "country";
-};
-
-const normalizeName = (name: string) => name.trim();
-
-function resolveSharingState(sharingState: SharingState) {
-  const shareCountry = sharingState !== "none";
-  const shareCity = sharingState !== "country" && shareCountry;
-  return { shareCountry, shareCity };
-}
-
-function getCountryAndCityNameFromFriend(
-  data: CityAndCountryData,
-  friend: Friend
-) {
-  const { country, city } = findCityAndCountryByCoordinates(
-    data,
-    friend.location
-  );
-
-  return {
-    countryName: normalizeName(country.name),
-    cityName: normalizeName(city.name),
-  };
-}
-
-export const SharingInformation = ({ friend }: { friend: Friend }) => {
-  const data = useData();
-
-  const { countryName, cityName } = getCountryAndCityNameFromFriend(
-    data,
-    friend
-  );
-  const { shareCountry, shareCity } = resolveSharingState(friend.sharingState);
-
-  return (
-    <div className="prose prose-p:!m-0 !text-left">
-      <p className="leading-snug">
-        <b>{friend.name}</b> is sharing their {friend.sharingState} location.
-      </p>
-      <div className="mt-4">
-        {shareCountry && <p>Country: {countryName}</p>}
-        {shareCity && <p>City: {cityName}</p>}
-        {friend.sharingState === "exact" && (
-          <p>
-            Lat: {friend.location.latitude.toFixed(4)}, Lon:{" "}
-            {friend.location.longitude.toFixed(4)}
-          </p>
-        )}
-      </div>
-    </div>
-  );
 };
 
 export const FriendSearch = () => {
