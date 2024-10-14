@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
-import { LoadingSpinner } from "./Loading/Spinner";
+import { FullscreenLoader } from "./Loading/Spinner";
 
 interface IsAnonProps {
   children: ReactElement;
@@ -11,7 +11,7 @@ export function IsAnon({ children }: IsAnonProps) {
   const { isLoggedIn, isLoading } = useAuth();
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <FullscreenLoader />;
   }
 
   if (isLoggedIn) {

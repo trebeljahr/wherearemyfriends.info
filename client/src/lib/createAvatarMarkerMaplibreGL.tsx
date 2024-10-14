@@ -6,7 +6,7 @@ export const createAvatarMarkerMapLibreGL = (
 ) => {
   return (
     <div
-      className={`rounded-full ${bgColorClass} w-12 h-12 flex items-center justify-center`}
+      className={`rounded-full ${bgColorClass} w-12 h-12 flex items-center justify-center cursor-pointer`}
     >
       <img
         src={assembleImageUrl(imgSrc)}
