@@ -82,26 +82,6 @@ const goodCountriesData = typedWorldGeoJSON.features
     const region = feature.properties.REGION_UN;
     const subregion = feature.properties.SUBREGION;
 
-    if (
-      !name ||
-      !iso2 ||
-      !iso3 ||
-      !continent ||
-      !region ||
-      !subregion ||
-      !label
-    ) {
-      console.log("Missing data for", {
-        name,
-        iso2,
-        iso3,
-        continent,
-        region,
-        subregion,
-        label,
-      });
-    }
-
     return {
       type: "Feature" as const,
       geometry: feature.geometry,

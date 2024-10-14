@@ -47,17 +47,14 @@ export const Altcha = forwardRef<{ value: string | null }, AltchaProps>(
       }
     }, [onStateChange]);
 
-    /* Configure your `challengeurl` and remove the `test` attribute, see docs: https://altcha.org/docs/website-integration/#using-altcha-widget  */
     return (
       <altcha-widget
         ref={widgetRef}
         style={{
           "--altcha-max-width": "100%",
         }}
-        debug
         challengeurl={backendURL + "/auth/altcha-challenge"}
-        // test
-      ></altcha-widget>
+      />
     );
   }
 );

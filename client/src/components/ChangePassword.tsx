@@ -21,8 +21,7 @@ export const ChangePassword = () => {
       await authService.changePassword(requestBody);
       setSuccessMessage("Password changed successfully");
     } catch (error: any) {
-      console.log(error);
-
+      console.error(error);
       const errorMessage = error?.response?.data?.message || error?.message;
       setErrorMessage(errorMessage);
     }

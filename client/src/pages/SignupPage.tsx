@@ -10,13 +10,13 @@ import { Altcha } from "src/components/Altcha";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
   const { passwordStrength } = usePasswordStrength(password);
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const altchaRef = useRef<HTMLInputElement>(null);
+  const [altchaValue, setAltchaValue] = useState<string | null>(null);
+  const altchaRef = useRef<{ value: string | null }>(null);
 
   const navigate = useNavigate();
 
@@ -30,29 +30,28 @@ export function SignupPage() {
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
-      if (!altchaRef.current?.value) return;
-
       e.preventDefault();
-      console.log("Altcha payload:", altchaRef.current?.value);
-      console.log("Altcha:", altchaRef.current);
-
+      if (!altchaValue) return;
       const requestBody = {
         email,
         password,
         username,
-        altchaPayload: altchaRef.current?.value,
+        altchaPayload: altchaValue,
       };
       await authService.signup(requestBody);
       navigate("/login");
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
 
       const errorMessage = error?.response?.data?.message || error?.message;
       setErrorMessage(errorMessage);
     }
+    // finally {
+    // if (altchaRef.current) altchaRef.current.value = null;
+    // }
   };
 
-  const enableSubmit = passwordStrength >= 5 && altchaRef.current?.value;
+  const enableSubmit = passwordStrength >= 5 && altchaValue;
   return (
     <div className="py-24 flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
@@ -97,7 +96,12 @@ export function SignupPage() {
             setPassword={setPassword}
           />
           <fieldset>
-            <Altcha ref={altchaRef} />
+            <Altcha
+              ref={altchaRef}
+              onStateChange={(ev: any) => {
+                setAltchaValue(ev.detail.payload);
+              }}
+            />
           </fieldset>
           <button
             type="submit"
