@@ -3,8 +3,8 @@ import { FaExclamationCircle } from "react-icons/fa";
 import {
   PasswordFieldComponent,
   usePasswordStrength,
-} from "src/hooks/usePasswordField";
-import authService from "src/services/auth.service";
+} from "../hooks/usePasswordField";
+import authService from "../services/auth.service";
 
 export const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");

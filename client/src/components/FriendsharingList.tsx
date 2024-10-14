@@ -1,8 +1,8 @@
-import { useAuth } from "src/context/auth.context";
-import { userService } from "src/services/user.service";
+import { useAuth } from "../context/auth.context";
+import { userService } from "../services/user.service";
 import { FaCity, FaMap, FaMapPin, FaTrash } from "react-icons/fa6";
-import { assembleImageUrl } from "src/lib/consts";
-import { SharingState } from "src/lib/types";
+import { assembleImageUrl } from "../lib/consts";
+import { SharingState } from "../lib/types";
 import { FaExclamationTriangle } from "react-icons/fa";
 
 export const FriendsPrivacySettings = () => {

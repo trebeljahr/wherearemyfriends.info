@@ -1,6 +1,6 @@
 import axios, { Axios } from "axios";
-import { backendURL } from "src/lib/consts";
-import { Friend, SharingState, UserLocationData } from "src/lib/types";
+import { backendURL } from "../lib/consts";
+import { Friend, SharingState, UserLocationData } from "../lib/types";
 
 class UserService {
   api: Axios;

@@ -3,8 +3,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "src/context/auth.context";
-import { assembleImageUrl } from "src/lib/consts";
+import { useAuth } from "../context/auth.context";
+import { assembleImageUrl } from "../lib/consts";
 
 export const useCloseWhenClickedOutside = ({
   ref,

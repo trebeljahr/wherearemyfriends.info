@@ -7,7 +7,7 @@ import {
 } from "react";
 
 import "altcha";
-import { backendURL } from "src/lib/consts";
+import { backendURL } from "../lib/consts";
 
 interface AltchaProps {
   onStateChange?: (ev: Event | CustomEvent) => void;

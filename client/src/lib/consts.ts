@@ -3,9 +3,9 @@ import maplibregl from "maplibre-gl";
 import { SharingState } from "./types";
 
 export const backendURL =
-  process.env.NODE_ENV === "production"
+  import.meta.env.NODE_ENV === "production"
     ? ""
-    : process.env.REACT_APP_SERVER_URL || "https://localhost:5005";
+    : import.meta.env.VITE_SERVER_URL || "https://localhost:5005";
 
 export const normalizeName = (name: string) => name.trim();
 

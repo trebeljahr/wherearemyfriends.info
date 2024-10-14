@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { userService } from "src/services/user.service";
+import { userService } from "../services/user.service";
 
 export const UserSearch = () => {
   const [username, setUsername] = useState("");

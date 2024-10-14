@@ -1,5 +1,5 @@
-import { ProfilePictureUpload } from "src/components/ProfilePictureUpload";
-import { ChangePassword } from "src/components/ChangePassword";
+import { ProfilePictureUpload } from "../components/ProfilePictureUpload";
+import { ChangePassword } from "../components/ChangePassword";
 
 export function SettingsPage() {
   return (

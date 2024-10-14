@@ -7,7 +7,7 @@ import {
   ReactNode,
   useContext,
 } from "react";
-import { CityAndCountryData, CityData, CountryData } from "src/lib/types";
+import { CityAndCountryData, CityData, CountryData } from "../lib/types";
 
 export const DataContext = createContext<CityAndCountryData>({
   cityData: null!,

@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { forwardRef, useRef, useState } from "react";
 import { FaBars, FaX } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "src/context/auth.context";
+import { useAuth } from "../context/auth.context";
 import {
   FoldableUserLogo,
   useCloseWhenClickedOutside,

@@ -1,7 +1,7 @@
-import { CityAndCountryData } from "src/lib/types";
-import { normalizeName } from "src/lib/consts";
-import { findCityAndCountryByCoordinates } from "src/lib/findCity";
-import { Friend, SharingState } from "src/lib/types";
+import { CityAndCountryData } from "../lib/types";
+import { normalizeName } from "../lib/consts";
+import { findCityAndCountryByCoordinates } from "../lib/findCity";
+import { Friend, SharingState } from "../lib/types";
 
 export function getCountryAndCityNameFromFriend(
   data: CityAndCountryData,

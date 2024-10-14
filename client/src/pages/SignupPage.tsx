@@ -5,8 +5,8 @@ import authService from "../services/auth.service";
 import {
   PasswordFieldComponent,
   usePasswordStrength,
-} from "src/hooks/usePasswordField";
-import { Altcha } from "src/components/Altcha";
+} from "../hooks/usePasswordField";
+import { Altcha } from "../components/Altcha";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");

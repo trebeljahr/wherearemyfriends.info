@@ -1,7 +1,7 @@
-import { UserSearch } from "src/components/UserSearch";
-import { FriendsPrivacySettings } from "src/components/FriendsharingList";
-import { PendingFriendRequests } from "src/components/PendingFriendRequests";
-import { MapWithFriendMarkers } from "src/components/MapWithFriendMarkers";
+import { UserSearch } from "../components/UserSearch";
+import { FriendsPrivacySettings } from "../components/FriendsharingList";
+import { PendingFriendRequests } from "../components/PendingFriendRequests";
+import { MapWithFriendMarkers } from "../components/MapWithFriendMarkers";
 
 export const FriendsPage = () => {
   return (

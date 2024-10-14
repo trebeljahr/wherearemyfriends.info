@@ -7,7 +7,7 @@ import { Navbar } from "./components/Navbar";
 import { IsPrivate } from "./components/IsPrivate";
 import { IsAnon } from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage";
-import { SettingsPage } from "./pages/ProfileSettingsPage";
+import { SettingsPage } from "./pages/SettingsPage";
 
 export function App() {
   return (

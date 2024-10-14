@@ -1,15 +1,15 @@
 import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
-import { useData } from "src/context/DataContext";
-import { normalizeName } from "src/lib/consts";
-import { assembleImageUrl } from "src/lib/consts";
+import { useData } from "../context/DataContext";
+import { normalizeName } from "../lib/consts";
+import { assembleImageUrl } from "../lib/consts";
 import { useFriends } from "./MapWithFriendMarkers";
 import {
   getCountryAndCityNameFromFriend,
   SharingInformation,
 } from "./SharingInformation";
-import { Friend } from "src/lib/types";
+import { Friend } from "../lib/types";
 
 type OptionType = {
   value: string;

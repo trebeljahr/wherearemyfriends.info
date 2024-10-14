@@ -3,12 +3,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Marker } from "react-map-gl/maplibre";
-import { useData } from "src/context/DataContext";
-import { Feature } from "src/lib/types";
-import { mapSharingStateToMarkerColor } from "src/lib/consts";
+import { useData } from "../context/DataContext";
+import { mapSharingStateToMarkerColor } from "../lib/consts";
+import { Feature, Friend } from "../lib/types";
 import { AvatarPinMarker } from "./AvatarPinMarker";
 import { SharingInformation } from "./SharingInformation";
-import { Friend } from "src/lib/types";
 
 export const FriendMarkerPin = ({ friend }: { friend: Feature<Friend> }) => {
   const data = useData();

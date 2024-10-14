@@ -3,7 +3,7 @@ import { useAuth } from "../context/auth.context";
 import { useData } from "../context/DataContext";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import { userService } from "../services/user.service";
-import { UserLocationData } from "src/lib/types";
+import { UserLocationData } from "../lib/types";
 
 export const useUpdateUserLocation = () => {
   const { user, refreshUser } = useAuth();

@@ -1,7 +1,7 @@
-import { FriendSearch } from "src/components/FriendSearch";
-import { LandingPage } from "src/components/LandingPage";
-import { MapWithFriendMarkers } from "src/components/MapWithFriendMarkers";
-import { useAuth } from "src/context/auth.context";
+import { FriendSearch } from "../components/FriendSearch";
+import { LandingPage } from "../components/LandingPage";
+import { MapWithFriendMarkers } from "../components/MapWithFriendMarkers";
+import { useAuth } from "../context/auth.context";
 
 function HomePageForLoggedInUsers() {
   return (

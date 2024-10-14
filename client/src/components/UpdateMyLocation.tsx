@@ -6,8 +6,8 @@ import Map, {
   NavigationControl,
 } from "react-map-gl/maplibre";
 import { ScaleLoader } from "react-spinners";
-import { useUpdateUserLocation } from "src/hooks/useUpdateUserLocation";
-import { getCurrentLocationFromGps } from "src/lib/getCurrentLocationFromGps";
+import { useUpdateUserLocation } from "../hooks/useUpdateUserLocation";
+import { getCurrentLocationFromGps } from "../lib/getCurrentLocationFromGps";
 import { useAuth } from "../context/auth.context";
 import { defaultMapSettings } from "../lib/consts";
 import { UserLocationMarkers } from "./UserLocationMarkers";

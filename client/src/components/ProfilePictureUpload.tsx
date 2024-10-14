@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "src/context/auth.context";
-import { assembleImageUrl } from "src/lib/consts";
-import { userService } from "src/services/user.service";
+import { useAuth } from "../context/auth.context";
+import { assembleImageUrl } from "../lib/consts";
+import { userService } from "../services/user.service";
 
 export const ProfilePictureUpload = () => {
   const { user, refreshUser } = useAuth();

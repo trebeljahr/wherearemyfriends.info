@@ -1,40 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // Target ECMAScript version
-    "module": "ESNext", // Use ESNext for modern JavaScript modules
-    "lib": ["ES2020", "DOM"], // Add "DOM" for React browser environment
-    "allowJs": true, // Allows JS files alongside TS
-    "skipLibCheck": true, // Skip type checks for declaration files
-    "strict": true, // Enable strict type-checking
-    "esModuleInterop": true, // Handle CommonJS/ES module interop
-    "forceConsistentCasingInFileNames": true, // Consistent file name casing across OSes
-    "noImplicitAny": true, // No `any` type without explicit declaration
-    "moduleResolution": "Node", // Use Node's module resolution
-    "resolveJsonModule": true, // Allows importing JSON modules
-    "isolatedModules": true, // Required for `babel` or `ts-loader`
-    "jsx": "react-jsx", // Enable JSX/TSX syntax for React (React 17+)
-    "noEmit": true, // Don't emit compiled files
-    "allowSyntheticDefaultImports": true, // Allow default imports from modules
-    "baseUrl": ".", // Base URL for module resolution
-    "paths": {},
-    "outDir": "./dist", // Output folder for server-side code
-    "rootDir": ".", // Root directory for both server and client code
-    "incremental": true // Enable incremental compilation
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "../*": ["./src/*"]
+    },
+    "types": ["vite/client"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*", // Include all source files in `src`
-    "models/**/*", // Include models for the server
-    "controllers/**/*", // Include controllers for the server
-    "services/**/*", // Include services for the server
-    "client/src/**/*", // Include all React app files in `client/src`
-    "modules.ts",
-    "*.d.ts",
-    "types.ts"
-  ],
-  "exclude": [
-    "node_modules", // Exclude dependencies
-    "dist", // Exclude build output
-    "**/*.test.ts", // Optionally exclude test files
-    "server/**/*.js" // Exclude JavaScript files if you're using TypeScript for the server
-  ]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

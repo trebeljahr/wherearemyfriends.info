@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import authService from "../services/auth.service";
-import { Altcha } from "src/components/Altcha";
+import { Altcha } from "../components/Altcha";
 
 export function LoginPage() {
   const [emailOrUsername, setEmailOrUsername] = useState("");
