@@ -1,3 +1,6 @@
+import { ViewState } from "react-map-gl";
+import maplibregl from "maplibre-gl";
+
 export const backendURL =
   process.env.NODE_ENV === "production"
     ? ""
@@ -7,6 +10,16 @@ export const normalizeName = (name: string) => name.trim();
 
 export const tileServerURL = "https://tiles.openfreemap.org/styles/liberty";
 
+export const defaultMapSettings = {
+  initialState: {
+    zoom: 1.5,
+  } as ViewState,
+  center: [100, 20],
+  minZoom: 1.5,
+  mapLib: maplibregl,
+  mapStyle: tileServerURL,
+  style: { width: "100%", height: "80vh" },
+};
 // old leaflet solutions:
 // export const tileServerURL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 

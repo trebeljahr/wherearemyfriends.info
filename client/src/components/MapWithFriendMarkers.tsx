@@ -1,25 +1,16 @@
 // MapWithFriendMarkers.tsx
-import maplibregl, { Popup } from "maplibre-gl";
+import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import React, {
-  forwardRef,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Map, {
   Layer,
   Marker,
   NavigationControl,
   Source,
 } from "react-map-gl/maplibre";
-import { tileServerURL } from "src/lib/consts";
+import { defaultMapSettings } from "src/lib/consts";
 import { userService } from "src/services/user.service";
-import {
-  assembleImageUrl,
-  createAvatarMarkerMapLibreGL,
-} from "../lib/createAvatarMarkerMaplibreGL";
+import { createAvatarMarkerMapLibreGL } from "../lib/createAvatarMarkerMaplibreGL";
 import { SharingState } from "./FriendsharingList";
 
 export type Friend = {
@@ -119,75 +110,65 @@ export const MapWithFriendMarkers: React.FC = () => {
   );
 
   return (
-    <div style={{ height: "80vh", width: "100%" }}>
-      <Map
-        initialViewState={{
-          longitude: 0,
-          latitude: 0,
-          zoom: 0,
-        }}
-        style={{ width: "100%", height: "100vh" }}
-        mapStyle={tileServerURL}
+    <Map {...defaultMapSettings}>
+      <NavigationControl position="top-left" />
+      <Source
+        id="friends"
+        type="geojson"
+        data={friendsAsGeojsonData}
+        cluster={true}
+        clusterMaxZoom={14}
+        clusterRadius={50}
       >
-        <NavigationControl position="top-left" />
-        <Source
-          id="friends"
-          type="geojson"
-          data={friendsAsGeojsonData}
-          cluster={true}
-          clusterMaxZoom={14}
-          clusterRadius={50}
-        >
-          <Layer
-            id="clusters"
-            type="circle"
-            source="friends"
-            filter={["has", "point_count"]}
-            paint={{
-              "circle-color": "#1E3A8A",
-              "circle-radius": [
-                "step",
-                ["get", "point_count"],
-                50,
-                10,
-                100,
-                30,
-                750,
-              ],
-              "circle-opacity": 1,
-            }}
-          />
-          <Layer
-            id="cluster-count"
-            type="symbol"
-            source="friends"
-            filter={["has", "point_count"]}
-            layout={{
-              "text-field": "{point_count_abbreviated}",
-              "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
-              "text-size": 14,
-            }}
-            paint={{
-              "text-color": "#FFFFFF",
-            }}
-          />
-          <Layer
-            id="unclustered-point"
-            type="symbol"
-            source="friends"
-            filter={["!", ["has", "point_count"]]}
-            layout={{
-              "icon-image": "custom-marker",
-              "icon-size": 1,
-              "icon-allow-overlap": true,
-            }}
-          />
-        </Source>
+        <Layer
+          id="clusters"
+          type="circle"
+          source="friends"
+          filter={["has", "point_count"]}
+          paint={{
+            "circle-color": "#1E3A8A",
+            "circle-radius": [
+              "step",
+              ["get", "point_count"],
+              50,
+              10,
+              100,
+              30,
+              750,
+            ],
+            "circle-opacity": 1,
+          }}
+        />
+        <Layer
+          id="cluster-count"
+          type="symbol"
+          source="friends"
+          filter={["has", "point_count"]}
+          layout={{
+            "text-field": "{point_count_abbreviated}",
+            "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+            "text-size": 14,
+          }}
+          paint={{
+            "text-color": "#FFFFFF",
+          }}
+        />
+        <Layer
+          id="unclustered-point"
+          type="symbol"
+          source="friends"
+          filter={["!", ["has", "point_count"]]}
+          layout={{
+            "icon-image": "custom-marker",
+            "icon-size": 1,
+            "icon-allow-overlap": true,
+          }}
+        />
+      </Source>
 
-        {friendsAsGeojsonData.features.map((friend) => (
-          <CustomFriendMarker friend={friend} />
-        ))}
-      </Map>
-    </div>
+      {friendsAsGeojsonData.features.map((friend) => (
+        <CustomFriendMarker friend={friend} />
+      ))}
+    </Map>
   );
 };

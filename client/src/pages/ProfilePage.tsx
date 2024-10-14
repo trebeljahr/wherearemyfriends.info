@@ -1,11 +1,11 @@
-import { PickLocation } from "src/components/PickLocation";
+import { UpdateMyLocation } from "src/components/UpdateMyLocation";
 import { ProfilePictureUpload } from "src/components/ProfilePictureUpload";
 
 export function ProfilePage() {
   return (
     <div className="pt-24">
       <h1>Profile page</h1>
-      <PickLocation />
+      <UpdateMyLocation />
       <ProfilePictureUpload />
     </div>
   );
