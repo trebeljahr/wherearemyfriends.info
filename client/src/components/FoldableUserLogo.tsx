@@ -1,5 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { FaCog } from "react-icons/fa";
+import { FaPowerOff } from "react-icons/fa6";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "src/context/auth.context";
 import { assembleImageUrl } from "src/lib/consts";
 
@@ -54,7 +57,7 @@ export const FoldableUserLogo = () => {
   }
 
   return (
-    <div className="relative mx-2 not-prose flex items-center" ref={menuRef}>
+    <div className="relative ml-2 not-prose flex items-center" ref={menuRef}>
       <img
         className="w-8 h-8 rounded-full cursor-pointer"
         src={assembleImageUrl(user.profilePicture)}
@@ -76,10 +79,19 @@ export const FoldableUserLogo = () => {
                 Welcome <b>{user.username}</b>
               </p>
             </div>
+
+            <NavLink
+              to="/settings"
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+            >
+              <FaCog className="inline-block mr-2" />
+              Settings
+            </NavLink>
             <button
               onClick={handleLogout}
-              className="block w-full px-4 py-2 hover:bg-gray-100"
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
             >
+              <FaPowerOff className="inline-block mr-2" />
               Logout
             </button>
           </motion.div>

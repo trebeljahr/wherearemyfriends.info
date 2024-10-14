@@ -15,7 +15,7 @@ export function IsAnon({ children }: IsAnonProps) {
   }
 
   if (isLoggedIn) {
-    return <Navigate to="/" />;
+    return <Navigate to="/location" />;
   }
 
   return children;

@@ -1,5 +1,6 @@
 import { ViewState } from "react-map-gl";
 import maplibregl from "maplibre-gl";
+import { SharingState } from "./types";
 
 export const backendURL =
   process.env.NODE_ENV === "production"
@@ -10,6 +11,20 @@ export const normalizeName = (name: string) => name.trim();
 
 export const tileServerURL = "https://tiles.openfreemap.org/styles/liberty";
 
+export const mapSharingStateToMarkerColor = (
+  sharingState: SharingState
+): string => {
+  switch (sharingState) {
+    case "exact":
+      return "bg-red-400"; // return "rgb(248 113 113)";
+    case "city":
+      return "bg-cyan-600"; // return "rgb(8 145 178)";
+    case "country":
+      return "bg-green-500"; // return "rgb(34 197 94)";
+    default:
+      return "bg-gray-500"; // return "rgb(107 114 128)";
+  }
+};
 export const defaultMapSettings = {
   initialState: {
     zoom: 1.5,

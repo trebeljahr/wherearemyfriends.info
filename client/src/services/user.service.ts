@@ -1,19 +1,6 @@
 import axios, { Axios } from "axios";
-import { SharingState } from "src/components/FriendsharingList";
-import { Friend } from "src/components/MapWithFriendMarkers";
 import { backendURL } from "src/lib/consts";
-
-export type SingleLocation = {
-  name: string;
-  latitude: number;
-  longitude: number;
-};
-
-export interface UserLocationData {
-  country?: SingleLocation;
-  city?: SingleLocation;
-  exact?: SingleLocation;
-}
+import { Friend, SharingState, UserLocationData } from "src/lib/types";
 
 class UserService {
   api: Axios;

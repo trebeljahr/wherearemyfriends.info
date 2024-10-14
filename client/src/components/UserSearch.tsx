@@ -44,8 +44,7 @@ export const UserSearch = () => {
   };
 
   return (
-    <div className="friend-search">
-      <h2 className="text-xl mb-4">Add a New Friend</h2>
+    <>
       <div className="mb-4">
         <input
           type="text"
@@ -74,6 +73,6 @@ export const UserSearch = () => {
           {loading ? "Adding..." : "Add Friend"}
         </button>
       )}
-    </div>
+    </>
   );
 };

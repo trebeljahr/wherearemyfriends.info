@@ -4,11 +4,12 @@ import AsyncSelect from "react-select/async";
 import { useData } from "src/context/DataContext";
 import { normalizeName } from "src/lib/consts";
 import { assembleImageUrl } from "src/lib/consts";
-import { Friend, useFriends } from "./MapWithFriendMarkers";
+import { useFriends } from "./MapWithFriendMarkers";
 import {
   getCountryAndCityNameFromFriend,
   SharingInformation,
 } from "./SharingInformation";
+import { Friend } from "src/lib/types";
 
 type OptionType = {
   value: string;

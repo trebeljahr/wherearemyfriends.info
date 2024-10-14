@@ -15,10 +15,10 @@ export const AvatarPinMarker: React.FC<AvatarPinMarkerProps> = ({
 
   return (
     <div
-      className={`relative h-14 w-14 rounded-full rounded-br-none flex justify-center items-center rotate-45 ${pinColor}`}
+      className={`border border-gray-900 relative h-14 w-14 rounded-full rounded-br-none flex justify-center items-center rotate-45 ${pinColor}`}
     >
       <div
-        className="rotate-[-45deg] z-10 border border-white h-12 w-12 bg-center bg-cover rounded-full"
+        className="rotate-[-45deg] z-10 border border-gray-900 h-12 w-12 bg-center bg-cover rounded-full"
         style={{ backgroundImage: `url('${imgUrl}')` }}
       />
     </div>

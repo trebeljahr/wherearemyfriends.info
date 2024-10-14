@@ -1,5 +1,5 @@
 import axios, { Axios } from "axios";
-import { UserType } from "src/context/auth.context";
+import { UserType } from "src/lib/types";
 import { backendURL } from "src/lib/consts";
 
 class AuthService {

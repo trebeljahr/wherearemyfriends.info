@@ -1,10 +1,6 @@
 import * as turf from "@turf/turf";
-import {
-  CityProperties,
-  Feature,
-  CityAndCountryData,
-} from "src/context/DataContext";
-import { SingleLocation } from "src/services/user.service";
+import { CityProperties, Feature, CityAndCountryData } from "./types";
+import { SingleLocation } from "./types";
 
 export const findCityAndCountryByCoordinates = (
   { cityData, countryData }: CityAndCountryData,

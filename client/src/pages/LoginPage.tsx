@@ -25,7 +25,7 @@ export function LoginPage() {
       const response = await authService.login(requestBody);
       storeToken(response.data.authToken);
       authenticateUser();
-      navigate("/");
+      navigate("/location");
     } catch (error: any) {
       const errorDescription = error.response.data.message;
       setErrorMessage(errorDescription);

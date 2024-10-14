@@ -17,5 +17,6 @@ export function IsPrivate({ children }: IsPrivateProps) {
   if (!isLoggedIn) {
     return <Navigate to="/login" />;
   }
+
   return children;
 }

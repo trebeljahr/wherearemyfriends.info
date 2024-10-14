@@ -1,8 +1,7 @@
-import { CityAndCountryData } from "src/context/DataContext";
+import { CityAndCountryData } from "src/lib/types";
 import { normalizeName } from "src/lib/consts";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
-import { SharingState } from "./FriendsharingList";
-import { Friend } from "./MapWithFriendMarkers";
+import { Friend, SharingState } from "src/lib/types";
 
 export function getCountryAndCityNameFromFriend(
   data: CityAndCountryData,
