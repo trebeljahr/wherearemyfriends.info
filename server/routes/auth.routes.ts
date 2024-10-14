@@ -24,19 +24,31 @@ router.post("/signup", async (req: Request, res: Response, _: NextFunction) => {
     return;
   }
 
-  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+  const passwordRegex =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
   if (!passwordRegex.test(password)) {
     res.status(400).json({
       message:
-        "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+        "Your password must have at least 12 characters and contain at least one number, one lowercase and one uppercase letter.",
     });
     return;
   }
 
-  const foundUser = await User.findOne({ email });
-  if (foundUser) {
-    res.status(400).json({ message: "User already exists." });
-    return;
+  const foundUserByEmail = await User.findOne({ email });
+
+  if (foundUserByEmail) {
+    return res.status(400).json({
+      message: "A user with this email already exists. Please login instead.",
+    });
+  }
+
+  const foundUserByUsername = await User.findOne({ username });
+
+  if (foundUserByUsername) {
+    return res.status(400).json({
+      message:
+        "A user with this username already exists. Please choose another username.",
+    });
   }
 
   const salt = bcrypt.genSaltSync(saltRounds);

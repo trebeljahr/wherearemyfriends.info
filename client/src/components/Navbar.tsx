@@ -33,7 +33,7 @@ export const Navbar = () => {
 
       {user ? (
         <>
-          <PreconfiguredNavlink to="/profile">Profile</PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/location">Location</PreconfiguredNavlink>
           <PreconfiguredNavlink to="/friends">Friends</PreconfiguredNavlink>
         </>
       ) : (

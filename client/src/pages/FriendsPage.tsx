@@ -4,7 +4,7 @@ import { PendingFriendRequests } from "src/components/PendingFriendRequests";
 
 export const FriendsPage = () => {
   return (
-    <div className="pt-24">
+    <div className="pt-24 px-4 sm:px-6 lg:px-8 ">
       <h1>Friends page</h1>
 
       <FriendList />

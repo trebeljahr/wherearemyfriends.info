@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaUserShield, FaHandsHelping } from "react-icons/fa";
+import { FaHandsHelping, FaMapMarkerAlt, FaUserShield } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 export const LandingPage: React.FC = () => {
   return (
     <main className="py-24 flex flex-col items-center w-full justify-center min-h-screen">
-      {/* Hero Section */}
       <div className="text-center px-4 md:px-8 py-12">
         <motion.h1
           className="text-4xl md:text-6xl font-bold mb-6"
@@ -24,19 +24,20 @@ export const LandingPage: React.FC = () => {
           each friend can see—country, city, or exact spot. Stay connected
           effortlessly.
         </motion.p>
-        {/* Call to Action */}
-        <motion.a
-          href="/signup"
-          className="inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+
+        <motion.div
+          className="relative inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-gray-900 text-white font-semibold rounded-full shadow-lg transition duration-300 hover:shadow-xl"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          Sign Up Now
-        </motion.a>
+          <NavLink to="/signup" className="text-white">
+            Sign Up Now
+          </NavLink>
+        </motion.div>
       </div>
 
-      {/* Features Section */}
       <div className="mt-16 px-4 md:px-8 max-w-4xl">
         <motion.h2
           className="text-2xl md:text-4xl font-semibold mb-8 text-center"
@@ -74,7 +75,7 @@ export const LandingPage: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
             >
-              <span className="mr-4 mt-1 text-blue-500">{feature.icon}</span>
+              <span className="mr-4 mt-1 text-blue-700">{feature.icon}</span>
               <span>
                 <strong>{feature.title}</strong> {feature.description}
               </span>
@@ -83,7 +84,6 @@ export const LandingPage: React.FC = () => {
         </ul>
       </div>
 
-      {/* Additional Section */}
       <div className="mt-20 px-4 md:px-8 max-w-4xl text-center">
         <motion.h2
           className="text-2xl md:text-4xl font-semibold mb-6"
@@ -101,15 +101,16 @@ export const LandingPage: React.FC = () => {
         >
           Join now and connect with your friends like never before.
         </motion.p>
-        <motion.a
-          href="/signup"
-          className="inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded-full shadow-lg hover:bg-blue-700 transition duration-300"
+        <motion.div
+          className="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-gray-900 text-white font-semibold rounded-full shadow-lg transition duration-300 hover:shadow-xl"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          Create Your Account
-        </motion.a>
+          <NavLink to="/signup" className="text-white">
+            Create Your Account
+          </NavLink>
+        </motion.div>
       </div>
     </main>
   );

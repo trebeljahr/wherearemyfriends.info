@@ -14,7 +14,7 @@ import { AvatarPinMarker } from "./AvatarPinMarker";
 import { SharingState } from "./FriendsharingList";
 import { SharingInformation } from "./SharingInformation";
 import { createRoot } from "react-dom/client";
-import { Feature, useData } from "src/context/DataContext";
+import { CityAndCountryData, Feature, useData } from "src/context/DataContext";
 
 export type Friend = {
   id: string;
@@ -60,51 +60,47 @@ export function useFriends() {
   return friends;
 }
 
+const createPopupNode = ({
+  data,
+  friend,
+}: {
+  friend: Friend;
+  data: CityAndCountryData;
+}) => {
+  let popupNode = document.createElement("div");
+  const root = createRoot(popupNode);
+  root.render(<SharingInformation friend={friend} data={data} />);
+
+  return new maplibregl.Popup().setDOMContent(popupNode).setOffset([0, -40]);
+};
+
 const CustomFriendMarker = ({ friend }: { friend: Feature<Friend> }) => {
   const data = useData();
-  const popup = useMemo(() => {
-    // if (!friend.properties || !data.cityData || !data.countryData) return null;
+  // const popup = useMemo(() => {
+  //   return createPopupNode({ data, friend: friend.properties });
+  // }, [friend, data]);
 
-    console.log(friend);
+  const [popup, setPopup] = useState<maplibregl.Popup | null>(null);
 
-    let popupNode = document.createElement("div");
+  useEffect(() => {
+    if (!friend.properties) return;
+
+    const popupNode = document.createElement("div");
     const root = createRoot(popupNode);
     root.render(<SharingInformation friend={friend.properties} data={data} />);
 
-    console.log(popupNode);
-    // return new maplibregl.Popup().setDOMContent(popupNode).setOffset([0, -40]);
-
-    // const { longitude: lon, latitude: lat } = friend.properties.location;
-    return (
-      new maplibregl.Popup()
-        // .setLngLat({ lon, lat })
-        .setDOMContent(popupNode)
-        .setOffset([0, -40])
+    const newPopup = new maplibregl.Popup({ offset: [0, -40] }).setDOMContent(
+      popupNode
     );
-    // .addTo(map.current);
+
+    setPopup(newPopup);
+
+    // Clean up when component unmounts or dependencies change
+    return () => {
+      // root.unmount();
+      newPopup.remove();
+    };
   }, [friend, data]);
-
-  // const openPopup = ({
-  //   longitude,
-  //   latitude,
-  // }: {
-  //   longitude: number;
-  //   latitude: number;
-  // }) => {
-  //   console.log("openPopup", friend, longitude, latitude);
-  //   let popupNode = document.createElement("div");
-  //   const root = createRoot(popupNode);
-  //   root.render(<SharingInformation friend={friend} />);
-
-  //   // return new maplibregl.Popup().setDOMContent(popupNode).setOffset([0, -40]);
-
-  //   new maplibregl.Popup()
-  //     .setLngLat({ lon: longitude, lat: latitude })
-  //     .setDOMContent(popupNode);
-  //   // .addTo(map.current);
-  // };
-
-  if (!friend.properties) return null;
 
   const { id, profilePicture, sharingState } = friend.properties;
   const [longitude, latitude] = friend.geometry.coordinates;
@@ -115,7 +111,6 @@ const CustomFriendMarker = ({ friend }: { friend: Feature<Friend> }) => {
       longitude={longitude}
       latitude={latitude}
       anchor="bottom"
-      // onClick={() => openPopup({ longitude, latitude })}
       popup={popup}
     >
       <AvatarPinMarker
@@ -211,7 +206,7 @@ export const MapWithFriendMarkers: React.FC = () => {
       </Source>
 
       {friendsAsGeojsonData.features.map((friend) => (
-        <CustomFriendMarker friend={friend} />
+        <CustomFriendMarker key={friend.properties.id} friend={friend} />
       ))}
     </Map>
   );

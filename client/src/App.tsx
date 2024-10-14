@@ -1,12 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import { ProfilePage } from "./pages/ProfilePage";
+import { MyLocationPage } from "./pages/MyLocationPage";
 import { SignupPage } from "./pages/SignupPage";
 import { LoginPage } from "./pages/LoginPage";
 import { Navbar } from "./components/Navbar";
 import { IsPrivate } from "./components/IsPrivate";
 import { IsAnon } from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage";
+import { ProfileSettingsPage } from "./pages/ProfileSettingsPage";
 
 export function App() {
   return (
@@ -18,10 +19,10 @@ export function App() {
           <Route path="/" element={<HomePage />} />
 
           <Route
-            path="/profile"
+            path="/location"
             element={
               <IsPrivate>
-                <ProfilePage />
+                <MyLocationPage />
               </IsPrivate>
             }
           />
@@ -41,6 +42,15 @@ export function App() {
               <IsAnon>
                 <SignupPage />
               </IsAnon>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <IsPrivate>
+                <ProfileSettingsPage />
+              </IsPrivate>
             }
           />
 
