@@ -9,7 +9,12 @@ import { TOKEN_SECRET } from "../config/envVars";
 const router = express.Router();
 const saltRounds = 10;
 
-// POST /auth/signup  - Creates a new user in the database
+const passwordRegex =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+
+const passwordRegexNotMatchingError =
+  "Your password must have at least 12 characters and contain at least one number, one lowercase, one uppercase and one special character.";
+
 router.post("/signup", async (req: Request, res: Response, _: NextFunction) => {
   const { email, password, username } = req.body;
 
@@ -24,12 +29,9 @@ router.post("/signup", async (req: Request, res: Response, _: NextFunction) => {
     return;
   }
 
-  const passwordRegex =
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
   if (!passwordRegex.test(password)) {
     res.status(400).json({
-      message:
-        "Your password must have at least 12 characters and contain at least one number, one lowercase and one uppercase letter.",
+      message: passwordRegexNotMatchingError,
     });
     return;
   }
@@ -70,7 +72,6 @@ router.post("/signup", async (req: Request, res: Response, _: NextFunction) => {
   res.status(201).json({ user: user });
 });
 
-// POST  /auth/login - Verifies email and password and returns a JWT
 router.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -113,7 +114,50 @@ router.post(
   }
 );
 
-// GET  /auth/verify  -  Used to verify JWT stored on the client
+router.post(
+  "/change-password",
+  jwtMiddleware,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ message: "Provide old and new password" });
+    }
+
+    const user = await User.findById(req.auth?._id);
+
+    if (!user) {
+      return res.status(403).json({ message: "User not authorized" });
+    }
+
+    const passwordCorrect = bcrypt.compareSync(oldPassword, user.password);
+    if (!passwordCorrect) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    const passwordRegex =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        message: passwordRegexNotMatchingError,
+      });
+    }
+
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashedPassword = bcrypt.hashSync(newPassword, salt);
+
+    try {
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: "Password succesfully updated!" });
+    } catch (error) {
+      return res.status(500).json({ message: "Error saving the new password" });
+    }
+  }
+);
+
 router.get(
   "/verify",
   jwtMiddleware,
@@ -123,7 +167,7 @@ router.get(
       .populate("pendingFriendRequests privacySettings location");
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(403).json({ message: "User not authorized" });
     }
 
     res.status(200).json({

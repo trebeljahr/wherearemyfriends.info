@@ -7,7 +7,7 @@ import { Navbar } from "./components/Navbar";
 import { IsPrivate } from "./components/IsPrivate";
 import { IsAnon } from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage";
-import { ProfileSettingsPage } from "./pages/ProfileSettingsPage";
+import { SettingsPage } from "./pages/ProfileSettingsPage";
 
 export function App() {
   return (
@@ -49,7 +49,7 @@ export function App() {
             path="/settings"
             element={
               <IsPrivate>
-                <ProfileSettingsPage />
+                <SettingsPage />
               </IsPrivate>
             }
           />
