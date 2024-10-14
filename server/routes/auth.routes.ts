@@ -4,7 +4,9 @@ import { Request } from "express-jwt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { jwtMiddleware } from "../middleware/jwt.middleware";
-import { TOKEN_SECRET } from "../config/envVars";
+import { ALTCHA_HMAC_KEY, TOKEN_SECRET } from "../config/envVars";
+import { createChallenge, extractParams, verifySolution } from "altcha-lib";
+import { AltchaChallenge } from "../models/CaptchaChallenges";
 
 const router = express.Router();
 const saltRounds = 10;
@@ -15,66 +17,159 @@ const passwordRegex =
 const passwordRegexNotMatchingError =
   "Your password must have at least 12 characters and contain at least one number, one lowercase, one uppercase and one special character.";
 
-router.post("/signup", async (req: Request, res: Response, _: NextFunction) => {
-  const { email, password, username } = req.body;
-
-  if (email === "" || password === "" || username === "") {
-    res.status(400).json({ message: "Provide email, password and username" });
-    return;
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!emailRegex.test(email)) {
-    res.status(400).json({ message: "Provide a valid email address." });
-    return;
-  }
-
-  if (!passwordRegex.test(password)) {
-    res.status(400).json({
-      message: passwordRegexNotMatchingError,
+router.get("/altcha-challenge", async (_: Request, res: Response) => {
+  try {
+    const challenge = await createChallenge({
+      hmacKey: ALTCHA_HMAC_KEY,
     });
-    return;
-  }
+    console.log({ challenge });
 
-  const foundUserByEmail = await User.findOne({ email });
-
-  if (foundUserByEmail) {
-    return res.status(400).json({
-      message: "A user with this email already exists. Please login instead.",
+    const altchaChallenge = new AltchaChallenge({
+      challenge: challenge.challenge,
+      signature: challenge.signature,
+      salt: challenge.salt,
+      algorithm: challenge.algorithm,
+      maxnumber: challenge.maxnumber,
     });
+
+    await altchaChallenge.save();
+
+    res.status(200).json(challenge);
+  } catch (error) {
+    console.error("Error creating challenge:", error);
+    return res.status(500).json({ message: "Error creating challenge" });
   }
-
-  const foundUserByUsername = await User.findOne({ username });
-
-  if (foundUserByUsername) {
-    return res.status(400).json({
-      message:
-        "A user with this username already exists. Please choose another username.",
-    });
-  }
-
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hashedPassword = bcrypt.hashSync(password, salt);
-
-  const createdUser = await User.create({
-    email,
-    password: hashedPassword,
-    username,
-    profilePicture: "/assets/no-user.webp",
-  });
-
-  const user = {
-    _id: createdUser._id,
-    email: createdUser.email,
-    username: createdUser.username,
-  };
-
-  res.status(201).json({ user: user });
 });
 
+async function verifyAltchaChallenge(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { altchaPayload } = req.body;
+    console.log({ altchaPayload });
+
+    const decoded = jwt.decode(altchaPayload) as {
+      algorithm: string;
+      challenge: string;
+      number: number;
+      salt: string;
+      signature: string;
+      took: number;
+    };
+
+    console.log({ decoded });
+
+    // const params = extractParams(altchaPayload);
+    // console.log({ altchaParams: params });
+
+    const altchaOk = await verifySolution(altchaPayload, ALTCHA_HMAC_KEY);
+    if (!altchaOk) {
+      return res.status(403).json({ message: "Altcha solution invalid" });
+    }
+
+    const existingChallenge = await AltchaChallenge.findOne({
+      challenge: decoded.challenge,
+    });
+
+    console.log({ existingChallenge });
+
+    if (!existingChallenge) {
+      return res
+        .status(404)
+        .json({ message: "Challenge not found or expired" });
+    }
+
+    if (existingChallenge.isSolved) {
+      return res.status(403).json({ message: "Challenge already solved" });
+    }
+
+    await existingChallenge.deleteOne();
+
+    next();
+  } catch (error) {
+    console.error("Error verifying altcha solution:", error);
+    return res.status(500).json({ message: "Error verifying altcha solution" });
+  }
+}
+
 router.post(
-  "/login",
-  async (req: Request, res: Response, next: NextFunction) => {
+  "/signup",
+  verifyAltchaChallenge,
+  async (req: Request, res: Response) => {
+    try {
+      const { email, password, username } = req.body;
+
+      if (email === "" || password === "" || username === "") {
+        res
+          .status(400)
+          .json({ message: "Provide email, password and username" });
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      if (!emailRegex.test(email)) {
+        res.status(400).json({ message: "Provide a valid email address." });
+        return;
+      }
+
+      console.log(password);
+
+      console.log(passwordRegex.test(password));
+      console.log(password.match(passwordRegex));
+
+      if (!passwordRegex.test(password)) {
+        res.status(400).json({
+          message: passwordRegexNotMatchingError,
+        });
+        return;
+      }
+
+      const foundUserByEmail = await User.findOne({ email });
+
+      if (foundUserByEmail) {
+        return res.status(400).json({
+          message:
+            "A user with this email already exists. Please login instead.",
+        });
+      }
+
+      const foundUserByUsername = await User.findOne({ username });
+
+      if (foundUserByUsername) {
+        return res.status(400).json({
+          message:
+            "A user with this username already exists. Please choose another username.",
+        });
+      }
+
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
+      const createdUser = await User.create({
+        email,
+        password: hashedPassword,
+        username,
+        profilePicture: "/assets/no-user.webp",
+      });
+
+      const user = {
+        _id: createdUser._id,
+        email: createdUser.email,
+        username: createdUser.username,
+      };
+
+      res.status(201).json({ user: user });
+    } catch (error) {
+      console.error("Error creating user:", error);
+      return res.status(500).json({ message: "Error creating user" });
+    }
+  }
+);
+
+router.post("/login", async (req: Request, res: Response) => {
+  try {
     const { emailOrUsername, password } = req.body;
 
     if (emailOrUsername === "" || password === "") {
@@ -111,43 +206,53 @@ router.post(
     } else {
       res.status(401).json({ message: "Unable to authenticate the user" });
     }
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    return res.status(500).json({ message: "Error logging in user" });
   }
-);
+});
 
 router.post(
   "/change-password",
   jwtMiddleware,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { oldPassword, newPassword } = req.body;
-
-    if (!oldPassword || !newPassword) {
-      return res.status(400).json({ message: "Provide old and new password" });
-    }
-
-    const user = await User.findById(req.auth?._id);
-
-    if (!user) {
-      return res.status(403).json({ message: "User not authorized" });
-    }
-
-    const passwordCorrect = bcrypt.compareSync(oldPassword, user.password);
-    if (!passwordCorrect) {
-      return res.status(401).json({ message: "Incorrect password" });
-    }
-
-    const passwordRegex =
-      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
-
-    if (!passwordRegex.test(newPassword)) {
-      return res.status(400).json({
-        message: passwordRegexNotMatchingError,
-      });
-    }
-
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hashedPassword = bcrypt.hashSync(newPassword, salt);
-
+  async (req: Request, res: Response) => {
     try {
+      const { oldPassword, newPassword, altchaPayload } = req.body;
+
+      const altchaOk = await verifySolution(altchaPayload, ALTCHA_HMAC_KEY);
+      if (!altchaOk) {
+        return res.status(403).json({ message: "Altcha solution invalid" });
+      }
+
+      if (!oldPassword || !newPassword) {
+        return res
+          .status(400)
+          .json({ message: "Provide old and new password" });
+      }
+
+      const user = await User.findById(req.auth?._id);
+
+      if (!user) {
+        return res.status(403).json({ message: "User not authorized" });
+      }
+
+      const passwordCorrect = bcrypt.compareSync(oldPassword, user.password);
+      if (!passwordCorrect) {
+        return res.status(401).json({ message: "Incorrect password" });
+      }
+
+      const passwordRegex =
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+
+      if (!passwordRegex.test(newPassword)) {
+        return res.status(400).json({
+          message: passwordRegexNotMatchingError,
+        });
+      }
+
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+
       user.password = hashedPassword;
       await user.save();
 

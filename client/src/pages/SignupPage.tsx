@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../services/auth.service";
@@ -6,13 +6,18 @@ import {
   PasswordFieldComponent,
   usePasswordStrength,
 } from "src/hooks/usePasswordField";
+import { Altcha } from "src/components/Altcha";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
   const { passwordStrength } = usePasswordStrength(password);
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const altchaRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
 
   const handleEmailField = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +29,19 @@ export function SignupPage() {
   };
 
   const handleSignupSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const requestBody = { email, password, username };
-
     try {
+      if (!altchaRef.current?.value) return;
+
+      e.preventDefault();
+      console.log("Altcha payload:", altchaRef.current?.value);
+      console.log("Altcha:", altchaRef.current);
+
+      const requestBody = {
+        email,
+        password,
+        username,
+        altchaPayload: altchaRef.current?.value,
+      };
       await authService.signup(requestBody);
       navigate("/login");
     } catch (error: any) {
@@ -38,6 +52,7 @@ export function SignupPage() {
     }
   };
 
+  const enableSubmit = passwordStrength >= 5 && altchaRef.current?.value;
   return (
     <div className="py-24 flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
@@ -65,7 +80,6 @@ export function SignupPage() {
               required
             />
           </div>
-
           <div>
             <label className="block mb-1 text-gray-600">Username</label>
             <input
@@ -78,20 +92,19 @@ export function SignupPage() {
               required
             />
           </div>
-
           <PasswordFieldComponent
             password={password}
             setPassword={setPassword}
           />
-
+          <fieldset>
+            <Altcha ref={altchaRef} />
+          </fieldset>
           <button
             type="submit"
-            disabled={passwordStrength < 5}
+            disabled={!enableSubmit}
             className={`w-full px-4 py-2 font-semibold text-white ${
-              passwordStrength >= 5 ? "bg-blue-600" : "bg-gray-500"
-            } rounded-md ${
-              passwordStrength >= 5 && "hover:bg-blue-700"
-            } transition duration-200 focus:outline-none focus:ring focus:ring-blue-300`}
+              enableSubmit ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-500"
+            } rounded-md transition duration-200 focus:outline-none focus:ring focus:ring-blue-300`}
           >
             Sign Up
           </button>

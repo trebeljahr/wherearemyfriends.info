@@ -28,6 +28,7 @@ class AuthService {
     email: string;
     username: string;
     password: string;
+    altchaPayload: string;
   }) => {
     return this.api.post("/signup", requestBody);
   };
