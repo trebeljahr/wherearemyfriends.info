@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "src/context/auth.context";
+import { assembleImageUrl } from "src/lib/consts";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapWithFriendMarkers";
 
 type UserRequest = {
   id: string;
@@ -70,7 +70,6 @@ export const PendingFriendRequests = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Pending Friend Requests</h2>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (

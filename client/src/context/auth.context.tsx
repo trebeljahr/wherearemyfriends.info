@@ -1,35 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { SharingState } from "src/components/FriendsharingList";
-import { SingleLocation } from "src/services/user.service";
+import { createContext, useContext, useEffect, useState } from "react";
 import authService from "../services/auth.service";
-
-export type UserType = {
-  email: string;
-  username: string;
-  profilePicture: string;
-  location: {
-    exact?: SingleLocation;
-    city?: SingleLocation;
-    country?: SingleLocation;
-  };
-  privacySettings: {
-    friendId: string;
-    visibility: SharingState;
-  }[];
-  friends: UserType[];
-  _id: string;
-};
-
-export interface AuthContextType {
-  isLoggedIn: boolean;
-  isLoading: boolean;
-  user: UserType | null;
-  authToken: string | null;
-  storeToken: (token: string) => void;
-  authenticateUser: () => Promise<void>;
-  refreshUser: () => Promise<void>;
-  logOutUser: () => void;
-}
+import { AuthContextType, UserType } from "src/lib/types";
 
 const AuthContext = createContext({} as AuthContextType);
 

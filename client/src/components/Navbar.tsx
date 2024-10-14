@@ -29,15 +29,16 @@ export const Navbar = () => {
 
   const links = (
     <>
-      <PreconfiguredNavlink to="/">Home</PreconfiguredNavlink>
-
       {user ? (
         <>
-          <PreconfiguredNavlink to="/profile">Profile</PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/location">
+            My Location
+          </PreconfiguredNavlink>
           <PreconfiguredNavlink to="/friends">Friends</PreconfiguredNavlink>
         </>
       ) : (
         <>
+          <PreconfiguredNavlink to="/">Home</PreconfiguredNavlink>
           <PreconfiguredNavlink to="/login">Login</PreconfiguredNavlink>
           <PreconfiguredNavlink to="/signup">Signup</PreconfiguredNavlink>
         </>
@@ -74,14 +75,14 @@ export const Navbar = () => {
         </div>
 
         <div className="flex md:hidden">
-          <FoldableUserLogo />
-
           <button
             onClick={toggleMenu}
             className="text-white focus:outline-none"
           >
             {isOpen ? <FaX size={24} /> : <FaBars size={24} />}
           </button>
+
+          <FoldableUserLogo />
         </div>
       </div>
 
@@ -92,7 +93,7 @@ export const Navbar = () => {
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            className="md:hidden bg-gray-800 overflow-hidden z-10"
+            className="md:hidden bg-gray-800 overflow-hidden z-10 mb-4 sm:mb-6"
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
               {links}

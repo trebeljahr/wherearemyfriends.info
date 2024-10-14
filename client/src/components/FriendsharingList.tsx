@@ -1,11 +1,11 @@
 import { useAuth } from "src/context/auth.context";
 import { userService } from "src/services/user.service";
-import { assembleImageUrl } from "./MapWithFriendMarkers";
-import { FaTrash } from "react-icons/fa6";
+import { FaCity, FaMap, FaMapPin, FaTrash } from "react-icons/fa6";
+import { assembleImageUrl } from "src/lib/consts";
+import { SharingState } from "src/lib/types";
+import { FaExclamationTriangle } from "react-icons/fa";
 
-export type SharingState = "exact" | "city" | "country" | "none";
-
-export const FriendList = () => {
+export const FriendsPrivacySettings = () => {
   const { user, refreshUser } = useAuth();
 
   // Update privacy settings on the server
@@ -36,42 +36,60 @@ export const FriendList = () => {
 
   return (
     <div className="space-y-6">
+      {user.friends.length === 0 && (
+        <p className="text-lg">You have no friends yet.</p>
+      )}
       {user.friends.map((friend) => (
         <div
           key={friend._id}
-          className="flex items-center p-4 border rounded-lg shadow-sm not-prose space-x-4"
+          className="w-full flex items-center p-4 border rounded-lg shadow-sm not-prose space-x-4"
         >
           <img
             src={assembleImageUrl(friend.profilePicture)}
             alt={friend.username}
-            className="w-12 h-12 rounded-full"
+            className="w-10 h-10 rounded-full"
           />
-          <div>
-            <h3 className="text-lg font-medium">{friend.username}</h3>
-            <select
-              value={
-                user.privacySettings.find(
-                  (setting) => setting.friendId === friend._id
-                )?.visibility
-              }
-              onChange={(e) =>
-                handleSharingStateChange(
-                  friend._id,
-                  e.target.value as SharingState
-                )
-              }
-              className="mt-2 p-2 border border-gray-300 rounded-lg shadow-sm"
-            >
-              <option value="exact">Share Full Location</option>
-              <option value="city">Share City</option>
-              <option value="country">Share Country</option>
-              <option value="none">Share No Data</option>
-            </select>
-          </div>
-          <div className="flex items-center">
+
+          <p>you are</p>
+          <select
+            value={
+              user.privacySettings.find(
+                (setting) => setting.friendId === friend._id
+              )?.visibility
+            }
+            onChange={(e) =>
+              handleSharingStateChange(
+                friend._id,
+                e.target.value as SharingState
+              )
+            }
+            className="p-2 mx-2 border border-gray-300 rounded-lg shadow-sm"
+          >
+            <option value="exact">
+              {/* <FaMapPin className="w-2 h-2" /> */}
+              sharing your exact location
+            </option>
+            <option value="city">
+              {/* <FaCity /> */}
+              sharing your city location
+            </option>
+            <option value="country">
+              {/* <FaMap /> */}
+              sharing your country location
+            </option>
+            {/* <FaExclamationTriangle /> */}
+            <option value="none">sharing absolutely no location</option>
+          </select>
+          <p>
+            with <b>{friend.username}</b>
+          </p>
+
+          <div className="flex items-center justify-self-end self-end">
+            <p className="mr-2">Remove friend?</p>
             <button
-              className="w-10 self-start h-10 bg-red-400 text-white p-1 rounded-full flex justify-center items-center"
+              className="w-10 h-10 bg-red-400 text-white p-1 rounded-full flex justify-center items-center"
               onClick={() => handleRemoveFriend(friend._id)}
+              aria-label="Remove friend"
             >
               <FaTrash />
             </button>

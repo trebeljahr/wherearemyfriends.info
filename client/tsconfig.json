@@ -16,12 +16,7 @@
     "noEmit": true, // Don't emit compiled files
     "allowSyntheticDefaultImports": true, // Allow default imports from modules
     "baseUrl": ".", // Base URL for module resolution
-    "paths": {
-      // Path aliases for server-side code
-      "@models/*": ["./models/*"],
-      "@services/*": ["./services/*"],
-      "@controllers/*": ["./controllers/*"]
-    },
+    "paths": {},
     "outDir": "./dist", // Output folder for server-side code
     "rootDir": ".", // Root directory for both server and client code
     "incremental": true // Enable incremental compilation

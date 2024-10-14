@@ -7,41 +7,7 @@ import {
   ReactNode,
   useContext,
 } from "react";
-import { Point } from "geojson";
-
-export interface Feature<T> {
-  type: "Feature";
-  geometry: Point;
-  properties: T;
-}
-
-export interface CityProperties {
-  name: string;
-  country: CountryProperties;
-}
-
-export type CityData = GeoJsonData<CityProperties>;
-
-export type CountryData = CountriesById;
-
-export type CityAndCountryData = {
-  cityData: CityData;
-  countryData: CountryData;
-};
-
-interface GeoJsonData<T> {
-  type: "FeatureCollection";
-  features: Feature<T>[];
-}
-
-interface CountryProperties {
-  id: string;
-  name: string;
-}
-
-interface CountriesById {
-  [id: string]: CountryProperties & { labelPoint: Point };
-}
+import { CityAndCountryData, CityData, CountryData } from "src/lib/types";
 
 export const DataContext = createContext<CityAndCountryData>({
   cityData: null!,

@@ -27,10 +27,6 @@ const storage = multer.diskStorage({
   destination: (_, __, cb) => {
     const dest = path.resolve(CORRECT_PATH, "public/uploads/profile_pictures/");
 
-    console.log({ CORRECT_PATH });
-
-    console.log({ dest });
-
     cb(null, dest);
   },
   filename: (req: Request<{ _id: string }>, file, cb) => {

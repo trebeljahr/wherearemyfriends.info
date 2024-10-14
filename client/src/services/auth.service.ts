@@ -1,12 +1,12 @@
 import axios, { Axios } from "axios";
-import { UserType } from "src/context/auth.context";
+import { UserType } from "src/lib/types";
 import { backendURL } from "src/lib/consts";
 
 class AuthService {
   api: Axios;
   constructor() {
     this.api = axios.create({
-      baseURL: backendURL,
+      baseURL: backendURL + "/auth",
     });
 
     this.api.interceptors.request.use((config) => {
@@ -20,20 +20,32 @@ class AuthService {
     });
   }
 
-  login = (requestBody: { emailOrUsername: string; password: string }) => {
-    return this.api.post("/auth/login", requestBody);
+  login = (requestBody: {
+    emailOrUsername: string;
+    password: string;
+    altchaPayload: string;
+  }) => {
+    return this.api.post("/login", requestBody);
   };
 
   signup = (requestBody: {
     email: string;
     username: string;
     password: string;
+    altchaPayload: string;
   }) => {
-    return this.api.post("/auth/signup", requestBody);
+    return this.api.post("/signup", requestBody);
+  };
+
+  changePassword = (requestBody: {
+    oldPassword: string;
+    newPassword: string;
+  }) => {
+    return this.api.post("/change-password", requestBody);
   };
 
   verify = async () => {
-    const response = await this.api.get<UserType>("/auth/verify");
+    const response = await this.api.get<UserType>("/verify");
     const user = response.data;
     return user;
   };

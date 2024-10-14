@@ -19,17 +19,12 @@ app.use("/api", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/api", userRoutes);
 
-console.log({ NODE_ENV: process.env.NODE_ENV });
-console.log({ __dirname });
-console.log({ parentDir: CORRECT_PATH });
-
 const clientBuild = path.resolve(CORRECT_PATH, "..", "client", "build");
 app.use(express.static(path.resolve(CORRECT_PATH, "public")));
 app.use(express.static(clientBuild));
 
 app.get("*", (_, res) => {
   const indexFile = path.resolve(clientBuild, "index.html");
-  console.log({ indexFile });
 
   res.sendFile(indexFile);
 });
