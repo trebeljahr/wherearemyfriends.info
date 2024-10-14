@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "src/context/auth.context";
-import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
+import { assembleImageUrl } from "src/lib/consts";
 import { userService } from "src/services/user.service";
 
 export const ProfilePictureUpload = () => {

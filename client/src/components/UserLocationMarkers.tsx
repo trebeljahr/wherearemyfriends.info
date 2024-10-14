@@ -1,7 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Marker } from "react-map-gl/maplibre";
 import { useAuth } from "../context/auth.context";
-import { createAvatarMarkerMapLibreGL } from "../lib/createAvatarMarkerMaplibreGL";
+import { AvatarPinMarker } from "./AvatarPinMarker";
 
 type MarkerProps = {
   updateUserLocation: (newLocation: [number, number]) => void;
@@ -23,14 +23,11 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         longitude={user.location.city.longitude}
         latitude={user.location.city.latitude}
         anchor="bottom"
-        draggable
-        onDragEnd={(event: any) => {
-          const { lng, lat } = event.lngLat;
-          const newCoordinates: [number, number] = [lng, lat];
-          updateUserLocation(newCoordinates);
-        }}
       >
-        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-slate-500")}
+        <AvatarPinMarker
+          imgSrc={user.profilePicture}
+          pinColor={"rgb(107 114 128)"}
+        />
       </Marker>
     );
   }
@@ -43,7 +40,10 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         latitude={user.location.country.latitude}
         anchor="bottom"
       >
-        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-green-500")}
+        <AvatarPinMarker
+          imgSrc={user.profilePicture}
+          pinColor={"rgb(34 197 94)"}
+        />
       </Marker>
     );
   }
@@ -62,7 +62,10 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
           updateUserLocation(newCoordinates);
         }}
       >
-        {createAvatarMarkerMapLibreGL(user.profilePicture, "bg-red-400")}
+        <AvatarPinMarker
+          imgSrc={user.profilePicture}
+          pinColor={"rgb(248 113 113)"}
+        />
       </Marker>
     );
   }

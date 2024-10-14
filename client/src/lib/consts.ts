@@ -20,6 +20,11 @@ export const defaultMapSettings = {
   mapStyle: tileServerURL,
   style: { width: "100%", height: "80vh" },
 };
+export const assembleImageUrl = (
+  img: string = "/assets/no-user.webp"
+): string => {
+  return img?.startsWith("/") ? `${backendURL}${img}` : img;
+};
 // old leaflet solutions:
 // export const tileServerURL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 

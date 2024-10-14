@@ -3,7 +3,7 @@ import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useData } from "src/context/DataContext";
 import { normalizeName } from "src/lib/consts";
-import { assembleImageUrl } from "src/lib/createAvatarMarkerMaplibreGL";
+import { assembleImageUrl } from "src/lib/consts";
 import { Friend, useFriends } from "./MapWithFriendMarkers";
 import {
   getCountryAndCityNameFromFriend,
