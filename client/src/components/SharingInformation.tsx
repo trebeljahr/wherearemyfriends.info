@@ -1,8 +1,8 @@
-import { CityAndCountryData, useData } from "src/context/DataContext";
-import { Friend } from "./MapWithFriendMarkers";
-import { SharingState } from "./FriendsharingList";
+import { CityAndCountryData } from "src/context/DataContext";
 import { normalizeName } from "src/lib/consts";
 import { findCityAndCountryByCoordinates } from "src/lib/findCity";
+import { SharingState } from "./FriendsharingList";
+import { Friend } from "./MapWithFriendMarkers";
 
 export function getCountryAndCityNameFromFriend(
   data: CityAndCountryData,
@@ -25,8 +25,16 @@ function resolveSharingState(sharingState: SharingState) {
   return { shareCountry, shareCity };
 }
 
-export const SharingInformation = ({ friend }: { friend: Friend }) => {
-  const data = useData();
+export const SharingInformation = ({
+  friend,
+  data,
+}: {
+  friend: Friend;
+  data: CityAndCountryData;
+}) => {
+  if (!data.cityData || !data.countryData) {
+    return null;
+  }
 
   const { countryName, cityName } = getCountryAndCityNameFromFriend(
     data,
@@ -35,16 +43,25 @@ export const SharingInformation = ({ friend }: { friend: Friend }) => {
   const { shareCountry, shareCity } = resolveSharingState(friend.sharingState);
 
   return (
-    <div className="prose prose-p:!m-0 !text-left">
+    <div className="prose prose-p:!m-0 !text-left m-2">
       <p className="leading-snug">
         <b>{friend.name}</b> is sharing their {friend.sharingState} location.
       </p>
       <div className="mt-4">
-        {shareCountry && <p>Country: {countryName}</p>}
-        {shareCity && <p>City: {cityName}</p>}
+        {shareCountry && (
+          <p>
+            <b>Country:</b> {countryName}
+          </p>
+        )}
+        {shareCity && (
+          <p>
+            <b>City:</b> {cityName}
+          </p>
+        )}
         {friend.sharingState === "exact" && (
           <p>
-            Lat: {friend.location.latitude.toFixed(4)}, Lon:{" "}
+            <b>Lat: </b>
+            {friend.location.latitude.toFixed(4)}, <b>Lon:</b>{" "}
             {friend.location.longitude.toFixed(4)}
           </p>
         )}

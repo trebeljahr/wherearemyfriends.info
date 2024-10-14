@@ -152,7 +152,7 @@ export const FriendSearch = () => {
                     alt={`${friend.name}'s profile`}
                     className="rounded-full w-10 h-10 object-cover"
                   />
-                  <SharingInformation friend={friend} />
+                  <SharingInformation friend={friend} data={data} />
                 </li>
               );
             })}

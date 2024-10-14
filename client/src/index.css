@@ -14,24 +14,9 @@ body {
   display: none;
 }
 
-.custom-pin {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50% 50% 50% 0; 
-  transform: rotate(-45deg); 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.maplibregl-popup-close-button {
+  padding: 5px;
+
+  /* margin: 2px; */
 }
 
-.avatar-circle {
-  width: 30px;
-  height: 30px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 50%;
-  border: 1px solid white; 
-  z-index: 10; 
-  transform: rotate(45deg); 
-}

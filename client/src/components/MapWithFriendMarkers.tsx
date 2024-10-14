@@ -12,6 +12,9 @@ import { defaultMapSettings } from "src/lib/consts";
 import { userService } from "src/services/user.service";
 import { AvatarPinMarker } from "./AvatarPinMarker";
 import { SharingState } from "./FriendsharingList";
+import { SharingInformation } from "./SharingInformation";
+import { createRoot } from "react-dom/client";
+import { Feature, useData } from "src/context/DataContext";
 
 export type Friend = {
   id: string;
@@ -28,13 +31,13 @@ export type Friend = {
 function mapSharingStateToMarkerColor(sharingState: SharingState): string {
   switch (sharingState) {
     case "exact":
-      return "rgb(248 113 113)"; // return "bg-red-400";
+      return "bg-red-400"; // return "rgb(248 113 113)";
     case "city":
-      return "rgb(8 145 178)"; // return "bg-cyan-600";
+      return "bg-cyan-600"; // return "rgb(8 145 178)";
     case "country":
-      return "rgb(34 197 94)"; // return "bg-green-500";
+      return "bg-green-500"; // return "rgb(34 197 94)";
     default:
-      return "rgb(107 114 128)"; // return "bg-gray-500";
+      return "bg-gray-500"; // return "rgb(107 114 128)";
   }
 }
 
@@ -57,10 +60,49 @@ export function useFriends() {
   return friends;
 }
 
-const CustomFriendMarker = ({ friend }: { friend: any }) => {
+const CustomFriendMarker = ({ friend }: { friend: Feature<Friend> }) => {
+  const data = useData();
   const popup = useMemo(() => {
-    return new maplibregl.Popup().setText("Hello world!").setOffset([0, -40]);
-  }, []);
+    // if (!friend.properties || !data.cityData || !data.countryData) return null;
+
+    console.log(friend);
+
+    let popupNode = document.createElement("div");
+    const root = createRoot(popupNode);
+    root.render(<SharingInformation friend={friend.properties} data={data} />);
+
+    console.log(popupNode);
+    // return new maplibregl.Popup().setDOMContent(popupNode).setOffset([0, -40]);
+
+    // const { longitude: lon, latitude: lat } = friend.properties.location;
+    return (
+      new maplibregl.Popup()
+        // .setLngLat({ lon, lat })
+        .setDOMContent(popupNode)
+        .setOffset([0, -40])
+    );
+    // .addTo(map.current);
+  }, [friend, data]);
+
+  // const openPopup = ({
+  //   longitude,
+  //   latitude,
+  // }: {
+  //   longitude: number;
+  //   latitude: number;
+  // }) => {
+  //   console.log("openPopup", friend, longitude, latitude);
+  //   let popupNode = document.createElement("div");
+  //   const root = createRoot(popupNode);
+  //   root.render(<SharingInformation friend={friend} />);
+
+  //   // return new maplibregl.Popup().setDOMContent(popupNode).setOffset([0, -40]);
+
+  //   new maplibregl.Popup()
+  //     .setLngLat({ lon: longitude, lat: latitude })
+  //     .setDOMContent(popupNode);
+  //   // .addTo(map.current);
+  // };
 
   if (!friend.properties) return null;
 
@@ -73,6 +115,7 @@ const CustomFriendMarker = ({ friend }: { friend: any }) => {
       longitude={longitude}
       latitude={latitude}
       anchor="bottom"
+      // onClick={() => openPopup({ longitude, latitude })}
       popup={popup}
     >
       <AvatarPinMarker
@@ -99,6 +142,7 @@ export const MapWithFriendMarkers: React.FC = () => {
             profilePicture: friend.profilePicture,
             sharingState: friend.sharingState,
             locationName: friend.location.name,
+            location: friend.location,
           },
           geometry: {
             type: "Point" as const,
