@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "dev": "vite --host --port 3000",
+    "dev": "vite --port 3000",
     "build": "vite build",
     "serve": "vite preview",
     "assembleBetterDatasets": "tsx ./src/scripts/assembleBetterDatasets.ts"

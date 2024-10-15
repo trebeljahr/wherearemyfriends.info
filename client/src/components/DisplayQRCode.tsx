@@ -6,9 +6,7 @@ import { useAuth } from "../context/auth.context";
 export const DisplayQRCode: React.FC = () => {
   const { user } = useAuth();
 
-  const profileUrl = `${window.location.hostname}/profiles/${user?.username}`;
-
-  console.log(profileUrl);
+  const profileUrl = `${window.location.origin}/profiles/${user?.username}`;
 
   return (
     <div className="flex flex-col items-center">
