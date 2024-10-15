@@ -31,12 +31,12 @@ export const FriendMarkerPin = ({ friend }: { friend: Feature<Friend> }) => {
     };
   }, [friend, data]);
 
-  const { id, profilePicture, sharingState } = friend.properties;
+  const { _id, profilePicture, sharingState } = friend.properties;
   const [longitude, latitude] = friend.geometry.coordinates;
 
   return (
     <Marker
-      key={id}
+      key={_id}
       longitude={longitude}
       latitude={latitude}
       anchor="bottom"

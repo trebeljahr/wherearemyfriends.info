@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { userService } from "../services/user.service";
+import { useAuth } from "../context/auth.context";
 
 export const SendFriendRequest = ({
   friendId,
   setFriendId = () => {},
 }: {
   friendId: string | null;
-  setFriendId?: (id: string | null) => void;
+  setFriendId?: (_id: string | null) => void;
 }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const { refreshUser } = useAuth();
 
   const addFriend = async () => {
     if (!friendId) return;
@@ -19,6 +21,7 @@ export const SendFriendRequest = ({
       const data = await userService.makeFriendRequest(friendId);
       setMessage(data.message);
       setFriendId(null);
+      await refreshUser();
     } catch (error: any) {
       console.error("Error adding friend:", error);
       setMessage("Error: " + error.response.data.message);

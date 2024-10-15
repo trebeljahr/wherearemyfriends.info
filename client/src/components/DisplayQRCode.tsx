@@ -1,13 +1,14 @@
 // QRCodeGenerator.tsx
-import React from "react";
 import { QRCodeSVG } from "qrcode.react";
+import React from "react";
 import { useAuth } from "../context/auth.context";
-import { backendURL } from "../lib/consts";
 
 export const DisplayQRCode: React.FC = () => {
   const { user } = useAuth();
 
-  const profileUrl = `${backendURL}/profiles/${user?.username}`;
+  const profileUrl = `${window.location.hostname}/profiles/${user?.username}`;
+
+  console.log(profileUrl);
 
   return (
     <div className="flex flex-col items-center">

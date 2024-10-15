@@ -180,7 +180,9 @@ router.post("/login", async (req: Request, res: Response) => {
     const foundUser = foundUserByEmail || foundUserByUsername;
 
     if (!foundUser) {
-      res.status(401).json({ message: "User not found." });
+      res
+        .status(401)
+        .json({ message: "No user found for this email or username." });
       return;
     }
 
@@ -263,10 +265,10 @@ router.get(
   "/verify",
   jwtMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.auth?._id).populate(
-      "friends",
-      "username email profilePicture"
-    );
+    const user = await User.findById(req.auth?._id)
+      .populate("friends", "username profilePicture")
+      .populate("sentFriendRequests", "profilePicture username")
+      .populate("receivedFriendRequests", "profilePicture username");
 
     if (!user) {
       return res.status(403).json({ message: "User not authorized" });
@@ -280,7 +282,7 @@ router.get(
       friends: user.friends,
       email: user.email,
       privacySettings: user.privacySettings,
-      pendingFriendRequests: user.pendingFriendRequests,
+      receivedFriendRequests: user.receivedFriendRequests,
       sentFriendRequests: user.sentFriendRequests,
     };
 

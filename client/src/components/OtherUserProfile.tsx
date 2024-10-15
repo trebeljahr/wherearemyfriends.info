@@ -5,7 +5,7 @@ import { userService } from "../services/user.service";
 import { assembleImageUrl } from "../lib/consts";
 import { SendFriendRequest } from "./UserSearch";
 import { useAuth } from "../context/auth.context";
-import { DisplaySingleFriendRequest } from "./PendingFriendRequests";
+import { DisplaySingleFriendRequest } from "./DisplaySingleFriendRequest";
 
 export const OtherUserProfile: React.FC = () => {
   const { user } = useAuth();
@@ -26,16 +26,6 @@ export const OtherUserProfile: React.FC = () => {
     fetchUser();
   }, [username]);
 
-  // const sendFriendRequest = async () => {
-  //   try {
-  //     if (!id) await userService.makeFriendRequest(id);
-  //     setFriendRequestStatus("sent");
-  //   } catch (error) {
-  //     console.error("Error sending friend request:", error);
-  //     setFriendRequestStatus("error");
-  //   }
-  // };
-
   if (!otherUser) {
     return <div>Loading...</div>;
   }
@@ -44,12 +34,12 @@ export const OtherUserProfile: React.FC = () => {
     .map(({ _id }) => _id)
     .includes(otherUser._id);
   const sameUser = user?._id === otherUser._id;
-  const alreadySentFriendRequest = user?.sentFriendRequests.includes(
-    otherUser._id
-  );
-  const alreadyReceivedFriendRequest = user?.pendingFriendRequests.includes(
-    otherUser._id
-  );
+  const alreadySentFriendRequest = user?.sentFriendRequests
+    .map(({ _id }) => _id)
+    .includes(otherUser._id);
+  const alreadyReceivedFriendRequest = user?.receivedFriendRequests
+    .map(({ _id }) => _id)
+    .includes(otherUser._id);
 
   return (
     <div className="py-24 min-h-screen rounded-lg p-6">
@@ -72,35 +62,11 @@ export const OtherUserProfile: React.FC = () => {
       ) : alreadyReceivedFriendRequest ? (
         <div>
           <p>You already have a friend request from this person. Accept it?</p>
-          <DisplaySingleFriendRequest
-            request={{
-              id: otherUser._id,
-              username: otherUser.username,
-              profilePicture: otherUser.profilePicture,
-            }}
-          />
+          <DisplaySingleFriendRequest request={otherUser} />
         </div>
       ) : (
         <SendFriendRequest friendId={otherUser._id} />
       )}
-      {/* <button
-        onClick={sendFriendRequest}
-        className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition duration-300 flex items-center justify-center"
-        disabled={friendRequestStatus === "sent"}
-      >
-        {friendRequestStatus === "sent" ? (
-          <>
-            <FaCheckCircle className="mr-2" /> Friend Request Sent
-          </>
-        ) : (
-          "Send Friend Request"
-        )}
-      </button>
-      {friendRequestStatus === "error" && (
-        <p className="text-red-500 text-center mt-2">
-          Failed to send friend request.
-        </p>
-      )} */}
     </div>
   );
 };

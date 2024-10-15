@@ -35,14 +35,7 @@ export const MapWithFriendMarkers: React.FC = () => {
         .filter((friend) => friend.location)
         .map((friend) => ({
           type: "Feature" as const,
-          properties: {
-            id: friend.id,
-            name: friend.name,
-            profilePicture: friend.profilePicture,
-            sharingState: friend.sharingState,
-            locationName: friend.location.name,
-            location: friend.location,
-          },
+          properties: friend,
           geometry: {
             type: "Point" as const,
             coordinates: [friend.location.longitude, friend.location.latitude],
@@ -57,7 +50,7 @@ export const MapWithFriendMarkers: React.FC = () => {
       <NavigationControl position="top-left" />
 
       {friendsAsGeojsonData.features.map((friend) => (
-        <FriendMarkerPin key={friend.properties.id} friend={friend} />
+        <FriendMarkerPin key={friend.properties._id} friend={friend} />
       ))}
     </Map>
   );
