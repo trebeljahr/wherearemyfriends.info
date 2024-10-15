@@ -1,13 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import authService from "../services/auth.service";
-import { AuthContextType, UserType } from "../lib/types";
+import { AuthContextType, LoggedInUser } from "../lib/types";
 
 const AuthContext = createContext({} as AuthContextType);
 
 function AuthProviderWrapper(props: any) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<LoggedInUser | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
   const storeToken = (token: string) => {

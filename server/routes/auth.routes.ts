@@ -263,15 +263,16 @@ router.get(
   "/verify",
   jwtMiddleware,
   async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.auth?._id)
-      .populate("friends", "username email profilePicture")
-      .populate("pendingFriendRequests privacySettings location");
+    const user = await User.findById(req.auth?._id).populate(
+      "friends",
+      "username email profilePicture"
+    );
 
     if (!user) {
       return res.status(403).json({ message: "User not authorized" });
     }
 
-    res.status(200).json({
+    const resObject = {
       _id: user._id,
       username: user.username,
       profilePicture: user.profilePicture,
@@ -280,7 +281,10 @@ router.get(
       email: user.email,
       privacySettings: user.privacySettings,
       pendingFriendRequests: user.pendingFriendRequests,
-    });
+      sentFriendRequests: user.sentFriendRequests,
+    };
+
+    res.status(200).json(resObject);
   }
 );
 

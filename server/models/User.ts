@@ -55,6 +55,7 @@ export interface IUser extends Document {
   friends: Schema.Types.ObjectId[];
   privacySettings: FriendPrivacy[];
   pendingFriendRequests: Schema.Types.ObjectId[];
+  sentFriendRequests: Schema.Types.ObjectId[];
   profilePicture: string;
 }
 
@@ -81,6 +82,9 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   location: { type: UserLocationSchema, default: { lastUpdated: new Date() } },
   pendingFriendRequests: [
+    { type: Schema.Types.ObjectId, ref: "User", default: [] },
+  ],
+  sentFriendRequests: [
     { type: Schema.Types.ObjectId, ref: "User", default: [] },
   ],
   friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],

@@ -8,6 +8,7 @@ import { IsPrivate } from "./components/IsPrivate";
 import { IsAnon } from "./components/IsAnon";
 import { FriendsPage } from "./pages/FriendsPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { OtherUserProfile } from "./components/OtherUserProfile";
 
 export function App() {
   return (
@@ -23,6 +24,15 @@ export function App() {
             element={
               <IsPrivate>
                 <MyLocationPage />
+              </IsPrivate>
+            }
+          />
+
+          <Route
+            path="/profiles/:username"
+            element={
+              <IsPrivate>
+                <OtherUserProfile />
               </IsPrivate>
             }
           />

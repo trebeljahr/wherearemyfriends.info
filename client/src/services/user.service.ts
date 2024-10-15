@@ -1,6 +1,11 @@
 import axios, { Axios } from "axios";
 import { backendURL } from "../lib/consts";
-import { Friend, SharingState, UserLocationData } from "../lib/types";
+import {
+  Friend,
+  OtherUser,
+  SharingState,
+  UserLocationData,
+} from "../lib/types";
 
 class UserService {
   api: Axios;
@@ -49,6 +54,11 @@ class UserService {
   async searchForUser(username: string) {
     const response = await this.api.get(`/users/search?username=${username}`);
     return response.data;
+  }
+
+  async getUserProfile(username: string) {
+    const response = await this.api.get(`/users/${username}`);
+    return response.data as OtherUser;
   }
 
   async fetchPendingRequests() {

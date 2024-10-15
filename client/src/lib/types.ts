@@ -13,7 +13,14 @@ export type Friend = {
 };
 
 export type SharingState = "exact" | "city" | "country" | "none";
-export type UserType = {
+
+export type OtherUser = {
+  _id: string;
+  username: string;
+  profilePicture: string;
+};
+
+export type LoggedInUser = {
   email: string;
   username: string;
   profilePicture: string;
@@ -26,14 +33,16 @@ export type UserType = {
     friendId: string;
     visibility: SharingState;
   }[];
-  friends: UserType[];
+  friends: LoggedInUser[];
+  pendingFriendRequests: string[];
+  sentFriendRequests: string[];
   _id: string;
 };
 
 export interface AuthContextType {
   isLoggedIn: boolean;
   isLoading: boolean;
-  user: UserType | null;
+  user: LoggedInUser | null;
   authToken: string | null;
   storeToken: (token: string) => void;
   authenticateUser: () => Promise<void>;

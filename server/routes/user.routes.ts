@@ -1,5 +1,5 @@
 // routes/userRoutes.ts
-import express from "express";
+import express, { Response } from "express";
 import { Request } from "express-jwt";
 import fs from "fs";
 import multer from "multer";
@@ -214,17 +214,47 @@ router.put("/friends/privacy", async (req: Request, res) => {
   }
 });
 
-router.get("/users/search", async (req: Request, res) => {
-  const { username } = req.query;
-  const { _id: currentUserId } = req.auth as { _id: string };
+router.get("/users/:username", async (req: Request, res) => {
+  const { username } = req.params;
+
   try {
-    const friend = await User.findOne({
-      username: new RegExp(`^${username}$`, "i"),
-    });
+    const user = await User.findOne(
+      { username },
+      "username profilePicture"
+    ).lean();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/users/search", async (req: Request, res) => {
+  try {
+    console.log("Searching for user");
+    const { username } = req.query;
+    const { _id: currentUserId } = req.auth as { _id: string };
+
+    console.log(username, currentUserId);
+
+    const friend = await User.findOne({ username });
     const user = await User.findById(currentUserId);
 
-    if (!user || !friend) {
+    console.log(friend, user);
+
+    if (!friend) {
       return res.status(404).json({ message: "User not found." });
+    }
+
+    if (!user) {
+      return res
+        .status(403)
+        .json({ message: "It seems like you are not authenticated." });
     }
 
     if (friend.id === currentUserId) {
@@ -263,18 +293,27 @@ router.post("/friends/requests", async (req: Request, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (user.id === friendId) {
+      return res
+        .status(400)
+        .json({ message: "You cannot add yourself as a friend" });
+    }
+
     if (user.friends.includes(friendId)) {
       return res
         .status(400)
         .json({ message: "You are already friends with this user" });
     }
 
-    if (friend.pendingFriendRequests.includes(user.id)) {
+    if (user.sentFriendRequests.includes(user.id)) {
       return res.status(400).json({ message: "Friend request already sent" });
     }
 
     friend.pendingFriendRequests.push(user.id);
     await friend.save();
+
+    user.sentFriendRequests.push(friendId);
+    await user.save();
 
     return res
       .status(200)
@@ -338,6 +377,10 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
       (id) => id.toString() !== requesterId
     );
 
+    requester.sentFriendRequests = requester.sentFriendRequests.filter(
+      (id) => id.toString() !== userId
+    );
+
     user.friends.push(requesterId);
     requester.friends.push(user.id);
 
@@ -367,9 +410,16 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
 
   try {
     const user = await User.findById(userId);
+    const requester = await User.findById(requesterId);
 
-    if (!user || user.id === requesterId) {
+    if (!user || !requester) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.id === requesterId) {
+      return res
+        .status(400)
+        .json({ message: "You cannot decline your own friend request" });
     }
 
     if (!user.pendingFriendRequests.includes(requesterId)) {
@@ -382,7 +432,12 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
       (id) => id.toString() !== requesterId
     );
 
+    requester.sentFriendRequests = requester.sentFriendRequests.filter(
+      (id) => id.toString() !== userId
+    );
+
     await user.save();
+    await requester.save();
 
     return res.status(200).json({ message: "Friend request declined" });
   } catch (error) {
