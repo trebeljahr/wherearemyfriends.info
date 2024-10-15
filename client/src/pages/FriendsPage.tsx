@@ -1,7 +1,8 @@
 import { UserSearch } from "../components/UserSearch";
 import { FriendsPrivacySettings } from "../components/FriendsharingList";
-import { PendingFriendRequests } from "../components/PendingFriendRequests";
+import { ReceivedFriendRequests } from "../components/ReceivedFriendRequests";
 import { MapWithFriendMarkers } from "../components/MapWithFriendMarkers";
+import { SentFriendRequests } from "../components/SentFriendRequests";
 
 export const FriendsPage = () => {
   return (
@@ -16,8 +17,11 @@ export const FriendsPage = () => {
       <h2 className="text-2xl font-bold mb-4">Add a New Friend</h2>
       <UserSearch />
 
-      <h2 className="text-2xl font-bold mb-4">Pending Friend Requests</h2>
-      <PendingFriendRequests />
+      <h2 className="text-2xl font-bold mb-4">Received Friend Requests</h2>
+      <ReceivedFriendRequests />
+
+      <h2 className="text-2xl font-bold mb-4">Sent Friend Requests</h2>
+      <SentFriendRequests />
     </div>
   );
 };

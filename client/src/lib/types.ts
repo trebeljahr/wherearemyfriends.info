@@ -1,8 +1,8 @@
 import { Point } from "geojson";
 
 export type Friend = {
-  id: string;
-  name: string;
+  _id: string;
+  username: string;
   profilePicture: string;
   sharingState: SharingState;
   location: {
@@ -34,8 +34,8 @@ export type LoggedInUser = {
     visibility: SharingState;
   }[];
   friends: LoggedInUser[];
-  pendingFriendRequests: string[];
-  sentFriendRequests: string[];
+  receivedFriendRequests: OtherUser[];
+  sentFriendRequests: OtherUser[];
   _id: string;
 };
 

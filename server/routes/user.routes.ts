@@ -70,7 +70,7 @@ router.post(
 
       if (!user) {
         if (req.file) fs.unlinkSync(req.file.path);
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "User not found." });
       }
 
       user.profilePicture = `/uploads/profile_pictures/${req.file.filename}`;
@@ -112,7 +112,7 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
       .lean();
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     const friendsWithPrivacy = user.friends.map((friend: any) => {
@@ -123,8 +123,8 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
         )?.visibility || "country";
 
       return {
-        id: typedFriend._id,
-        name: typedFriend.username,
+        _id: typedFriend._id,
+        username: typedFriend.username,
         profilePicture: typedFriend.profilePicture || "/assets/no-user.webp",
         sharingState,
         location: mapSharingStateToLocation(sharingState, typedFriend.location),
@@ -190,7 +190,7 @@ router.put("/friends/privacy", async (req: Request, res) => {
       !user.friends.includes(friendId) ||
       friendId === currentUserId
     ) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     const friendPrivacy = user.privacySettings.find(
@@ -214,7 +214,7 @@ router.put("/friends/privacy", async (req: Request, res) => {
   }
 });
 
-router.get("/users/:username", async (req: Request, res) => {
+router.get("/profiles/:username", async (req: Request, res) => {
   const { username } = req.params;
 
   try {
@@ -224,7 +224,7 @@ router.get("/users/:username", async (req: Request, res) => {
     ).lean();
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     return res.json(user);
@@ -268,8 +268,8 @@ router.get("/users/search", async (req: Request, res) => {
     }
 
     if (
-      friend.pendingFriendRequests.includes(user.id) ||
-      user.pendingFriendRequests.includes(friend.id)
+      friend.receivedFriendRequests.includes(user.id) ||
+      user.receivedFriendRequests.includes(friend.id)
     ) {
       return res.status(400).json({ message: "Friend request already sent." });
     }
@@ -290,7 +290,7 @@ router.post("/friends/requests", async (req: Request, res) => {
     const friend = await User.findById(friendId);
 
     if (!user || !friend) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     if (user.id === friendId) {
@@ -309,7 +309,7 @@ router.post("/friends/requests", async (req: Request, res) => {
       return res.status(400).json({ message: "Friend request already sent" });
     }
 
-    friend.pendingFriendRequests.push(user.id);
+    friend.receivedFriendRequests.push(user.id);
     await friend.save();
 
     user.sentFriendRequests.push(friendId);
@@ -328,22 +328,22 @@ router.get("/friends/requests", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   try {
     const user = await User.findById(userId)
-      .populate("pendingFriendRequests", "username profilePicture")
+      .populate("receivedFriendRequests", "username profilePicture")
       .lean();
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
-    const pendingRequests = user.pendingFriendRequests.map(
+    const receivedFriendRequests = user.receivedFriendRequests.map(
       (requester: any) => ({
-        id: requester._id,
+        _id: requester._id,
         username: requester.username,
         profilePicture: requester.profilePicture || "/assets/no-user.webp",
       })
     );
 
-    return res.json(pendingRequests);
+    return res.json(receivedFriendRequests);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
@@ -364,16 +364,16 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
       user.friends.includes(requesterId) ||
       user.id === requesterId
     ) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
-    if (!user.pendingFriendRequests.includes(requesterId)) {
+    if (!user.receivedFriendRequests.includes(requesterId)) {
       return res
         .status(400)
         .json({ message: "No pending friend request from this user" });
     }
 
-    user.pendingFriendRequests = user.pendingFriendRequests.filter(
+    user.receivedFriendRequests = user.receivedFriendRequests.filter(
       (id) => id.toString() !== requesterId
     );
 
@@ -404,6 +404,51 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
   }
 });
 
+router.post("/friends/requests/revoke", async (req: Request, res) => {
+  const { _id: userId } = req.auth as { _id: string };
+  const { friendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    console.log(user.sentFriendRequests, friendId);
+
+    if (!user.sentFriendRequests.includes(friendId)) {
+      return res
+        .status(400)
+        .json({ message: "No pending friend request to this user" });
+    }
+
+    const potentialFriend = await User.findById(friendId);
+
+    if (!potentialFriend) {
+      return res.status(404).json({ message: "Potential Friend not found." });
+    }
+
+    user.sentFriendRequests = user.sentFriendRequests.filter(
+      (id) => id.toString() !== friendId
+    );
+
+    potentialFriend.receivedFriendRequests =
+      potentialFriend.receivedFriendRequests.filter(
+        (id) => id.toString() !== userId
+      );
+
+    await user.save();
+    await potentialFriend.save();
+
+    return res
+      .status(200)
+      .json({ message: "Friend request revoked succesfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.post("/friends/requests/decline", async (req: Request, res) => {
   const { _id: userId } = req.auth as { _id: string };
   const { requesterId } = req.body;
@@ -413,7 +458,7 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
     const requester = await User.findById(requesterId);
 
     if (!user || !requester) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     if (user.id === requesterId) {
@@ -422,13 +467,13 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
         .json({ message: "You cannot decline your own friend request" });
     }
 
-    if (!user.pendingFriendRequests.includes(requesterId)) {
+    if (!user.receivedFriendRequests.includes(requesterId)) {
       return res
         .status(400)
         .json({ message: "No pending friend request from this user" });
     }
 
-    user.pendingFriendRequests = user.pendingFriendRequests.filter(
+    user.receivedFriendRequests = user.receivedFriendRequests.filter(
       (id) => id.toString() !== requesterId
     );
 
@@ -454,7 +499,7 @@ router.put("/users/location", async (req: Request, res) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found." });
     }
 
     user.location = {

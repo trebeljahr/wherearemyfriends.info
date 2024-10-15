@@ -51,17 +51,24 @@ class UserService {
     return response.data;
   }
 
+  async revokeFriendRequest(friendId: string) {
+    const response = await this.api.post("/friends/requests/revoke", {
+      friendId,
+    });
+    return response.data;
+  }
+
   async searchForUser(username: string) {
     const response = await this.api.get(`/users/search?username=${username}`);
     return response.data;
   }
 
   async getUserProfile(username: string) {
-    const response = await this.api.get(`/users/${username}`);
+    const response = await this.api.get(`/profiles/${username}`);
     return response.data as OtherUser;
   }
 
-  async fetchPendingRequests() {
+  async fetchReceivedRequests() {
     const response = await this.api.get("/friends/requests");
     return response.data;
   }

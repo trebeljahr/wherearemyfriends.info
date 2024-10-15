@@ -145,12 +145,12 @@ export const FriendSearch = () => {
             {filteredFriends.map((friend) => {
               return (
                 <li
-                  key={friend.id}
+                  key={friend._id}
                   className="flex items-center my-6 not-prose space-x-4"
                 >
                   <img
                     src={assembleImageUrl(friend.profilePicture)}
-                    alt={`${friend.name}'s profile`}
+                    alt={`${friend.username}'s profile`}
                     className="rounded-full w-10 h-10 object-cover"
                   />
                   <SharingInformation friend={friend} data={data} />

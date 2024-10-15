@@ -44,7 +44,8 @@ export const SharingInformation = ({
   return (
     <div className="prose prose-p:!m-0 !text-left m-2">
       <p className="leading-snug">
-        <b>{friend.name}</b> is sharing their {friend.sharingState} location.
+        <b>{friend.username}</b> is sharing their {friend.sharingState}{" "}
+        location.
       </p>
       <div className="mt-4">
         {shareCountry && (
