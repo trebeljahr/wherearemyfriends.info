@@ -2,10 +2,9 @@ import { ViewState } from "react-map-gl";
 import maplibregl from "maplibre-gl";
 import { SharingState } from "./types";
 
-export const backendURL =
-  import.meta.env.NODE_ENV === "production"
-    ? ""
-    : import.meta.env.VITE_SERVER_URL || "https://localhost:5005";
+export const backendURL = import.meta.env.PROD
+  ? ""
+  : import.meta.env.VITE_SERVER_URL || "https://localhost:5005";
 
 export const normalizeName = (name: string) => name.trim();
 
