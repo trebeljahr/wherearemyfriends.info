@@ -1,5 +1,5 @@
 import axios, { Axios } from "axios";
-import { UserType } from "../lib/types";
+import { LoggedInUser } from "../lib/types";
 import { backendURL } from "../lib/consts";
 
 class AuthService {
@@ -45,7 +45,7 @@ class AuthService {
   };
 
   verify = async () => {
-    const response = await this.api.get<UserType>("/verify");
+    const response = await this.api.get<LoggedInUser>("/verify");
     const user = response.data;
     return user;
   };

@@ -1,39 +1,16 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { assembleImageUrl } from "../lib/consts";
 import { userService } from "../services/user.service";
 
-type UserRequest = {
-  id: string;
-  username: string;
-  profilePicture: string;
-};
-
-export const PendingFriendRequests = () => {
+export const DisplaySingleFriendRequest = ({
+  request,
+  setPendingRequests = () => {},
+}: {
+  request: UserRequest;
+  setPendingRequests?: Dispatch<SetStateAction<UserRequest[]>>;
+}) => {
   const { user, refreshUser } = useAuth();
-
-  const [pendingRequests, setPendingRequests] = useState<UserRequest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchPendingRequests = async () => {
-      if (!user) {
-        return;
-      }
-
-      try {
-        const data = await userService.fetchPendingRequests();
-        setPendingRequests(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch pending friend requests.");
-        setLoading(false);
-      }
-    };
-
-    fetchPendingRequests();
-  }, [user]);
 
   const handleAccept = async (requesterId: string) => {
     if (!user) {
@@ -59,7 +36,6 @@ export const PendingFriendRequests = () => {
     try {
       await userService.declineFriendRequest(requesterId);
 
-      // Remove the declined request from the state
       setPendingRequests((prevRequests) =>
         prevRequests.filter((request) => request.id !== requesterId)
       );
@@ -67,6 +43,64 @@ export const PendingFriendRequests = () => {
       alert("Failed to decline friend request.");
     }
   };
+
+  return (
+    <li key={request.id} className="mb-4 flex items-center">
+      <img
+        src={assembleImageUrl(request.profilePicture)}
+        alt={`${request.username}'s avatar`}
+        className="w-12 h-12 rounded-full"
+      />
+      <span className="ml-4">{request.username}</span>
+      <div className="mt-2 ml-auto">
+        <button
+          onClick={() => handleAccept(request.id)}
+          className="mr-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Accept
+        </button>
+        <button
+          onClick={() => handleDecline(request.id)}
+          className="px-4 py-2 bg-red-400 text-white rounded hover:bg-red-600"
+        >
+          Decline
+        </button>
+      </div>
+    </li>
+  );
+};
+
+type UserRequest = {
+  id: string;
+  username: string;
+  profilePicture: string;
+};
+
+export const PendingFriendRequests = () => {
+  const { user } = useAuth();
+
+  const [pendingRequests, setPendingRequests] = useState<UserRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPendingRequests = async () => {
+      if (!user) {
+        return;
+      }
+
+      try {
+        const data = await userService.fetchPendingRequests();
+        setPendingRequests(data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch pending friend requests.");
+        setLoading(false);
+      }
+    };
+
+    fetchPendingRequests();
+  }, [user]);
 
   return (
     <div>
@@ -79,28 +113,10 @@ export const PendingFriendRequests = () => {
       ) : (
         <ul>
           {pendingRequests.map((request) => (
-            <li key={request.id} className="mb-4 flex items-center">
-              <img
-                src={assembleImageUrl(request.profilePicture)}
-                alt={`${request.username}'s avatar`}
-                className="w-12 h-12 rounded-full"
-              />
-              <span className="ml-4">{request.username}</span>
-              <div className="mt-2 ml-auto">
-                <button
-                  onClick={() => handleAccept(request.id)}
-                  className="mr-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => handleDecline(request.id)}
-                  className="px-4 py-2 bg-red-400 text-white rounded hover:bg-red-600"
-                >
-                  Decline
-                </button>
-              </div>
-            </li>
+            <DisplaySingleFriendRequest
+              request={request}
+              setPendingRequests={setPendingRequests}
+            />
           ))}
         </ul>
       )}
