@@ -11,7 +11,8 @@ export const DisplayQRCode: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Share Your Profile</h2>
       <QRCodeSVG value={profileUrl} size={200} className="mb-4" />
       <p className="text-gray-700">
-        Scan this QR code to view my profile and send me friend request.
+        Scan this QR code to <a href={profileUrl}>view my profile</a> and send
+        me a friend request.
       </p>
     </div>
   );

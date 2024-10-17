@@ -1,14 +1,16 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Altcha } from "../components/Altcha";
 import {
   PasswordFieldComponent,
   usePasswordStrength,
 } from "../hooks/usePasswordField";
 import authService from "../services/auth.service";
+import { useAuth } from "../context/auth.context";
 
 export function SignupPage() {
+  const { storeToken, authenticateUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { passwordStrength } = usePasswordStrength(password);
@@ -19,6 +21,7 @@ export function SignupPage() {
   const altchaRef = useRef<{ value: string | null }>(null);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleEmailField = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -38,8 +41,14 @@ export function SignupPage() {
         username,
         altchaPayload: altchaValue,
       };
-      await authService.signup(requestBody);
-      navigate("/login");
+      const response = await authService.signup(requestBody);
+      storeToken(response.data.authToken);
+
+      await authenticateUser();
+
+      console.log("Signup successful, navigating to location page", location);
+      const from = location.state?.from || "/location";
+      navigate(from, { replace: true });
     } catch (error: any) {
       console.error(error);
 
@@ -113,7 +122,11 @@ export function SignupPage() {
 
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link
+            to="/login"
+            state={location.state}
+            className="text-blue-600 hover:underline"
+          >
             Login
           </Link>
         </p>

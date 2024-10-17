@@ -140,14 +140,17 @@ router.post("/signup", async (req: Request, res: Response) => {
       username,
     });
 
-    const user = {
-      _id: createdUser._id,
-      email: createdUser.email,
-      username: createdUser.username,
-    };
     solution.markAsSolved();
 
-    res.status(201).json({ user: user });
+    const { _id } = createdUser;
+    const payload = { _id };
+
+    const authToken = jwt.sign(payload, TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+
+    res.status(201).json({ authToken });
   } catch (error) {
     console.error("Error creating user:", error);
     return res.status(500).json({ message: "Error creating user" });
@@ -187,9 +190,9 @@ router.post("/login", async (req: Request, res: Response) => {
     const passwordCorrect = bcrypt.compareSync(password, foundUser.password);
 
     if (passwordCorrect) {
-      const { _id, email, username, profilePicture } = foundUser;
+      const { _id } = foundUser;
 
-      const payload = { _id, email, username, profilePicture };
+      const payload = { _id };
 
       const authToken = jwt.sign(payload, TOKEN_SECRET, {
         algorithm: "HS256",
@@ -198,7 +201,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
       solution.markAsSolved();
 
-      res.status(200).json({ authToken: authToken });
+      res.status(200).json({ authToken });
     } else {
       res.status(401).json({ message: "Unable to authenticate the user" });
     }
@@ -237,9 +240,6 @@ router.post(
       if (!passwordCorrect) {
         return res.status(401).json({ message: "Incorrect password" });
       }
-
-      const passwordRegex =
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
 
       if (!passwordRegex.test(newPassword)) {
         return res.status(400).json({

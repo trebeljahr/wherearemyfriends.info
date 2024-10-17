@@ -10,11 +10,13 @@ interface IsAnonProps {
 export function IsAnon({ children }: IsAnonProps) {
   const { isLoggedIn, isLoading } = useAuth();
 
+  console.log("IsAnon is rendered");
   if (isLoading) {
     return <FullscreenLoader />;
   }
 
   if (isLoggedIn) {
+    console.log("Redirecting to location page from IsAnon");
     return <Navigate to="/location" />;
   }
 

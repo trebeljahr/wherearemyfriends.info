@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import { FullscreenLoader } from "./Loading/Spinner";
 
@@ -9,13 +9,15 @@ interface IsPrivateProps {
 
 export function IsPrivate({ children }: IsPrivateProps) {
   const { isLoggedIn, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return <FullscreenLoader />;
   }
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" />;
+    console.log("Redirecting to login page with location", location);
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 
   return children;

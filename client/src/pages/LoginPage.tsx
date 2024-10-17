@@ -1,5 +1,5 @@
 import { ChangeEvent, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import authService from "../services/auth.service";
 import { Altcha } from "../components/Altcha";
@@ -12,14 +12,15 @@ export function LoginPage() {
   const [altchaValue, setAltchaValue] = useState<string | null>(null);
   const altchaRef = useRef<{ value: string | null }>(null);
 
-  const navigate = useNavigate();
-
   const { storeToken, authenticateUser } = useAuth();
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
     setEmailOrUsername(e.target.value);
   const handlePassword = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -34,8 +35,11 @@ export function LoginPage() {
 
       const response = await authService.login(requestBody);
       storeToken(response.data.authToken);
-      authenticateUser();
-      navigate("/location");
+      await authenticateUser();
+
+      console.log("Login successful, navigating to location page", location);
+      const from = location.state?.from || "/location";
+      navigate(from, { replace: true });
     } catch (error: any) {
       const errorDescription = error.response.data.message;
       setErrorMessage(errorDescription);
@@ -101,7 +105,11 @@ export function LoginPage() {
 
         <p className="text-sm text-center text-gray-600">
           Don't have an account yet?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
+          <Link
+            to="/signup"
+            state={location.state}
+            className="text-blue-600 hover:underline"
+          >
             Sign Up
           </Link>
         </p>
