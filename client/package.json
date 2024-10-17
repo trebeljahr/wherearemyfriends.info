@@ -11,6 +11,7 @@
     "assembleBetterDatasets": "tsx ./src/scripts/assembleBetterDatasets.ts"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.10",
     "@turf/turf": "^7.1.0",
     "altcha": "^1.0.5",
     "axios": "^1.7.7",
