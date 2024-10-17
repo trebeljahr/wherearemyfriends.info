@@ -16,6 +16,7 @@ import User, {
   SharingState,
   UserLocation,
 } from "../models/User"; // Import User model
+import sharp from "sharp";
 
 // this makes the auth field *always* available in the Request object, which is only true when the jwt and authentication middleware are set up
 declare global {
@@ -50,12 +51,25 @@ router.post(
       const originalName = req.file.originalname;
       const ext = originalName.substring(originalName.lastIndexOf("."));
 
-      const fileName = `${randomUUID()}${ext}`;
+      const fileName = `${randomUUID()}.jpg`;
+
+      const size = {
+        width: 288,
+        height: 288,
+      };
+
+      const processedImageBuffer = await sharp(req.file.buffer)
+        .resize(size.width, size.height, {
+          fit: sharp.fit.cover,
+          withoutEnlargement: true,
+        })
+        .toFormat("jpg", { quality: 80 })
+        .toBuffer();
 
       const uploadParams = {
         Bucket: BUCKET_NAME,
         Key: fileName,
-        Body: req.file.buffer,
+        Body: processedImageBuffer,
         ContentType: req.file.mimetype,
       };
 
@@ -63,6 +77,11 @@ router.post(
       await s3Client.send(uploadCommand);
 
       try {
+        const defaultProfilePicture = `${CLOUDFRONT_URL}/no-user.webp`;
+        if (user.profilePicture === defaultProfilePicture) {
+          return;
+        }
+
         const deleteParams = {
           Bucket: BUCKET_NAME,
           Key: user.profilePicture.split("/").pop(),

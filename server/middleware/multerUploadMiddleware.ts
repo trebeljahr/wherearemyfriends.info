@@ -1,12 +1,11 @@
-// src/middleware/upload.ts
 import multer from "multer";
 
 const storage = multer.memoryStorage();
 
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 
 const fileFilter = (
-  req: Express.Request,
+  _: Express.Request,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ) => {
