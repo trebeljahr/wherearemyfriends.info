@@ -32,6 +32,8 @@ export const ReceivedFriendRequests = () => {
 
   return (
     <div>
+      <h2 className="text-2xl font-bold mb-4">Received Friend Requests</h2>
+
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -42,6 +44,7 @@ export const ReceivedFriendRequests = () => {
         <ul>
           {receivedRequests.map((request) => (
             <DisplaySingleFriendRequest
+              key={request._id}
               request={request}
               setRequests={setReceivedRequests}
             />

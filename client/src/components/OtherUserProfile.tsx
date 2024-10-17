@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { OtherUser } from "../lib/types";
 import { userService } from "../services/user.service";
-import { SendFriendRequest } from "./UserSearch";
 import { useAuth } from "../context/auth.context";
 import { DisplaySingleFriendRequest } from "./DisplaySingleFriendRequest";
+import { SendFriendRequest } from "./SendFriendRequest";
+import { DefaultPrivacySettingForOtherUser } from "./DefaultPrivacySetting";
 
 export const OtherUserProfile: React.FC = () => {
   const { user } = useAuth();
@@ -51,6 +52,8 @@ export const OtherUserProfile: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-2">
         <b>username:</b> {otherUser.username}
       </h2>
+
+      <DefaultPrivacySettingForOtherUser otherUser={otherUser} />
 
       {alreadyFriends ? (
         <p>You are already friends with this user</p>

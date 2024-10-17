@@ -1,6 +1,6 @@
-import { ProfilePictureUpload } from "../components/ProfilePictureUpload";
 import { ChangePassword } from "../components/ChangePassword";
 import { DisplayQRCode } from "../components/DisplayQRCode";
+import { ProfilePictureUpload } from "../components/ProfilePictureUpload";
 
 export function SettingsPage() {
   return (

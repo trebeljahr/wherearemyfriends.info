@@ -229,7 +229,7 @@ router.get("/profiles/:username", async (req: Request, res) => {
   try {
     const user = await User.findOne(
       { username },
-      "username profilePicture"
+      "username profilePicture defaultPrivacy"
     ).lean();
 
     if (!user) {
@@ -268,16 +268,11 @@ router.put("/users/default-privacy", async (req: Request, res) => {
 
 router.get("/users/search", async (req: Request, res) => {
   try {
-    console.log("Searching for user");
     const { username } = req.query;
     const { _id: currentUserId } = req.auth;
 
-    console.log(username, currentUserId);
-
     const friend = await User.findOne({ username });
     const user = await User.findById(currentUserId);
-
-    console.log(friend, user);
 
     if (!friend) {
       return res.status(404).json({ message: "User not found." });
@@ -445,8 +440,6 @@ router.post("/friends/requests/revoke", async (req: Request, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-
-    console.log(user.sentFriendRequests, friendId);
 
     if (!user.sentFriendRequests.includes(friendId)) {
       return res

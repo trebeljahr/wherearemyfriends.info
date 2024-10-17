@@ -18,6 +18,7 @@ export type OtherUser = {
   _id: string;
   username: string;
   profilePicture: string;
+  defaultPrivacy: SharingState;
 };
 
 export type LoggedInUser = {

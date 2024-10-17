@@ -16,7 +16,6 @@ export function IsPrivate({ children }: IsPrivateProps) {
   }
 
   if (!isLoggedIn) {
-    console.log("Redirecting to login page with location", location);
     return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   }
 

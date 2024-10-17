@@ -7,20 +7,22 @@ export interface PrivacyOption {
   icon: JSX.Element;
 }
 
-export const options: PrivacyOption[] = [
+export const generateOptions = (
+  pronoun: "their" | "your" = "your"
+): PrivacyOption[] => [
   {
     value: "exact",
-    label: "Sharing your exact location",
+    label: `Sharing ${pronoun} exact location`,
     icon: <FaMapPin className="w-5 h-5 text-red-400" />,
   },
   {
     value: "city",
-    label: "Sharing your city location",
+    label: `Sharing ${pronoun} city location`,
     icon: <FaCity className="w-5 h-5 text-cyan-600" />,
   },
   {
     value: "country",
-    label: "Sharing your country location",
+    label: `Sharing ${pronoun} country location`,
     icon: <FaMap className="w-5 h-5 text-green-500" />,
   },
   {

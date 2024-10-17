@@ -31,7 +31,6 @@ export function LoginPage() {
       storeToken(response.data.authToken);
       await authenticateUser();
 
-      console.log("Login successful, navigating to location page", location);
       const from = location.state?.from || "/location";
       navigate(from, { replace: true });
     } catch (error: any) {

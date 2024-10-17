@@ -8,8 +8,9 @@ import {
 import { Fragment } from "react";
 import { FaCheck } from "react-icons/fa";
 import { SharingState } from "../lib/types";
-import { options, PrivacyOption } from "./PrivacyOptions";
+import { generateOptions, PrivacyOption } from "./PrivacyOptions";
 
+const options = generateOptions("your");
 interface PrivacyOptionComponentProps {
   value: SharingState;
   onChange: (value: SharingState) => void;
@@ -55,7 +56,7 @@ export const PrivacyOptionsComponent = ({
                   }
                   value={option}
                 >
-                  {({ selected, focus }) => (
+                  {({ selected }) => (
                     <>
                       <div className="flex items-center">
                         {option.icon}

@@ -11,7 +11,10 @@ import {
 } from "@headlessui/react";
 import { PrivacyOptionsComponent } from "./PrivacyOptionsComponent";
 import { FaCog } from "react-icons/fa";
-import { options } from "./PrivacyOptions";
+import { generateOptions } from "./PrivacyOptions";
+import { DefaultPrivacySetting } from "./DefaultPrivacySetting";
+
+const options = generateOptions("your");
 
 export const FriendsPrivacySettings = () => {
   const { user, refreshUser } = useAuth();
@@ -27,15 +30,6 @@ export const FriendsPrivacySettings = () => {
       await refreshUser();
     } catch (error) {
       console.error("Error updating privacy setting:", error);
-    }
-  };
-
-  const updateDefaultPrivacy = async (newState: SharingState) => {
-    try {
-      await userService.updateDefaultPrivacy(newState);
-      await refreshUser();
-    } catch (error) {
-      console.error("Error updating default privacy setting:", error);
     }
   };
 
@@ -68,21 +62,14 @@ export const FriendsPrivacySettings = () => {
 
   return (
     <div className="space-y-6">
+      <h2 className="text-2xl font-bold mb-4">Location Privacy Settings</h2>
+
       {user.friends.length === 0 && (
         <p className="text-lg">You have no friends yet.</p>
       )}
 
-      {/* Default Privacy Setting */}
-      <div className="w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4 flex-wrap">
-        <p>You are</p>
-        <PrivacyOptionsComponent
-          value={user.defaultPrivacy}
-          onChange={updateDefaultPrivacy}
-        />
-        <p>per default with new friends.</p>
-      </div>
+      <DefaultPrivacySetting />
 
-      {/* Friends List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {user.friends.map((friend) => {
           const friendPrivacySetting =
@@ -97,7 +84,7 @@ export const FriendsPrivacySettings = () => {
           return (
             <div
               key={friend._id}
-              className="not-prose w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4"
+              className="not-prose bg-white w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4"
             >
               <img
                 src={friend.profilePicture}
@@ -124,10 +111,8 @@ export const FriendsPrivacySettings = () => {
         })}
       </div>
 
-      {/* Modal */}
       <Transition show={isModalOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          {/* Overlay */}
           <div className="fixed inset-0 bg-black bg-opacity-50" />
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -142,7 +127,6 @@ export const FriendsPrivacySettings = () => {
                 leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
               >
                 <DialogPanel className="relative bg-white text-left shadow-xl transform transition-all w-full h-[calc(100vh-32px)] rounded-lg md:rounded-none md:h-screen md:max-w-md">
-                  {/* Close Button */}
                   <div className="absolute top-0 right-0 pt-4 pr-4">
                     <button
                       type="button"
@@ -182,7 +166,6 @@ export const FriendsPrivacySettings = () => {
                             }
                           />
                         </div>
-                        {/* Remove Friend Button at the Bottom */}
                         <div className="p-6 mt-auto">
                           <button
                             className="w-full bg-red-500 text-white py-2 rounded-md flex items-center justify-center"
