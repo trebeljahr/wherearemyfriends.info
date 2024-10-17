@@ -7,12 +7,12 @@ export const mapSharingStateToMarkerColor = (
 ): string => {
   switch (sharingState) {
     case "exact":
-      return "bg-red-400"; // return "rgb(248 113 113)";
+      return "bg-red-400";
     case "city":
-      return "bg-cyan-600"; // return "rgb(8 145 178)";
+      return "bg-cyan-600";
     case "country":
-      return "bg-green-500"; // return "rgb(34 197 94)";
+      return "bg-green-500";
     default:
-      return "bg-gray-500"; // return "rgb(107 114 128)";
+      return "bg-gray-500";
   }
 };

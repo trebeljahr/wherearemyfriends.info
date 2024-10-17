@@ -1,4 +1,3 @@
-// models/PrivacySetting.ts
 import { Schema, model, Document } from "mongoose";
 import { SharingState } from "./User";
 

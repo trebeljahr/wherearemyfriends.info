@@ -1,6 +1,3 @@
-// AvatarPinMarker.tsx
-import React from "react";
-
 interface AvatarPinMarkerProps {
   imgSrc: string;
   pinColor: string;

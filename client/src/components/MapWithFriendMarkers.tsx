@@ -1,10 +1,10 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Map, { NavigationControl } from "react-map-gl/maplibre";
 import { defaultMapSettings } from "../lib/consts";
+import { Friend } from "../lib/types";
 import { userService } from "../services/user.service";
 import { FriendMarkerPin } from "./CustomFriendMarker";
-import { Friend } from "../lib/types";
 
 export function useFriends() {
   const [friends, setFriends] = useState<Friend[]>([]);

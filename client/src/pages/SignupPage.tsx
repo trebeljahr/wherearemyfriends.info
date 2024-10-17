@@ -1,12 +1,12 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../services/auth.service";
+import { Altcha } from "../components/Altcha";
 import {
   PasswordFieldComponent,
   usePasswordStrength,
 } from "../hooks/usePasswordField";
-import { Altcha } from "../components/Altcha";
+import authService from "../services/auth.service";
 
 export function SignupPage() {
   const [email, setEmail] = useState("");
@@ -46,9 +46,6 @@ export function SignupPage() {
       const errorMessage = error?.response?.data?.message || error?.message;
       setErrorMessage(errorMessage);
     }
-    // finally {
-    // if (altchaRef.current) altchaRef.current.value = null;
-    // }
   };
 
   const enableSubmit = passwordStrength >= 5 && altchaValue;

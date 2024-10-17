@@ -1,11 +1,10 @@
-// DataContext.js
 import {
   createContext,
   FC,
-  useState,
-  useEffect,
   ReactNode,
   useContext,
+  useEffect,
+  useState,
 } from "react";
 import { CityAndCountryData, CityData, CountryData } from "../lib/types";
 

@@ -1,9 +1,7 @@
-// models/User.ts
 import { Schema, model, Document } from "mongoose";
 import { CLOUDFRONT_URL } from "../config/envVars";
 
 export type SharingState = "exact" | "city" | "country" | "none";
-// Define a TypeScript interface for the User document
 export interface FriendPrivacy {
   friendId: Schema.Types.ObjectId;
   visibility: SharingState;
@@ -37,7 +35,6 @@ const SingleLocationSchema = new Schema<SingleLocation>({
   },
 });
 
-// Define the UserLocation schema
 const UserLocationSchema = new Schema<UserLocation>({
   lastUpdated: {
     type: Date,
@@ -60,7 +57,6 @@ export interface IUser extends Document {
   profilePicture: string;
 }
 
-// Sub-schema for friend-specific privacy settings
 const FriendPrivacySchema = new Schema<FriendPrivacy>({
   friendId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   visibility: {
@@ -70,7 +66,6 @@ const FriendPrivacySchema = new Schema<FriendPrivacy>({
   },
 });
 
-// Main User schema
 const UserSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: {

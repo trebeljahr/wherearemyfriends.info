@@ -6,7 +6,6 @@ import { userService } from "../services/user.service";
 export const FriendsPrivacySettings = () => {
   const { user, refreshUser } = useAuth();
 
-  // Update privacy settings on the server
   const handleSharingStateChange = async (
     friendId: string,
     newState: SharingState

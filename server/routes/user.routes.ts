@@ -1,11 +1,7 @@
-// routes/userRoutes.ts
-import {
-  DeleteObjectCommand,
-  ObjectCannedACL,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
-import express, { Response, Request } from "express";
+import express, { Request, Response } from "express";
+import sharp from "sharp";
 import { BUCKET_NAME, CLOUDFRONT_URL } from "../config/envVars";
 import { s3Client } from "../config/s3Client";
 import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
@@ -15,8 +11,7 @@ import User, {
   IUser,
   SharingState,
   UserLocation,
-} from "../models/User"; // Import User model
-import sharp from "sharp";
+} from "../models/User";
 
 // this makes the auth field *always* available in the Request object, which is only true when the jwt and authentication middleware are set up
 declare global {
@@ -227,7 +222,7 @@ router.put("/friends/privacy", async (req: Request, res) => {
       });
     }
 
-    await user.save(); // Save the changes
+    await user.save();
     return res.json({ message: "Privacy settings updated successfully" });
   } catch (error) {
     console.error(error);
