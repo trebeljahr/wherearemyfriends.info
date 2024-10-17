@@ -118,49 +118,44 @@ export const FriendSearch = () => {
 
   return (
     <>
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">
-          Search Users by Location
-        </h2>
-        <AsyncSelect
-          cacheOptions
-          loadOptions={debouncedLoadOptions}
-          defaultOptions={false}
-          value={selectedOption}
-          openMenuOnClick={false}
-          onChange={handleSelect}
-          placeholder="Type a city or country name"
-          isClearable={true}
-          className="w-72 mb-5 relative z-[1100]"
-        />
-        {selectedOption && (
-          <h3 className="text-xl font-medium mb-3">
-            Users in {selectedOption.label}:
-          </h3>
-        )}
+      <AsyncSelect
+        cacheOptions
+        loadOptions={debouncedLoadOptions}
+        defaultOptions={false}
+        value={selectedOption}
+        openMenuOnClick={false}
+        onChange={handleSelect}
+        placeholder="Type a city or country name"
+        isClearable={true}
+        className="w-72 mb-5 relative z-[1100]"
+      />
+      {selectedOption && (
+        <h3 className="text-xl font-medium mb-3">
+          Users in {selectedOption.label}:
+        </h3>
+      )}
 
-        {filteredFriends.length > 0 ? (
-          <ul className="list-none p-0">
-            {filteredFriends.map((friend) => {
-              return (
-                <li
-                  key={friend._id}
-                  className="flex items-center my-6 not-prose space-x-4"
-                >
-                  <img
-                    src={friend.profilePicture}
-                    alt={`${friend.username}'s profile`}
-                    className="rounded-full w-10 h-10 object-cover"
-                  />
-                  <SharingInformation friend={friend} data={data} />
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          selectedOption && <p>No users found in this location.</p>
-        )}
-      </div>
+      {filteredFriends.length > 0 ? (
+        <ul className="list-none p-0">
+          {filteredFriends.map((friend) => {
+            return (
+              <li
+                key={friend._id}
+                className="flex items-center my-6 not-prose space-x-4"
+              >
+                <img
+                  src={friend.profilePicture}
+                  alt={`${friend.username}'s profile`}
+                  className="rounded-full w-10 h-10 object-cover"
+                />
+                <SharingInformation friend={friend} data={data} />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        selectedOption && <p>No users found in this location.</p>
+      )}
     </>
   );
 };
