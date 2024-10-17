@@ -11,21 +11,21 @@ export const options: PrivacyOption[] = [
   {
     value: "exact",
     label: "Sharing your exact location",
-    icon: <FaMapPin className="w-5 h-5" />,
+    icon: <FaMapPin className="w-5 h-5 text-red-400" />,
   },
   {
     value: "city",
     label: "Sharing your city location",
-    icon: <FaCity className="w-5 h-5" />,
+    icon: <FaCity className="w-5 h-5 text-cyan-600" />,
   },
   {
     value: "country",
     label: "Sharing your country location",
-    icon: <FaMap className="w-5 h-5" />,
+    icon: <FaMap className="w-5 h-5 text-green-500" />,
   },
   {
     value: "none",
     label: "Sharing absolutely no location",
-    icon: <FaExclamationTriangle className="w-5 h-5" />,
+    icon: <FaExclamationTriangle className="w-5 h-5 text-yellow-500" />,
   },
 ];

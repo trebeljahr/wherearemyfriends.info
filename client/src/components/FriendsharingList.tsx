@@ -83,7 +83,7 @@ export const FriendsPrivacySettings = () => {
       </div>
 
       {/* Friends List */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {user.friends.map((friend) => {
           const friendPrivacySetting =
             user.privacySettings.find(
@@ -97,7 +97,7 @@ export const FriendsPrivacySettings = () => {
           return (
             <div
               key={friend._id}
-              className="w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4"
+              className="not-prose w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4"
             >
               <img
                 src={friend.profilePicture}
@@ -131,17 +131,17 @@ export const FriendsPrivacySettings = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50" />
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
-            <div className="flex min-h-full w-screen items-center justify-end p-4 text-center sm:p-0">
+            <div className="flex min-h-full w-screen items-center justify-end p-4 text-center md:p-0">
               <TransitionChild
                 as={Fragment}
                 enter="transform transition ease-in-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                enterFrom="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
+                enterTo="opacity-100 translate-y-0 md:scale-100"
                 leave="transform transition ease-in-out duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                leaveFrom="opacity-100 translate-y-0 md:scale-100"
+                leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
               >
-                <DialogPanel className="relative bg-white text-left shadow-xl transform transition-all w-full h-[calc(100vh-32px)] rounded-lg sm:rounded-none sm:h-screen sm:max-w-md">
+                <DialogPanel className="relative bg-white text-left shadow-xl transform transition-all w-full h-[calc(100vh-32px)] rounded-lg md:rounded-none md:h-screen md:max-w-md">
                   {/* Close Button */}
                   <div className="absolute top-0 right-0 pt-4 pr-4">
                     <button

@@ -50,8 +50,8 @@ export const PrivacyOptionsComponent = ({
                   key={option.value}
                   className={({ focus }) =>
                     `${
-                      focus ? "text-white bg-blue-600" : "text-gray-900"
-                    } cursor-default select-none relative py-2 pl-3 pr-9`
+                      focus ? " bg-gray-200" : "bg-white"
+                    } cursor-default select-none relative py-2 pl-3 pr-9 text-gray-900`
                   }
                   value={option}
                 >
@@ -69,9 +69,7 @@ export const PrivacyOptionsComponent = ({
                       </div>
                       {selected && (
                         <span
-                          className={`${
-                            focus ? "text-white" : "text-blue-600"
-                          } absolute inset-y-0 right-0 flex items-center pr-4`}
+                          className={`absolute inset-y-0 right-0 flex items-center pr-4`}
                         >
                           <FaCheck className="w-5 h-5" aria-hidden="true" />
                         </span>
