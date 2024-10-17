@@ -138,7 +138,6 @@ router.post("/signup", async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       username,
-      profilePicture: "/assets/no-user.webp",
     });
 
     const user = {

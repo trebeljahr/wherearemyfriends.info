@@ -1,5 +1,6 @@
 // models/User.ts
 import { Schema, model, Document } from "mongoose";
+import { CLOUDFRONT_URL } from "../config/envVars";
 
 export type SharingState = "exact" | "city" | "country" | "none";
 // Define a TypeScript interface for the User document
@@ -89,7 +90,7 @@ const UserSchema = new Schema<IUser>({
   ],
   friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   privacySettings: { type: [FriendPrivacySchema], default: [] },
-  profilePicture: { type: String, default: "/assets/no-user.webp" },
+  profilePicture: { type: String, default: `${CLOUDFRONT_URL}/no-user.webp` },
 });
 
 const User = model<IUser>("User", UserSchema);

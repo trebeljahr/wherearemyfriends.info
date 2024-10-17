@@ -127,7 +127,7 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
       return {
         _id: typedFriend._id,
         username: typedFriend.username,
-        profilePicture: typedFriend.profilePicture || "/assets/no-user.webp",
+        profilePicture: typedFriend.profilePicture,
         sharingState,
         location: mapSharingStateToLocation(sharingState, typedFriend.location),
       };
@@ -341,7 +341,7 @@ router.get("/friends/requests", async (req: Request, res) => {
       (requester: any) => ({
         _id: requester._id,
         username: requester.username,
-        profilePicture: requester.profilePicture || "/assets/no-user.webp",
+        profilePicture: requester.profilePicture,
       })
     );
 
