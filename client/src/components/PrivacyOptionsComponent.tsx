@@ -3,38 +3,12 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
+  Transition,
 } from "@headlessui/react";
-import { FaCity, FaExclamationTriangle, FaMap, FaMapPin } from "react-icons/fa";
+import { Fragment } from "react";
+import { FaCheck } from "react-icons/fa";
 import { SharingState } from "../lib/types";
-
-interface PrivacyOption {
-  value: SharingState;
-  label: string;
-  icon: JSX.Element;
-}
-
-const options: PrivacyOption[] = [
-  {
-    value: "exact",
-    label: "Sharing your exact location",
-    icon: <FaMapPin className="w-5 h-5" />,
-  },
-  {
-    value: "city",
-    label: "Sharing your city location",
-    icon: <FaCity className="w-5 h-5" />,
-  },
-  {
-    value: "country",
-    label: "Sharing your country location",
-    icon: <FaMap className="w-5 h-5" />,
-  },
-  {
-    value: "none",
-    label: "Sharing absolutely no location",
-    icon: <FaExclamationTriangle className="w-5 h-5" />,
-  },
-];
+import { options, PrivacyOption } from "./PrivacyOptions";
 
 interface PrivacyOptionComponentProps {
   value: SharingState;
@@ -53,7 +27,7 @@ export const PrivacyOptionsComponent = ({
       value={selectedOption}
       onChange={(option: PrivacyOption) => onChange(option.value)}
     >
-      {({ open }: { open: boolean }) => (
+      {({ open }) => (
         <div className="relative">
           <ListboxButton className="relative w-full p-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-lg shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             <span className="flex items-center">
@@ -63,25 +37,25 @@ export const PrivacyOptionsComponent = ({
               </span>
             </span>
           </ListboxButton>
-          {open && (
-            <ListboxOptions className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+          <Transition
+            show={open}
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <ListboxOptions className="absolute z-20 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
               {options.map((option) => (
                 <ListboxOption
                   key={option.value}
-                  className={({ active }: { active: boolean }) =>
+                  className={({ focus }) =>
                     `${
-                      active ? "text-white bg-blue-600" : "text-gray-900"
+                      focus ? "text-white bg-blue-600" : "text-gray-900"
                     } cursor-default select-none relative py-2 pl-3 pr-9`
                   }
                   value={option}
                 >
-                  {({
-                    selected,
-                    active,
-                  }: {
-                    selected: boolean;
-                    active: boolean;
-                  }) => (
+                  {({ selected, focus }) => (
                     <>
                       <div className="flex items-center">
                         {option.icon}
@@ -93,21 +67,21 @@ export const PrivacyOptionsComponent = ({
                           {option.label}
                         </span>
                       </div>
-                      {selected ? (
+                      {selected && (
                         <span
                           className={`${
-                            active ? "text-white" : "text-blue-600"
+                            focus ? "text-white" : "text-blue-600"
                           } absolute inset-y-0 right-0 flex items-center pr-4`}
                         >
-                          {/* Optional: Add a checkmark icon here */}
+                          <FaCheck className="w-5 h-5" aria-hidden="true" />
                         </span>
-                      ) : null}
+                      )}
                     </>
                   )}
                 </ListboxOption>
               ))}
             </ListboxOptions>
-          )}
+          </Transition>
         </div>
       )}
     </Listbox>
