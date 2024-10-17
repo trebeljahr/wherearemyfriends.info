@@ -35,7 +35,7 @@ export const ProfilePictureUpload = () => {
 
   return (
     <div>
-      <h3>Upload New Profile Picture</h3>
+      <h2>Upload New Profile Picture</h2>
       <img
         src={user?.profilePicture}
         alt="Profile"

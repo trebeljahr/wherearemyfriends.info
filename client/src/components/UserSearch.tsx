@@ -49,17 +49,17 @@ export const SendFriendRequest = ({
 
 export const UserSearch = () => {
   const [username, setUsername] = useState("");
-  const [friendId, setFriendId] = useState<string | null>(null);
+  const [otherUserId, setOtherUserId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const searchForUser = async () => {
     try {
       setLoading(true);
-      const foundFriend = await userService.searchForUser(username);
-      if (foundFriend) {
-        setFriendId(foundFriend._id);
-        setMessage(`User found: ${foundFriend.username}`);
+      const foundUser = await userService.searchForUser(username);
+      if (foundUser) {
+        setOtherUserId(foundUser._id);
+        setMessage(`User found: ${foundUser.username}`);
       } else {
         setMessage("No user found with that username.");
       }
@@ -92,7 +92,10 @@ export const UserSearch = () => {
 
         {message && <p className="mb-4">{message}</p>}
 
-        <SendFriendRequest friendId={friendId} setFriendId={setFriendId} />
+        <SendFriendRequest
+          friendId={otherUserId}
+          setFriendId={setOtherUserId}
+        />
       </div>
     </>
   );

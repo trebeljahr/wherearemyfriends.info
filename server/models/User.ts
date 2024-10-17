@@ -55,6 +55,7 @@ export interface IUser extends Document {
   receivedFriendRequests: Schema.Types.ObjectId[];
   sentFriendRequests: Schema.Types.ObjectId[];
   profilePicture: string;
+  defaultPrivacy: SharingState;
 }
 
 const FriendPrivacySchema = new Schema<FriendPrivacy>({
@@ -83,6 +84,11 @@ const UserSchema = new Schema<IUser>({
   sentFriendRequests: [
     { type: Schema.Types.ObjectId, ref: "User", default: [] },
   ],
+  defaultPrivacy: {
+    type: String,
+    enum: ["exact", "city", "country", "none"],
+    default: "city",
+  },
   friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   privacySettings: { type: [FriendPrivacySchema], default: [] },
   profilePicture: { type: String, default: `${CLOUDFRONT_URL}/no-user.webp` },

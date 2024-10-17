@@ -26,7 +26,7 @@ export const LandingPage: React.FC = () => {
         </motion.p>
 
         <motion.div
-          className="relative inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-gray-900 text-white font-semibold rounded-full shadow-lg transition duration-300 hover:shadow-xl"
+          className="relative px-8 py-4 bg-gradient-to-r from-blue-500 to-gray-900 text-white font-semibold rounded-full shadow-lg transition duration-300 hover:shadow-xl"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.05 }}

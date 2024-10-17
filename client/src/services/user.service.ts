@@ -94,6 +94,13 @@ class UserService {
     return response.data;
   }
 
+  async updateDefaultPrivacy(defaultPrivacy: SharingState) {
+    const response = await this.api.put("/users/default-privacy", {
+      defaultPrivacy,
+    });
+    return response.data;
+  }
+
   async uploadProfilePicture(file: File) {
     const formData = new FormData();
     formData.append("profilePicture", file);

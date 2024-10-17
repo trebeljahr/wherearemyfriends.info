@@ -1,7 +1,25 @@
-import { CityAndCountryData } from "../lib/types";
+import { CityAndCountryData, SingleLocation } from "../lib/types";
 import { normalizeName } from "../lib/utils";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import { Friend, SharingState } from "../lib/types";
+
+export function DisplayExactLocation({
+  location,
+}: {
+  location: SingleLocation;
+}) {
+  return (
+    <div className="flex flex-wrap">
+      <span className="mr-2">
+        <b>Lat:</b>
+        {location.latitude.toFixed(4)}
+      </span>
+      <span>
+        <b>Lon:</b> {location.longitude.toFixed(4)}
+      </span>
+    </div>
+  );
+}
 
 export function getCountryAndCityNameFromFriend(
   data: CityAndCountryData,
@@ -59,11 +77,7 @@ export const SharingInformation = ({
           </p>
         )}
         {friend.sharingState === "exact" && (
-          <p>
-            <b>Lat: </b>
-            {friend.location.latitude.toFixed(4)}, <b>Lon:</b>{" "}
-            {friend.location.longitude.toFixed(4)}
-          </p>
+          <DisplayExactLocation location={friend.location} />
         )}
       </div>
     </div>

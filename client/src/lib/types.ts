@@ -36,6 +36,7 @@ export type LoggedInUser = {
   friends: LoggedInUser[];
   receivedFriendRequests: OtherUser[];
   sentFriendRequests: OtherUser[];
+  defaultPrivacy: SharingState;
   _id: string;
 };
 

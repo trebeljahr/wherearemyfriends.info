@@ -30,8 +30,8 @@ export const ChangePassword = () => {
   const { passwordStrength } = usePasswordStrength(newPassword);
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full">
-      <h1>Change Password</h1>
+    <div className="mt-8 sm:w-full sm:max-w-xl sm:mt-24">
+      <h2>Change Password</h2>
 
       {errorMessage && (
         <div className="flex items-center p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-md">

@@ -59,8 +59,8 @@ export function SignupPage() {
 
   const enableSubmit = passwordStrength >= 5 && altchaValue;
   return (
-    <div className="py-24 flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div className="mt-16 sm:mt-10 sm:py-24 flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full sm:max-w-md p-8 space-y-6 bg-white rounded-lg sm:shadow-md">
         <h1 className="text-2xl font-bold text-center text-gray-800">
           Sign Up
         </h1>

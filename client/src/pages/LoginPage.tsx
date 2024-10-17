@@ -9,9 +9,6 @@ export function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [altchaValue, setAltchaValue] = useState<string | null>(null);
-  const altchaRef = useRef<{ value: string | null }>(null);
-
   const { storeToken, authenticateUser } = useAuth();
 
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
@@ -25,12 +22,10 @@ export function LoginPage() {
   const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      if (!altchaValue) return;
 
       const requestBody = {
         emailOrUsername,
         password,
-        altchaPayload: altchaValue,
       };
 
       const response = await authService.login(requestBody);
@@ -83,15 +78,6 @@ export function LoginPage() {
               className="w-full px-4 py-2 text-gray-700 bg-white border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               placeholder="Enter your password"
               required
-            />
-          </fieldset>
-
-          <fieldset>
-            <Altcha
-              ref={altchaRef}
-              onStateChange={(ev: any) => {
-                setAltchaValue(ev.detail.payload);
-              }}
             />
           </fieldset>
 

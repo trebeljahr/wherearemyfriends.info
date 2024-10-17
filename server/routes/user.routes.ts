@@ -114,7 +114,7 @@ function mapSharingStateToLocation(
 
 router.get("/friends", async (req: Request<{ _id: string }>, res) => {
   try {
-    const { _id: userId } = req.auth as { _id: string };
+    const { _id: userId } = req.auth;
 
     const user = await User.findById(userId)
       .populate("friends", "username profilePicture privacySettings location")
@@ -148,7 +148,7 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
 });
 
 router.delete("/friends", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { friendId } = req.body;
 
   try {
@@ -188,7 +188,7 @@ router.delete("/friends", async (req: Request, res) => {
 });
 
 router.put("/friends/privacy", async (req: Request, res) => {
-  const { _id: currentUserId } = req.auth as { _id: string };
+  const { _id: currentUserId } = req.auth;
   const { friendId, newVisibility } = req.body;
 
   try {
@@ -243,11 +243,34 @@ router.get("/profiles/:username", async (req: Request, res) => {
   }
 });
 
+router.put("/users/default-privacy", async (req: Request, res) => {
+  try {
+    const { _id: userId } = req.auth;
+    const { defaultPrivacy } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.defaultPrivacy = defaultPrivacy;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Default privacy updated successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
 router.get("/users/search", async (req: Request, res) => {
   try {
     console.log("Searching for user");
     const { username } = req.query;
-    const { _id: currentUserId } = req.auth as { _id: string };
+    const { _id: currentUserId } = req.auth;
 
     console.log(username, currentUserId);
 
@@ -291,7 +314,7 @@ router.get("/users/search", async (req: Request, res) => {
 });
 
 router.post("/friends/requests", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { friendId } = req.body;
 
   try {
@@ -334,7 +357,7 @@ router.post("/friends/requests", async (req: Request, res) => {
 });
 
 router.get("/friends/requests", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   try {
     const user = await User.findById(userId)
       .populate("receivedFriendRequests", "username profilePicture")
@@ -360,7 +383,7 @@ router.get("/friends/requests", async (req: Request, res) => {
 });
 
 router.post("/friends/requests/accept", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { requesterId } = req.body;
 
   try {
@@ -414,7 +437,7 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
 });
 
 router.post("/friends/requests/revoke", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { friendId } = req.body;
 
   try {
@@ -459,7 +482,7 @@ router.post("/friends/requests/revoke", async (req: Request, res) => {
 });
 
 router.post("/friends/requests/decline", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { requesterId } = req.body;
 
   try {
@@ -501,7 +524,7 @@ router.post("/friends/requests/decline", async (req: Request, res) => {
 });
 
 router.put("/users/location", async (req: Request, res) => {
-  const { _id: userId } = req.auth as { _id: string };
+  const { _id: userId } = req.auth;
   const { country, city, exact } = req.body as UserLocation;
 
   try {

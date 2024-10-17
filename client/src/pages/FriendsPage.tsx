@@ -6,7 +6,7 @@ import { SentFriendRequests } from "../components/SentFriendRequests";
 
 export const FriendsPage = () => {
   return (
-    <div className="py-24 px-4 sm:px-6 lg:px-8 ">
+    <div className="py-24 px-4 sm:px-6 lg:px-8 w-screen">
       <h1>Friends page</h1>
 
       <MapWithFriendMarkers />

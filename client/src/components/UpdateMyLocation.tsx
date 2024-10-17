@@ -11,6 +11,7 @@ import { getCurrentLocationFromGps } from "../lib/getCurrentLocationFromGps";
 import { useAuth } from "../context/auth.context";
 import { defaultMapSettings } from "../lib/consts";
 import { UserLocationMarkers } from "./UserLocationMarkers";
+import { DisplayExactLocation } from "./SharingInformation";
 
 export const UpdateMyLocation = () => {
   const { updateUserLocation } = useUpdateUserLocation();
@@ -26,12 +27,13 @@ export const UpdateMyLocation = () => {
   return (
     <div className="prose-p:m-0 mb-5">
       <LocationInfoBox />
+      <InstructionInfoBox />
+
       <UseGeolocationButton />
       <Map {...defaultMapSettings} onClick={handleMapClick}>
         <NavigationControl position="top-left" />
         <UserLocationMarkers updateUserLocation={updateUserLocation} />
       </Map>
-      <InstructionInfoBox />
     </div>
   );
 };
@@ -70,15 +72,18 @@ const UseGeolocationButton = () => {
 
 const InstructionInfoBox = () => {
   return (
-    <div className="mt-5 flex bg-slate-200 p-5">
-      <FaInfo className="mt-[6px] inline mr-2 rounded-full bg-yellow-400 w-5 h-5 p-[3px]" />
+    <div className="mb-5 flex bg-slate-200 p-5">
+      <div className="flex mr-2 mt-2 w-9 h-9 p-2 rounded-full bg-yellow-400 items-center justify-center flex-shrink-0">
+        <FaInfo className="flex-shrink-0 w-5 h-5" />
+      </div>
 
       <p>
         <b>Click on the map to update your location.</b>
         <br />
         Your location will be calculated and shared based on your privacy
         settings, and it's easier to share your exact location when you are
-        further zoomed in.
+        further zoomed in alternatively you can also use the button below to
+        load the location from your GPS data.
       </p>
     </div>
   );
@@ -88,7 +93,9 @@ const LocationInfoBox = () => {
   const { user } = useAuth();
   return (
     <div className="mt-2 flex bg-slate-200 p-5 mb-5">
-      <FaLocationCrosshairs className="mt-[6px] inline mr-2 rounded-full bg-green-400 w-5 h-5 p-[3px]" />
+      <div className="flex mr-2 mt-2 w-9 h-9 p-2 rounded-full bg-green-400 items-center justify-center flex-shrink-0">
+        <FaLocationCrosshairs className="flex-shrink-0 w-5 h-5" />
+      </div>
 
       <div>
         {user?.location.country ? (
@@ -115,10 +122,7 @@ const LocationInfoBox = () => {
         )}
 
         {user?.location.exact ? (
-          <p>
-            <b>Lat:</b> {user.location.exact.latitude}, <b>Lon:</b>{" "}
-            {user.location.exact.longitude}
-          </p>
+          <DisplayExactLocation location={user.location.exact} />
         ) : (
           <p>
             You are not sharing your exact location with anybody at the moment.

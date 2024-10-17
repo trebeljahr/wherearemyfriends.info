@@ -161,12 +161,6 @@ router.post("/login", async (req: Request, res: Response) => {
   try {
     const { emailOrUsername, password } = req.body;
 
-    const solution = await verifyAltchaChallenge(req, res);
-
-    if (!solution) {
-      return;
-    }
-
     if (emailOrUsername === "" || password === "") {
       res.status(400).json({ message: "Provide email and password." });
       return;
@@ -198,8 +192,6 @@ router.post("/login", async (req: Request, res: Response) => {
         algorithm: "HS256",
         expiresIn: "6h",
       });
-
-      solution.markAsSolved();
 
       res.status(200).json({ authToken });
     } else {
@@ -283,6 +275,7 @@ router.get(
       privacySettings: user.privacySettings,
       receivedFriendRequests: user.receivedFriendRequests,
       sentFriendRequests: user.sentFriendRequests,
+      defaultPrivacy: user.defaultPrivacy,
     };
 
     res.status(200).json(resObject);

@@ -4,7 +4,7 @@ import { DisplayQRCode } from "../components/DisplayQRCode";
 
 export function SettingsPage() {
   return (
-    <div className="py-24 px-4 sm:px-6 lg:px-8 ">
+    <div className="py-24 px-4 sm:px-6 lg:px-8 w-screen">
       <h1>Profile Settings</h1>
 
       <DisplayQRCode />
