@@ -20,7 +20,6 @@ app.use("/auth", authRoutes);
 app.use("/api", userRoutes);
 
 const clientBuild = path.resolve(CORRECT_PATH, "..", "client", "build");
-app.use(express.static(path.resolve(CORRECT_PATH, "public")));
 app.use(express.static(clientBuild));
 
 app.get("*", (_, res) => {
