@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/auth.context";
-import { assembleImageUrl } from "../lib/consts";
 import { userService } from "../services/user.service";
 
 export const ProfilePictureUpload = () => {
@@ -38,7 +37,7 @@ export const ProfilePictureUpload = () => {
     <div>
       <h3>Upload New Profile Picture</h3>
       <img
-        src={assembleImageUrl(user?.profilePicture)}
+        src={user?.profilePicture}
         alt="Profile"
         className="w-36 h-36 rounded-full"
       />
@@ -60,11 +59,9 @@ type ApplicationUser = {
 };
 
 export const DisplayUserAvatar = ({ user }: { user: ApplicationUser }) => {
-  const profilePicUrl = assembleImageUrl(user.profilePicture);
-
   return (
     <img
-      src={profilePicUrl}
+      src={user.profilePicture}
       alt={`${user.username}'s Profile`}
       style={{ width: "150px", height: "150px", borderRadius: "50%" }}
     />

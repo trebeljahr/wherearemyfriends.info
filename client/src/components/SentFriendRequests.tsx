@@ -1,6 +1,5 @@
 import { FaTrash } from "react-icons/fa6";
 import { useAuth } from "../context/auth.context";
-import { assembleImageUrl } from "../lib/consts";
 import { userService } from "../services/user.service";
 
 export const SentFriendRequests = () => {
@@ -28,7 +27,7 @@ export const SentFriendRequests = () => {
           {user.sentFriendRequests.map((potentialFriend) => (
             <div key={potentialFriend._id} className="flex items-center my-4">
               <img
-                src={assembleImageUrl(potentialFriend.profilePicture)}
+                src={potentialFriend.profilePicture}
                 alt={`${potentialFriend.username}'s profile`}
                 className="w-10 h-10 rounded-full my-0 mr-4"
               />

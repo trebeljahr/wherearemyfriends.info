@@ -1,9 +1,7 @@
+import { FaTrash } from "react-icons/fa6";
 import { useAuth } from "../context/auth.context";
-import { userService } from "../services/user.service";
-import { FaCity, FaMap, FaMapPin, FaTrash } from "react-icons/fa6";
-import { assembleImageUrl } from "../lib/consts";
 import { SharingState } from "../lib/types";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { userService } from "../services/user.service";
 
 export const FriendsPrivacySettings = () => {
   const { user, refreshUser } = useAuth();
@@ -45,7 +43,7 @@ export const FriendsPrivacySettings = () => {
           className="w-full flex items-center p-4 border rounded-lg shadow-sm not-prose space-x-4"
         >
           <img
-            src={assembleImageUrl(friend.profilePicture)}
+            src={friend.profilePicture}
             alt={friend.username}
             className="w-10 h-10 rounded-full"
           />

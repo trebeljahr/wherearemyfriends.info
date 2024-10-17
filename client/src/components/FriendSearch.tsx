@@ -2,8 +2,7 @@ import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useData } from "../context/DataContext";
-import { normalizeName } from "../lib/consts";
-import { assembleImageUrl } from "../lib/consts";
+import { normalizeName } from "../lib/utils";
 import { useFriends } from "./MapWithFriendMarkers";
 import {
   getCountryAndCityNameFromFriend,
@@ -149,7 +148,7 @@ export const FriendSearch = () => {
                   className="flex items-center my-6 not-prose space-x-4"
                 >
                   <img
-                    src={assembleImageUrl(friend.profilePicture)}
+                    src={friend.profilePicture}
                     alt={`${friend.username}'s profile`}
                     className="rounded-full w-10 h-10 object-cover"
                   />

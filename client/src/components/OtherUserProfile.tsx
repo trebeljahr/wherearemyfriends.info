@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { OtherUser } from "../lib/types";
 import { userService } from "../services/user.service";
-import { assembleImageUrl } from "../lib/consts";
 import { SendFriendRequest } from "./UserSearch";
 import { useAuth } from "../context/auth.context";
 import { DisplaySingleFriendRequest } from "./DisplaySingleFriendRequest";
@@ -45,7 +44,7 @@ export const OtherUserProfile: React.FC = () => {
     <div className="py-24 min-h-screen rounded-lg p-6">
       <h1>Profile Page</h1>
       <img
-        src={assembleImageUrl(otherUser.profilePicture)}
+        src={otherUser.profilePicture}
         alt={`${otherUser.username}'s profile`}
         className="w-32 h-32 rounded-full mb-4"
       />

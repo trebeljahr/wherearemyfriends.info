@@ -4,7 +4,6 @@ import { FaCog } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
-import { assembleImageUrl } from "../lib/consts";
 
 export const useCloseWhenClickedOutside = ({
   ref,
@@ -60,7 +59,7 @@ export const FoldableUserLogo = () => {
     <div className="relative ml-2 not-prose flex items-center" ref={menuRef}>
       <img
         className="w-8 h-8 rounded-full cursor-pointer"
-        src={assembleImageUrl(user.profilePicture)}
+        src={user.profilePicture}
         alt="profile pic"
         onClick={toggleOpen}
       />

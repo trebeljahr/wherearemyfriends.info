@@ -1,9 +1,8 @@
 import bcrypt from "bcryptjs";
-import express, { NextFunction, Response } from "express";
-import { Request } from "express-jwt";
+import express, { NextFunction, Response, Request } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
-import { jwtMiddleware } from "../middleware/jwt.middleware";
+import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
 import { ALTCHA_HMAC_KEY, TOKEN_SECRET } from "../config/envVars";
 import { createChallenge, extractParams, verifySolution } from "altcha-lib";
 import { AltchaChallenge } from "../models/CaptchaChallenges";
@@ -213,6 +212,7 @@ router.post("/login", async (req: Request, res: Response) => {
 router.post(
   "/change-password",
   jwtMiddleware,
+  isAuthenticated,
   async (req: Request, res: Response) => {
     try {
       const { oldPassword, newPassword, altchaPayload } = req.body;
@@ -228,7 +228,7 @@ router.post(
           .json({ message: "Provide old and new password" });
       }
 
-      const user = await User.findById(req.auth?._id);
+      const user = await User.findById(req.auth._id);
 
       if (!user) {
         return res.status(403).json({ message: "User not authorized" });

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Marker } from "react-map-gl/maplibre";
 import { useData } from "../context/DataContext";
-import { mapSharingStateToMarkerColor } from "../lib/consts";
+import { mapSharingStateToMarkerColor } from "../lib/utils";
 import { Feature, Friend } from "../lib/types";
 import { AvatarPinMarker } from "./AvatarPinMarker";
 import { SharingInformation } from "./SharingInformation";

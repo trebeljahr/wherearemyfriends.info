@@ -1,79 +1,81 @@
 // routes/userRoutes.ts
-import express, { Response } from "express";
-import { Request } from "express-jwt";
-import fs from "fs";
-import multer from "multer";
-import path from "path";
 import {
-  AuthenticatedRequest,
-  isAuthenticated,
-  jwtMiddleware,
-} from "../middleware/jwt.middleware";
+  DeleteObjectCommand,
+  ObjectCannedACL,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
+import { randomUUID } from "crypto";
+import express, { Response, Request } from "express";
+import { BUCKET_NAME, CLOUDFRONT_URL } from "../config/envVars";
+import { s3Client } from "../config/s3Client";
+import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
+import { multerUploadMiddleware } from "../middleware/multerUploadMiddleware";
 import User, {
   FriendPrivacy,
   IUser,
   SharingState,
   UserLocation,
 } from "../models/User"; // Import User model
-import { CORRECT_PATH } from "../config/envVars";
+
+// this makes the auth field *always* available in the Request object, which is only true when the jwt and authentication middleware are set up
+declare global {
+  namespace Express {
+    interface Request {
+      auth: {
+        _id: string;
+      };
+    }
+  }
+}
 
 const router = express.Router();
 
 router.use(jwtMiddleware);
 router.use(isAuthenticated);
 
-// Set up storage configuration
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    const dest = path.resolve(CORRECT_PATH, "public/uploads/profile_pictures/");
-
-    cb(null, dest);
-  },
-  filename: (req: Request<{ _id: string }>, file, cb) => {
-    const ext = path.extname(file.originalname);
-
-    if (!req.auth) return cb(new Error("User ID not found"), "");
-
-    const { _id: userId } = req.auth as { _id: string };
-
-    cb(null, `${userId}${ext}`); // Use user ID as the filename
-  },
-});
-
-// Initialize multer with storage configuration
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limit to 5MB
-  fileFilter: (req: any, file: any, cb: any) => {
-    // Accept image files only
-    if (file.mimetype.startsWith("image/")) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only image files are allowed!"));
-    }
-  },
-});
-
-// Upload profile picture
 router.post(
   "/users/profile-picture",
-  upload.single("profilePicture"),
-  async (req: AuthenticatedRequest, res) => {
-    if (!req.file) {
-      return res.status(400).json({ message: "Please upload a file" });
-    }
-
-    const { _id: userId } = req.auth as { _id: string };
-
+  multerUploadMiddleware.single("profilePicture"),
+  async (req: Request, res: Response) => {
     try {
-      const user = await User.findById(userId);
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded." });
+      }
+      const user = await User.findById(req.auth._id);
 
       if (!user) {
-        if (req.file) fs.unlinkSync(req.file.path);
         return res.status(404).json({ message: "User not found." });
       }
 
-      user.profilePicture = `/uploads/profile_pictures/${req.file.filename}`;
+      const originalName = req.file.originalname;
+      const ext = originalName.substring(originalName.lastIndexOf("."));
+
+      const fileName = `${randomUUID()}${ext}`;
+
+      const uploadParams = {
+        Bucket: BUCKET_NAME,
+        Key: fileName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
+      };
+
+      const uploadCommand = new PutObjectCommand(uploadParams);
+      await s3Client.send(uploadCommand);
+
+      try {
+        const deleteParams = {
+          Bucket: BUCKET_NAME,
+          Key: user.profilePicture.split("/").pop(),
+        };
+        const deleteCommand = new DeleteObjectCommand(deleteParams);
+        await s3Client.send(deleteCommand);
+      } catch (err) {
+        console.error("Error deleting old profile picture from S3:", err);
+      }
+
+      const fileUrl = `${CLOUDFRONT_URL}/${fileName}`;
+
+      user.profilePicture = fileUrl;
       await user.save();
 
       return res.status(200).json({
@@ -81,8 +83,8 @@ router.post(
         profilePicture: user.profilePicture,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
+      console.error("Error uploading to S3:", error);
+      return res.status(500).json({ message: "Internal Server Error." });
     }
   }
 );

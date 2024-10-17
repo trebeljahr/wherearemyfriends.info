@@ -1,5 +1,5 @@
 import { CityAndCountryData } from "../lib/types";
-import { normalizeName } from "../lib/consts";
+import { normalizeName } from "../lib/utils";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import { Friend, SharingState } from "../lib/types";
 

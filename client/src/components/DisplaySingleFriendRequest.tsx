@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 import { useAuth } from "../context/auth.context";
-import { assembleImageUrl } from "../lib/consts";
 import { OtherUser } from "../lib/types";
 import { userService } from "../services/user.service";
 
@@ -48,7 +47,7 @@ export const DisplaySingleFriendRequest = ({
   return (
     <li key={request._id} className="mb-4 flex items-center">
       <img
-        src={assembleImageUrl(request.profilePicture)}
+        src={request.profilePicture}
         alt={`${request.username}'s avatar`}
         className="w-12 h-12 rounded-full"
       />

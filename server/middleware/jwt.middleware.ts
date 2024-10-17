@@ -7,15 +7,8 @@ export const jwtMiddleware = jwt({
   getToken: getTokenFromHeaders,
 });
 
-export interface AuthenticatedRequest extends Request {
-  auth?: {
-    _id: string;
-  };
-  file?: Express.Multer.File;
-}
-
 export const isAuthenticated = (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): void => {
