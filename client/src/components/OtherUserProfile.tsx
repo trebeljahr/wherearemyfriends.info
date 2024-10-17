@@ -50,15 +50,14 @@ export const OtherUserProfile: React.FC = () => {
         className="w-32 h-32 rounded-full mb-4"
       />
       <h2 className="text-2xl font-semibold mb-2">
-        <b>username:</b> {otherUser.username}
+        <b>username:</b> {otherUser.username}{" "}
+        {sameUser && <span className="ml-2 font-thin">(This is you)</span>}
       </h2>
 
       <DefaultPrivacySettingForOtherUser otherUser={otherUser} />
 
       {alreadyFriends ? (
         <p>You are already friends with this user</p>
-      ) : sameUser ? (
-        <p>This is you.</p>
       ) : alreadySentFriendRequest ? (
         <p>Friend request already sent</p>
       ) : alreadyReceivedFriendRequest ? (
@@ -67,7 +66,7 @@ export const OtherUserProfile: React.FC = () => {
           <DisplaySingleFriendRequest request={otherUser} />
         </div>
       ) : (
-        <SendFriendRequest friendId={otherUser._id} />
+        !sameUser && <SendFriendRequest friendId={otherUser._id} />
       )}
     </div>
   );

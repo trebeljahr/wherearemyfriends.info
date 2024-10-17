@@ -1,18 +1,17 @@
-import { useState, Fragment } from "react";
-import { FaTrash, FaTimes } from "react-icons/fa";
-import { useAuth } from "../context/auth.context";
-import { SharingState } from "../lib/types";
-import { userService } from "../services/user.service";
 import {
   Dialog,
   DialogPanel,
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { PrivacyOptionsComponent } from "./PrivacyOptionsComponent";
-import { FaCog } from "react-icons/fa";
-import { generateOptions } from "./PrivacyOptions";
+import { useState } from "react";
+import { FaCog, FaTimes, FaTrash } from "react-icons/fa";
+import { useAuth } from "../context/auth.context";
+import { SharingState } from "../lib/types";
+import { userService } from "../services/user.service";
 import { DefaultPrivacySetting } from "./DefaultPrivacySetting";
+import { generateOptions } from "./PrivacyOptions";
+import { PrivacyOptionsComponent } from "./PrivacyOptionsComponent";
 
 const options = generateOptions("your");
 
@@ -111,14 +110,14 @@ export const FriendsPrivacySettings = () => {
         })}
       </div>
 
-      <Transition show={isModalOpen} as={Fragment}>
+      <Transition show={isModalOpen} as={"div"}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <div className="fixed inset-0 bg-black bg-opacity-50" />
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full w-screen items-center justify-end p-4 text-center md:p-0">
               <TransitionChild
-                as={Fragment}
+                as={"div"}
                 enter="transform transition ease-in-out duration-300"
                 enterFrom="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
                 enterTo="opacity-100 translate-y-0 md:scale-100"

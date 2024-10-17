@@ -11,11 +11,12 @@ export function DisplayExactLocation({
   return (
     <div className="flex flex-wrap">
       <span className="mr-2">
-        <b>Lat:</b>
+        <b>Lat: </b>
         {location.latitude.toFixed(4)}
       </span>
       <span>
-        <b>Lon:</b> {location.longitude.toFixed(4)}
+        <b>Lon: </b>
+        {location.longitude.toFixed(4)}
       </span>
     </div>
   );

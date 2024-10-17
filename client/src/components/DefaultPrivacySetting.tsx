@@ -1,7 +1,6 @@
 import { useAuth } from "../context/auth.context";
-import { OtherUser, SharingState } from "../lib/types";
+import { SharingState } from "../lib/types";
 import { userService } from "../services/user.service";
-import { generateOptions } from "./PrivacyOptions";
 import { PrivacyOptionsComponent } from "./PrivacyOptionsComponent";
 
 export const DefaultPrivacySetting = () => {
@@ -21,39 +20,47 @@ export const DefaultPrivacySetting = () => {
   }
 
   return (
-    <div className="w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4 flex-wrap">
+    <div className="w-full flex items-center p-4 border rounded-lg shadow-sm flex-wrap bg-white">
       <p>You are</p>
-      <PrivacyOptionsComponent
-        value={user.defaultPrivacy}
-        onChange={updateDefaultPrivacy}
-      />
+      <div className="w-full sm:w-auto sm:mx-2">
+        <PrivacyOptionsComponent
+          value={user.defaultPrivacy}
+          onChange={updateDefaultPrivacy}
+        />
+      </div>
       <p>per default with new friends.</p>
     </div>
   );
 };
 
-const options = generateOptions("their");
+import { OtherUser } from "../lib/types";
+import { generateOptions } from "./PrivacyOptions";
 
 export const DefaultPrivacySettingForOtherUser = ({
   otherUser,
 }: {
   otherUser: OtherUser;
 }) => {
+  const { user } = useAuth();
+  const isYou = user?._id === otherUser._id;
+
+  const options = generateOptions(isYou ? "your" : "their");
   const privacyOption = options.find(
     (option) => option.value === otherUser.defaultPrivacy
   );
-  if (!privacyOption) return null;
+
+  if (!privacyOption || !user) return null;
 
   return (
-    <span className="w-full flex items-center p-4 border rounded-lg shadow-sm space-x-4 flex-wrap">
-      <p>{otherUser.username} is</p>
-      <div className="relative w-full p-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-lg shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+    <div className="text-sm mt-8 w-[80vw] sm:w-[50vw] not-prose flex items-center border rounded-lg flex-wrap ">
+      <p>{isYou ? "You are" : `${otherUser.username} is`}</p>
+      <div className="relative w-fit p-2 mx-2 text-left bg-white border border-gray-300 rounded-lg shadow-sm text-sm">
         <span className="flex items-center">
           {privacyOption.icon}
-          <span className="ml-3 block truncate">{privacyOption.label}</span>
+          <span className="ml-3 block">{privacyOption.label}</span>
         </span>
       </div>
-      <p>per default with new friends.</p>
-    </span>
+      <p>with new friends per default.</p>
+    </div>
   );
 };

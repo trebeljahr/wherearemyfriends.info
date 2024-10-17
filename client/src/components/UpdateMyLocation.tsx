@@ -82,7 +82,7 @@ const InstructionInfoBox = () => {
         <br />
         Your location will be calculated and shared based on your privacy
         settings, and it's easier to share your exact location when you are
-        further zoomed in alternatively you can also use the button below to
+        further zoomed in. Alternatively you can also use the button below to
         load the location from your GPS data.
       </p>
     </div>
