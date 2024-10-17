@@ -6,6 +6,7 @@ import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
 import { ALTCHA_HMAC_KEY, TOKEN_SECRET } from "../config/envVars";
 import { createChallenge, extractParams, verifySolution } from "altcha-lib";
 import { AltchaChallenge } from "../models/CaptchaChallenges";
+import { rateLimiter } from "../middleware/rateLimiter";
 
 const router = express.Router();
 const saltRounds = 10;
@@ -86,7 +87,7 @@ async function verifyAltchaChallenge(req: Request, res: Response) {
   }
 }
 
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/signup", rateLimiter, async (req: Request, res: Response) => {
   try {
     const { email, password, username } = req.body;
 
@@ -205,6 +206,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
 router.post(
   "/change-password",
+  rateLimiter,
   jwtMiddleware,
   isAuthenticated,
   async (req: Request, res: Response) => {

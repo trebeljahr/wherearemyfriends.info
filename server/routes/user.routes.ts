@@ -12,6 +12,7 @@ import User, {
   UserLocation,
 } from "../models/User";
 import { Jimp } from "jimp";
+import { rateLimiter, userSearchRateLimiter } from "../middleware/rateLimiter";
 
 // this makes the auth field *always* available in the Request object, which is only true when the jwt and authentication middleware are set up
 declare global {
@@ -31,6 +32,7 @@ router.use(isAuthenticated);
 
 router.post(
   "/users/profile-picture",
+  rateLimiter,
   multerUploadMiddleware.single("profilePicture"),
   async (req: Request, res: Response) => {
     try {
@@ -223,25 +225,29 @@ router.put("/friends/privacy", async (req: Request, res) => {
   }
 });
 
-router.get("/profiles/:username", async (req: Request, res) => {
-  const { username } = req.params;
+router.get(
+  "/profiles/:username",
+  userSearchRateLimiter,
+  async (req: Request, res) => {
+    const { username } = req.params;
 
-  try {
-    const user = await User.findOne(
-      { username },
-      "username profilePicture defaultPrivacy"
-    ).lean();
+    try {
+      const user = await User.findOne(
+        { username },
+        "username profilePicture defaultPrivacy"
+      ).lean();
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      if (!user) {
+        return res.status(404).json({ message: "User not found." });
+      }
+
+      return res.json(user);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
     }
-
-    return res.json(user);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
   }
-});
+);
 
 router.put("/users/default-privacy", async (req: Request, res) => {
   try {
@@ -266,47 +272,58 @@ router.put("/users/default-privacy", async (req: Request, res) => {
   }
 });
 
-router.get("/users/search", async (req: Request, res) => {
-  try {
-    const { username } = req.query;
-    const { _id: currentUserId } = req.auth;
+router.get(
+  "/users/search",
+  userSearchRateLimiter,
+  async (req: Request, res) => {
+    try {
+      const { username } = req.query;
+      const { _id: currentUserId } = req.auth;
 
-    const friend = await User.findOne({ username });
-    const user = await User.findById(currentUserId);
+      const friend = await User.findOne({ username });
+      const user = await User.findById(currentUserId);
 
-    if (!friend) {
-      return res.status(404).json({ message: "User not found." });
+      if (!friend) {
+        return res.status(404).json({ message: "User not found." });
+      }
+
+      if (!user) {
+        return res
+          .status(403)
+          .json({ message: "It seems like you are not authenticated." });
+      }
+
+      if (friend.id === currentUserId) {
+        return res
+          .status(400)
+          .json({ message: "You cannot add yourself as a friend." });
+      }
+
+      if (
+        friend.friends.includes(user.id) ||
+        user.friends.includes(friend.id)
+      ) {
+        return res
+          .status(400)
+          .json({ message: "User is already your friend." });
+      }
+
+      if (
+        friend.receivedFriendRequests.includes(user.id) ||
+        user.receivedFriendRequests.includes(friend.id)
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Friend request already sent." });
+      }
+
+      return res.json(friend);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Server error" });
     }
-
-    if (!user) {
-      return res
-        .status(403)
-        .json({ message: "It seems like you are not authenticated." });
-    }
-
-    if (friend.id === currentUserId) {
-      return res
-        .status(400)
-        .json({ message: "You cannot add yourself as a friend." });
-    }
-
-    if (friend.friends.includes(user.id) || user.friends.includes(friend.id)) {
-      return res.status(400).json({ message: "User is already your friend." });
-    }
-
-    if (
-      friend.receivedFriendRequests.includes(user.id) ||
-      user.receivedFriendRequests.includes(friend.id)
-    ) {
-      return res.status(400).json({ message: "Friend request already sent." });
-    }
-
-    return res.json(friend);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
   }
-});
+);
 
 router.post("/friends/requests", async (req: Request, res) => {
   const { _id: userId } = req.auth;

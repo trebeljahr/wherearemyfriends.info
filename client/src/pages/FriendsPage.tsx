@@ -10,7 +10,6 @@ export const FriendsPage = () => {
     <div className="py-24 px-4 sm:px-6 lg:px-8 w-screen">
       <h1>Friends page</h1>
 
-      <h2 className="text-2xl font-bold mb-4">Search Friends by Location</h2>
       <FriendSearch />
 
       <MapWithFriendMarkers />

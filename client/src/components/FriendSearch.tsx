@@ -118,6 +118,8 @@ export const FriendSearch = () => {
 
   return (
     <>
+      <h2 className="text-2xl font-bold mb-4">Search Friends by Location</h2>
+
       <AsyncSelect
         cacheOptions
         loadOptions={debouncedLoadOptions}
