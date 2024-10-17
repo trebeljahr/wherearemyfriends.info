@@ -43,8 +43,8 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div className="mt-2 sm:mt-10 flex items-center justify-center min-h-screen bg-white sm:bg-gray-100">
+      <div className="w-full sm:max-w-md p-8 space-y-6 bg-white rounded-lg sm:shadow-md">
         <h1 className="text-2xl font-bold text-center text-gray-800">Login</h1>
 
         {errorMessage && (

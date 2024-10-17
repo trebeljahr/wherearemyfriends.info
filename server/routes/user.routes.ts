@@ -1,7 +1,6 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 import express, { Request, Response } from "express";
-import sharp from "sharp";
 import { BUCKET_NAME, CLOUDFRONT_URL } from "../config/envVars";
 import { s3Client } from "../config/s3Client";
 import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
@@ -12,6 +11,7 @@ import User, {
   SharingState,
   UserLocation,
 } from "../models/User";
+import { Jimp } from "jimp";
 
 // this makes the auth field *always* available in the Request object, which is only true when the jwt and authentication middleware are set up
 declare global {
@@ -43,29 +43,22 @@ router.post(
         return res.status(404).json({ message: "User not found." });
       }
 
-      const originalName = req.file.originalname;
-      const ext = originalName.substring(originalName.lastIndexOf("."));
-
-      const fileName = `${randomUUID()}.jpg`;
+      const fileName = `${randomUUID()}.jpeg`;
 
       const size = {
         width: 288,
-        height: 288,
       };
 
-      const processedImageBuffer = await sharp(req.file.buffer)
-        .resize(size.width, size.height, {
-          fit: sharp.fit.cover,
-          withoutEnlargement: true,
-        })
-        .toFormat("jpg", { quality: 80 })
-        .toBuffer();
+      const image = await Jimp.read(req.file.buffer);
+      image.resize({ w: size.width });
+
+      const processedImageBuffer = await image.getBuffer("image/jpeg");
 
       const uploadParams = {
         Bucket: BUCKET_NAME,
         Key: fileName,
         Body: processedImageBuffer,
-        ContentType: req.file.mimetype,
+        ContentType: "image/jpeg",
       };
 
       const uploadCommand = new PutObjectCommand(uploadParams);
