@@ -101,7 +101,7 @@ class UserService {
     return response.data;
   }
 
-  async uploadProfilePicture(file: File) {
+  async uploadProfilePicture(file: Blob) {
     const formData = new FormData();
     formData.append("profilePicture", file);
 
