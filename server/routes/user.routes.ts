@@ -68,16 +68,14 @@ router.post(
 
       try {
         const defaultProfilePicture = `${CLOUDFRONT_URL}/no-user.webp`;
-        if (user.profilePicture === defaultProfilePicture) {
-          return;
+        if (user.profilePicture !== defaultProfilePicture) {
+          const deleteParams = {
+            Bucket: BUCKET_NAME,
+            Key: user.profilePicture.split("/").pop(),
+          };
+          const deleteCommand = new DeleteObjectCommand(deleteParams);
+          await s3Client.send(deleteCommand);
         }
-
-        const deleteParams = {
-          Bucket: BUCKET_NAME,
-          Key: user.profilePicture.split("/").pop(),
-        };
-        const deleteCommand = new DeleteObjectCommand(deleteParams);
-        await s3Client.send(deleteCommand);
       } catch (err) {
         console.error("Error deleting old profile picture from S3:", err);
       }
