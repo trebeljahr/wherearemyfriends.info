@@ -21,7 +21,7 @@ class MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MaplibreMap(
+      body: MapLibreMap(
         styleString: "https://tiles.openfreemap.org/styles/liberty",
         myLocationEnabled: true,
         initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
