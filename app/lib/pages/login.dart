@@ -43,9 +43,9 @@ class _LoginPageState extends State<LoginPage> {
       // Log the response for debugging purposes
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+      final responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
         final authToken = responseData['authToken'];
         await authService.setAuthToken(authToken);
 
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushNamed(context, '/location');
       } else {
         setState(() {
-          _errorMessage = 'Invalid credentials. Please try again.';
+          _errorMessage = responseData['message'] ?? 'Something went wrong.';
         });
       }
     } catch (error) {

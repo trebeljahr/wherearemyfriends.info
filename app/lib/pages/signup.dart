@@ -64,8 +64,6 @@ class _SignupPageState extends State<SignupPage> {
 
     final url = Uri.parse('https://wherearemyfriends.info/auth/signup');
     try {
-      print(_challengeResolved);
-
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -77,10 +75,6 @@ class _SignupPageState extends State<SignupPage> {
         }),
       );
 
-      print('Response $response');
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final authToken = responseData['authToken'];
@@ -90,9 +84,9 @@ class _SignupPageState extends State<SignupPage> {
 
         Navigator.pushNamed(context, '/location');
       } else {
-        print("Error: ${response.statusCode}");
+        final responseData = json.decode(response.body);
         setState(() {
-          _errorMessage = 'Invalid credentials. Please try again.';
+          _errorMessage = responseData['message'] ?? 'Something went wrong.';
         });
       }
     } catch (error) {
