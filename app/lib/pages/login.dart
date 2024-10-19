@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wamf/services/authservice.dart';
 import 'dart:convert';
 import 'package:wamf/widgets/navbar.dart';
 
@@ -44,8 +45,8 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final authToken = responseData['authToken'];
-        // Store the token (in Flutter, you might use SharedPreferences or another secure storage method)
-        // Navigate to the next page
+        await authService.setAuthToken(authToken);
+
         Navigator.pushNamed(context, '/location');
       } else {
         setState(() {
