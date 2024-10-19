@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:my_map/widgets/altcha.dart';
 import 'package:my_map/widgets/navbar.dart';
 
 class SignupPage extends StatefulWidget {
@@ -18,8 +19,16 @@ class _SignupPageState extends State<SignupPage> {
   bool _isPasswordVisible = false;
   String _errorMessage = '';
   bool _isPasswordValid = false;
+  String? _challengeResolved;
 
   Future<void> _handleSignup() async {
+    if (_challengeResolved == null) {
+      setState(() {
+        _errorMessage = 'Please complete the verification challenge.';
+      });
+      return;
+    }
+
     final email = _emailController.text;
     final username = _usernameController.text;
     final password = _passwordController.text;
@@ -44,8 +53,12 @@ class _SignupPageState extends State<SignupPage> {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': email, 'username': username, 'password': password}),
+        body: json.encode({
+          'email': email,
+          'username': username,
+          'password': password,
+          'altchaPayload': _challengeResolved,
+        }),
       );
 
       // Log the response for debugging purposes
@@ -85,6 +98,12 @@ class _SignupPageState extends State<SignupPage> {
   void _updatePasswordValidation(String password) {
     setState(() {
       _isPasswordValid = _validatePassword(password);
+    });
+  }
+
+  void _handleChallengeSolved(String resolvedValue) {
+    setState(() {
+      _challengeResolved = resolvedValue;
     });
   }
 
@@ -149,8 +168,16 @@ class _SignupPageState extends State<SignupPage> {
               const SizedBox(height: 8),
               _buildPasswordCriteria(),
               const SizedBox(height: 24),
+              AltchaWidget(
+                verificationUrl:
+                    'https://wherearemyfriends.info/auth/altcha-challenge',
+                onChallengeSolved: _handleChallengeSolved,
+              ),
+              const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _isPasswordValid ? _handleSignup : null,
+                onPressed: _isPasswordValid && _challengeResolved != null
+                    ? _handleSignup
+                    : null,
                 child: const Text('Sign Up'),
               ),
               const SizedBox(height: 16),
@@ -249,8 +276,9 @@ class _SignupPageState extends State<SignupPage> {
     if (RegExp(r'[A-Z]').hasMatch(password)) strength++;
     if (RegExp(r'[a-z]').hasMatch(password)) strength++;
     if (RegExp(r'[0-9]').hasMatch(password)) strength++;
-    if (RegExp(r'[!@#\\$&*~]').hasMatch(password)) strength++;
+    if (RegExp(r'[!@#\$&*~]').hasMatch(password)) strength++;
     if (password.length >= 12) strength++;
+
     return strength;
   }
 }
