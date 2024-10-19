@@ -101,7 +101,7 @@ class UserService {
     }
 
     final response = await request.send();
-    if (response.statusCode != 200 && response.statusCode != 201) {
+    if (response.statusCode != 200) {
       throw Exception('Failed to upload profile picture');
     }
   }

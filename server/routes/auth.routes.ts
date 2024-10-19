@@ -158,7 +158,7 @@ router.post("/signup", rateLimiter, async (req: Request, res: Response) => {
       expiresIn: "6h",
     });
 
-    res.status(201).json({ authToken });
+    res.status(200).json({ authToken });
   } catch (error) {
     console.error("Error creating user:", error);
     return res.status(500).json({ message: "Error creating user" });

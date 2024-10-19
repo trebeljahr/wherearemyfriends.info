@@ -1,12 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wamf/services/authservice.dart';
-import 'dart:convert';
 import 'package:wamf/widgets/altcha.dart';
-import 'package:wamf/widgets/navbar.dart';
-import 'dart:typed_data';
-import 'package:wamf/providers/userprovider.dart';
-import 'package:provider/provider.dart';
 
 String encodeAltchaPayload(String payload) {
   // Convert payload string to Uint8List
@@ -81,12 +79,14 @@ class _SignupPageState extends State<SignupPage> {
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final authToken = responseData['authToken'];
 
         await authService.setAuthToken(authToken);
-        await context.read<UserProvider>().loadUser();
+
+        // await Navigator.pushNamed(context, '/location');
+        // await context.read<UserProvider>().loadUser();
 
         Navigator.pushNamed(context, '/location');
       } else {
@@ -130,7 +130,6 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Signup Page')),
-      drawer: const CustomNavbar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

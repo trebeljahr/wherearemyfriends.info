@@ -2,6 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import 'package:wamf/providers/userprovider.dart';
+
 const String backendBaseUrl = 'https://wherearemyfriends.info';
 const String authTokenKey = 'authToken';
 
@@ -16,7 +18,7 @@ class AuthService {
     return prefs.getString(authTokenKey);
   }
 
-  Future<Map<String, dynamic>?> getLoggedInUser() async {
+  Future<LoggedInUser?> getLoggedInUser() async {
     final token = await getAuthToken();
     if (token == null) return null;
 
@@ -27,10 +29,11 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      return null;
+      final decoded = json.decode(response.body);
+      final loggedInUser = LoggedInUser.fromJson(decoded);
+      return loggedInUser;
     }
+    return null;
   }
 
   Future<http.Response> authenticatedRequest(String endpoint, String method,

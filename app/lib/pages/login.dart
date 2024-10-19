@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:wamf/providers/userprovider.dart';
 import 'package:wamf/services/authservice.dart';
-import 'dart:convert';
-import 'package:wamf/widgets/navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,13 +49,14 @@ class _LoginPageState extends State<LoginPage> {
         final authToken = responseData['authToken'];
         await authService.setAuthToken(authToken);
 
-        Navigator.pushNamed(context, '/location');
+        context.read<AuthState>().loadUser();
       } else {
         setState(() {
           _errorMessage = 'Invalid credentials. Please try again.';
         });
       }
     } catch (error) {
+      print('Error: $error');
       setState(() {
         _errorMessage = 'An error occurred. Please try again later.';
       });
@@ -64,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Login Page')),
-      drawer: const CustomNavbar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
