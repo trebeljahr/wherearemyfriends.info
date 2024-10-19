@@ -12,7 +12,7 @@ class CustomNavbar extends StatelessWidget {
         children: <Widget>[
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.deepPurple,
+              color: Colors.blue,
             ),
             child: Text(
               'wherearemyfriends.info',
@@ -30,7 +30,7 @@ class CustomNavbar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.userFriends),
+            leading: const Icon(FontAwesomeIcons.userGroup),
             title: const Text('Friends'),
             onTap: () {
               Navigator.pushNamed(context, '/friends');
@@ -51,7 +51,7 @@ class CustomNavbar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.cog),
+            leading: const Icon(FontAwesomeIcons.gear),
             title: const Text('Settings'),
             onTap: () {
               Navigator.pushNamed(context, '/settings');

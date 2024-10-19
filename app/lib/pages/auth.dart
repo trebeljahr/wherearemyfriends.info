@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:my_map/widgets/navbar.dart';
 
 class SignupPage extends StatelessWidget {
@@ -40,12 +43,6 @@ class SignupPage extends StatelessWidget {
               onPressed: () {},
               child: const Text('Sign Up'),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
-              child: const Text("Already have an account? Log In."),
-            ),
           ],
         ),
       ),
@@ -66,16 +63,42 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  void _handleLogin() {
-    setState(() {
-      // Simulate login logic
-      if (_emailOrUsernameController.text == 'user' &&
-          _passwordController.text == 'password') {
+  Future<void> _handleLogin() async {
+    final emailOrUsername = _emailOrUsernameController.text;
+    final password = _passwordController.text;
+
+    if (emailOrUsername.isEmpty || password.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please provide both email/username and password.';
+      });
+      return;
+    }
+
+    final url = Uri.parse('https://wherearemyfriends.info/auth/login');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: json
+            .encode({'emailOrUsername': emailOrUsername, 'password': password}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        final authToken = responseData['authToken'];
+        // Store the token (in Flutter, you might use SharedPreferences or another secure storage method)
+        // Navigate to the next page
         Navigator.pushNamed(context, '/location');
       } else {
-        _errorMessage = 'Invalid credentials. Please try again.';
+        setState(() {
+          _errorMessage = 'Invalid credentials. Please try again.';
+        });
       }
-    });
+    } catch (error) {
+      setState(() {
+        _errorMessage = 'An error occurred. Please try again later.';
+      });
+    }
   }
 
   @override
