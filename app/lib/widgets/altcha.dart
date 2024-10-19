@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 
 class AltchaWidget extends StatefulWidget {
@@ -21,6 +20,7 @@ class AltchaWidget extends StatefulWidget {
 class _AltchaWidgetState extends State<AltchaWidget> {
   bool _isLoading = false;
   String _errorMessage = '';
+  bool _isSolved = false;
 
   Future<void> _fetchChallenge() async {
     setState(() {
@@ -42,9 +42,6 @@ class _AltchaWidgetState extends State<AltchaWidget> {
 
         final resolvedValue =
             await _solveChallenge(challenge, salt, algorithm, maxNumber);
-
-        print('resolvedValue $resolvedValue');
-
         if (resolvedValue != null) {
           final payload = {
             "algorithm": algorithm,
@@ -54,15 +51,12 @@ class _AltchaWidgetState extends State<AltchaWidget> {
             "signature": responseData['signature'],
             "took": resolvedValue['took'],
           };
-
-          print('payload $payload');
-
           final encodedPayload =
               base64.encode(utf8.encode(json.encode(payload)));
-
-          print('encodedPayload $encodedPayload');
-
           widget.onChallengeSolved(encodedPayload);
+          setState(() {
+            _isSolved = true;
+          });
         } else {
           setState(() {
             _errorMessage = 'Failed to solve the challenge. Please try again.';
@@ -121,24 +115,63 @@ class _AltchaWidgetState extends State<AltchaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (_errorMessage.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              _errorMessage,
-              style: const TextStyle(color: Colors.red),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: _isSolved ? Colors.green : Colors.grey,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(3.0),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              if (_isLoading)
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2.0),
+                )
+              else if (_isSolved)
+                const Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 24,
+                )
+              else
+                Checkbox(
+                  value: _isSolved,
+                  onChanged: (value) => _fetchChallenge(),
+                ),
+              const SizedBox(width: 8.0),
+              const Text(
+                "I'm not a robot",
+                style: TextStyle(fontSize: 16.0),
+              ),
+            ],
+          ),
+          if (_errorMessage.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                _errorMessage,
+                style: const TextStyle(color: Colors.red),
+              ),
             ),
-          ),
-        if (_isLoading)
-          const CircularProgressIndicator()
-        else
-          ElevatedButton(
-            onPressed: _fetchChallenge,
-            child: const Text('Verify with Altcha'),
-          ),
-      ],
+          if (!_isLoading && !_isSolved)
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: _fetchChallenge,
+                child: const Text('Verify with Altcha'),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
