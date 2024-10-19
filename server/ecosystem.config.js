@@ -6,7 +6,8 @@ module.exports = {
       env: {
         NODE_ENV: "production",
       },
-      interpreter: "node@20.18.0",
+      interpreter: "/usr/bin/node",
+      //   interpreter: "node@20.18.0",
     },
   ],
 };
