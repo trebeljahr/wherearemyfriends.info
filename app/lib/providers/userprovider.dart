@@ -141,7 +141,8 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  Future<void> logout() async {
+    await authService.clearAuthToken();
     _user = null; // api token is empty
     notifyListeners();
   }

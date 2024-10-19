@@ -40,6 +40,15 @@ class MyLocationPage extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text('Country: ${user.location.country!.name}'),
                   ],
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<AuthState>().logout();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                    child: const Text('Logout'),
+                  ),
                 ],
               ),
             ),

@@ -3,8 +3,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:wamf/providers/userprovider.dart';
 import 'package:wamf/services/authservice.dart';
 import 'package:wamf/widgets/altcha.dart';
+import 'package:provider/provider.dart';
 
 String encodeAltchaPayload(String payload) {
   // Convert payload string to Uint8List
@@ -84,9 +86,7 @@ class _SignupPageState extends State<SignupPage> {
         final authToken = responseData['authToken'];
 
         await authService.setAuthToken(authToken);
-
-        // await Navigator.pushNamed(context, '/location');
-        // await context.read<UserProvider>().loadUser();
+        await context.read<AuthState>().loadUser();
 
         Navigator.pushNamed(context, '/location');
       } else {

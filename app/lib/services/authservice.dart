@@ -18,6 +18,11 @@ class AuthService {
     return prefs.getString(authTokenKey);
   }
 
+  Future<void> clearAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(authTokenKey);
+  }
+
   Future<LoggedInUser?> getLoggedInUser() async {
     final token = await getAuthToken();
     if (token == null) return null;

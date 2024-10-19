@@ -37,20 +37,6 @@ class CustomNavbar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(FontAwesomeIcons.user),
-            title: const Text('Login'),
-            onTap: () {
-              Navigator.pushNamed(context, '/login');
-            },
-          ),
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.userPlus),
-            title: const Text('Sign Up'),
-            onTap: () {
-              Navigator.pushNamed(context, '/signup');
-            },
-          ),
-          ListTile(
             leading: const Icon(FontAwesomeIcons.gear),
             title: const Text('Settings'),
             onTap: () {

@@ -49,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
         final authToken = responseData['authToken'];
         await authService.setAuthToken(authToken);
 
-        context.read<AuthState>().loadUser();
+        await context.read<AuthState>().loadUser();
+        Navigator.pushNamed(context, '/location');
       } else {
         setState(() {
           _errorMessage = 'Invalid credentials. Please try again.';
