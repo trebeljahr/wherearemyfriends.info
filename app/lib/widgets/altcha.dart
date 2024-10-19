@@ -119,13 +119,13 @@ class _AltchaWidgetState extends State<AltchaWidget> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: _isSolved ? Colors.green : Colors.grey,
+          color: Colors.grey,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(3.0),
         color: Colors.white,
       ),
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(12.0, 20.0, 12.0, 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -149,10 +149,14 @@ class _AltchaWidgetState extends State<AltchaWidget> {
               else if (_isSolved)
                 const Row(
                   children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 24,
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Icon(
+                        Icons.check_circle,
+                        color: Colors.blue,
+                        size: 24,
+                      ),
                     ),
                     SizedBox(width: 8.0),
                     Text(
@@ -164,9 +168,16 @@ class _AltchaWidgetState extends State<AltchaWidget> {
               else
                 Row(
                   children: [
-                    Checkbox(
-                      value: _isSolved,
-                      onChanged: (value) => _fetchChallenge(),
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Checkbox(
+                        value: _isSolved,
+                        onChanged: (value) => _fetchChallenge(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8.0),
                     const Text(
@@ -178,8 +189,8 @@ class _AltchaWidgetState extends State<AltchaWidget> {
               const Spacer(),
               SvgPicture.string(
                 altchaLogoSvg,
-                width: 22,
-                height: 22,
+                width: 24,
+                height: 24,
                 colorFilter:
                     const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
               ),
@@ -195,7 +206,10 @@ class _AltchaWidgetState extends State<AltchaWidget> {
             ),
           const Align(
             alignment: Alignment.centerRight,
-            child: Text('Protected by Altcha'),
+            child: Text(
+              'Protected by Altcha',
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       ),
