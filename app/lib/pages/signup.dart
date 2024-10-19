@@ -3,6 +3,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:my_map/widgets/altcha.dart';
 import 'package:my_map/widgets/navbar.dart';
+import 'dart:typed_data';
+
+String encodeAltchaPayload(String payload) {
+  // Convert payload string to Uint8List
+  Uint8List payloadBytes = utf8.encode(payload);
+
+  // Encode to Base64
+  String base64String = base64.encode(payloadBytes);
+
+  return base64String;
+}
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -50,6 +61,8 @@ class _SignupPageState extends State<SignupPage> {
 
     final url = Uri.parse('https://wherearemyfriends.info/auth/signup');
     try {
+      print(_challengeResolved);
+
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
@@ -61,17 +74,18 @@ class _SignupPageState extends State<SignupPage> {
         }),
       );
 
-      // Log the response for debugging purposes
-      print('Response status: \${response.statusCode}');
-      print('Response body: \${response.body}');
+      print('Response $response');
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData = json.decode(response.body);
         final authToken = responseData['authToken'];
         // Store the token (in Flutter, you might use SharedPreferences or another secure storage method)
         // Navigate to the next page
         Navigator.pushNamed(context, '/location');
       } else {
+        print("Error: ${response.statusCode}");
         setState(() {
           _errorMessage = 'Invalid credentials. Please try again.';
         });

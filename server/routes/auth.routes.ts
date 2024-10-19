@@ -43,9 +43,14 @@ router.get("/altcha-challenge", async (_: Request, res: Response) => {
 async function verifyAltchaChallenge(req: Request, res: Response) {
   try {
     const { altchaPayload } = req.body;
+
+    console.log({ altchaPayload });
+
     const decodedString = Buffer.from(altchaPayload, "base64").toString("utf8");
 
-    const decoded = JSON.parse(decodedString) as {
+    console.log({ decodedString });
+
+    const decodedJSON = JSON.parse(decodedString) as {
       algorithm: string;
       challenge: string;
       number: number;
@@ -54,8 +59,10 @@ async function verifyAltchaChallenge(req: Request, res: Response) {
       took: number;
     };
 
+    console.log({ decoded: decodedJSON });
+
     const existingChallenge = await AltchaChallenge.findOne({
-      challenge: decoded.challenge,
+      challenge: decodedJSON.challenge,
     });
 
     if (!existingChallenge) {
