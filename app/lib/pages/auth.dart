@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:my_map/widgets/navbar.dart';
 
 class SignupPage extends StatelessWidget {
@@ -61,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailOrUsernameController =
       TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
   String _errorMessage = '';
 
   Future<void> _handleLogin() async {
@@ -82,6 +82,10 @@ class _LoginPageState extends State<LoginPage> {
         body: json
             .encode({'emailOrUsername': emailOrUsername, 'password': password}),
       );
+
+      // Log the response for debugging purposes
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
@@ -129,11 +133,23 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 16),
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(
+              obscureText: !_isPasswordVisible,
+              decoration: InputDecoration(
                 labelText: 'Password',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
               ),
-              obscureText: true,
             ),
             const SizedBox(height: 24),
             ElevatedButton(
