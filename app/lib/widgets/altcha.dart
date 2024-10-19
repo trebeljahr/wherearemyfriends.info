@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 
 class AltchaWidget extends StatefulWidget {
@@ -137,21 +138,34 @@ class _AltchaWidgetState extends State<AltchaWidget> {
                   child: CircularProgressIndicator(strokeWidth: 2.0),
                 )
               else if (_isSolved)
-                const Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
-                  size: 24,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8.0),
+                    const Text(
+                      "Verified",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
                 )
               else
-                Checkbox(
-                  value: _isSolved,
-                  onChanged: (value) => _fetchChallenge(),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _isSolved,
+                      onChanged: (value) => _fetchChallenge(),
+                    ),
+                    const SizedBox(width: 8.0),
+                    const Text(
+                      "I'm not a robot",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
                 ),
-              const SizedBox(width: 8.0),
-              const Text(
-                "I'm not a robot",
-                style: TextStyle(fontSize: 16.0),
-              ),
             ],
           ),
           if (_errorMessage.isNotEmpty)
@@ -162,14 +176,13 @@ class _AltchaWidgetState extends State<AltchaWidget> {
                 style: const TextStyle(color: Colors.red),
               ),
             ),
-          if (!_isLoading && !_isSolved)
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: _fetchChallenge,
-                child: const Text('Verify with Altcha'),
-              ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: _fetchChallenge,
+              child: const Text('Verify with Altcha'),
             ),
+          ),
         ],
       ),
     );
