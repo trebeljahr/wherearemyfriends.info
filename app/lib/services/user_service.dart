@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:wamf/services/authservice.dart';
+import 'package:wamf/services/auth_service.dart';
 
 class UserService {
   Future<List<dynamic>> fetchFriends() async {

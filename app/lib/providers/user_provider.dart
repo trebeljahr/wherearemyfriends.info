@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wamf/services/authservice.dart';
+import 'package:wamf/services/auth_service.dart';
 
 class LoggedInUser {
   final String email;
@@ -164,13 +164,9 @@ class AuthState extends ChangeNotifier {
       try {
         final fetchedUser = await authService.getLoggedInUser();
 
-        print(fetchedUser);
         if (fetchedUser != null) {
           setUser(fetchedUser);
         }
-      } catch (e) {
-        print('Error: $e');
-        // Handle errors if necessary
       } finally {
         _isLoading = false;
       }

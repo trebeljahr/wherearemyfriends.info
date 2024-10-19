@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:wamf/providers/userprovider.dart';
-import 'package:wamf/services/authservice.dart';
+import 'package:wamf/providers/user_provider.dart';
+import 'package:wamf/services/auth_service.dart';
 import 'package:wamf/widgets/altcha.dart';
 import 'package:provider/provider.dart';
 
@@ -22,10 +22,10 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  SignupPageState createState() => SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -80,9 +80,14 @@ class _SignupPageState extends State<SignupPage> {
         final authToken = responseData['authToken'];
 
         await authService.setAuthToken(authToken);
-        await context.read<AuthState>().loadUser();
 
-        Navigator.pushNamed(context, '/location');
+        if (mounted) {
+          await context.read<AuthState>().loadUser();
+        }
+
+        if (mounted) {
+          Navigator.pushNamed(context, '/location');
+        }
       } else {
         final responseData = json.decode(response.body);
         setState(() {

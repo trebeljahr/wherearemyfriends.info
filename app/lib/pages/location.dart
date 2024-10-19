@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wamf/providers/userprovider.dart';
+import 'package:wamf/providers/user_provider.dart';
 import 'package:wamf/widgets/navbar.dart';
 
 class MyLocationPage extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:wamf/pages/login.dart';
 import 'package:wamf/pages/profiles.dart';
 import 'package:wamf/pages/settings.dart';
 import 'package:wamf/pages/signup.dart';
-import 'package:wamf/providers/userprovider.dart';
+import 'package:wamf/providers/user_provider.dart';
 import 'package:wamf/widgets/splashscreen.dart';
 
 void main() {

@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:wamf/providers/userprovider.dart';
-import 'package:wamf/services/authservice.dart';
+import 'package:wamf/providers/user_provider.dart';
+import 'package:wamf/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final TextEditingController _emailOrUsernameController =
       TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -40,24 +40,25 @@ class _LoginPageState extends State<LoginPage> {
             .encode({'emailOrUsername': emailOrUsername, 'password': password}),
       );
 
-      // Log the response for debugging purposes
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
       final responseData = json.decode(response.body);
 
       if (response.statusCode == 200) {
         final authToken = responseData['authToken'];
         await authService.setAuthToken(authToken);
 
-        await context.read<AuthState>().loadUser();
-        Navigator.pushNamed(context, '/location');
+        if (mounted) {
+          await context.read<AuthState>().loadUser();
+        }
+
+        if (mounted) {
+          Navigator.pushNamed(context, '/location');
+        }
       } else {
         setState(() {
           _errorMessage = responseData['message'] ?? 'Something went wrong.';
         });
       }
     } catch (error) {
-      print('Error: $error');
       setState(() {
         _errorMessage = 'An error occurred. Please try again later.';
       });

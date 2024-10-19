@@ -8,17 +8,18 @@ class AltchaWidget extends StatefulWidget {
   final String verificationUrl;
   final ValueChanged<String> onChallengeSolved;
 
+  // ignore: use_super_parameters
   const AltchaWidget({
-    Key? key,
+    key,
     required this.verificationUrl,
     required this.onChallengeSolved,
   }) : super(key: key);
 
   @override
-  _AltchaWidgetState createState() => _AltchaWidgetState();
+  AltchaWidgetState createState() => AltchaWidgetState();
 }
 
-class _AltchaWidgetState extends State<AltchaWidget> {
+class AltchaWidgetState extends State<AltchaWidget> {
   bool _isLoading = false;
   String _errorMessage = '';
   bool _isSolved = false;
@@ -31,8 +32,6 @@ class _AltchaWidgetState extends State<AltchaWidget> {
 
     try {
       final response = await http.get(Uri.parse(widget.verificationUrl));
-
-      print('altcha challenge ${response.body}');
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
