@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AltchaWidget extends StatefulWidget {
   final String verificationUrl;
@@ -132,21 +132,30 @@ class _AltchaWidgetState extends State<AltchaWidget> {
           Row(
             children: [
               if (_isLoading)
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(strokeWidth: 2.0),
+                const Row(
+                  children: [
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2.0),
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      "Verifying...",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
                 )
               else if (_isSolved)
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.check_circle,
                       color: Colors.green,
                       size: 24,
                     ),
-                    const SizedBox(width: 8.0),
-                    const Text(
+                    SizedBox(width: 8.0),
+                    Text(
                       "Verified",
                       style: TextStyle(fontSize: 16.0),
                     ),
@@ -166,6 +175,14 @@ class _AltchaWidgetState extends State<AltchaWidget> {
                     ),
                   ],
                 ),
+              const Spacer(),
+              SvgPicture.string(
+                altchaLogoSvg,
+                width: 22,
+                height: 22,
+                colorFilter:
+                    const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+              ),
             ],
           ),
           if (_errorMessage.isNotEmpty)
@@ -176,15 +193,20 @@ class _AltchaWidgetState extends State<AltchaWidget> {
                 style: const TextStyle(color: Colors.red),
               ),
             ),
-          Align(
+          const Align(
             alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: _fetchChallenge,
-              child: const Text('Verify with Altcha'),
-            ),
+            child: Text('Verify with Altcha'),
           ),
         ],
       ),
     );
   }
 }
+
+const String altchaLogoSvg = '''
+<svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2.33955 16.4279C5.88954 20.6586 12.1971 21.2105 16.4279 17.6604C18.4699 15.947 19.6548 13.5911 19.9352 11.1365L17.9886 10.4279C17.8738 12.5624 16.909 14.6459 15.1423 16.1284C11.7577 18.9684 6.71167 18.5269 3.87164 15.1423C1.03163 11.7577 1.4731 6.71166 4.8577 3.87164C8.24231 1.03162 13.2883 1.4731 16.1284 4.8577C16.9767 5.86872 17.5322 7.02798 17.804 8.2324L19.9522 9.01429C19.7622 7.07737 19.0059 5.17558 17.6604 3.57212C14.1104 -0.658624 7.80283 -1.21043 3.57212 2.33956C-0.658625 5.88958 -1.21046 12.1971 2.33955 16.4279Z" fill="currentColor"/>
+  <path d="M3.57212 2.33956C1.65755 3.94607 0.496389 6.11731 0.12782 8.40523L2.04639 9.13961C2.26047 7.15832 3.21057 5.25375 4.8577 3.87164C8.24231 1.03162 13.2883 1.4731 16.1284 4.8577L13.8302 6.78606L19.9633 9.13364C19.7929 7.15555 19.0335 5.20847 17.6604 3.57212C14.1104 -0.658624 7.80283 -1.21043 3.57212 2.33956Z" fill="currentColor"/>
+  <path d="M7 10H5C5 12.7614 7.23858 15 10 15C12.7614 15 15 12.7614 15 10H13C13 11.6569 11.6569 13 10 13C8.3431 13 7 11.6569 7 10Z" fill="currentColor"/>
+</svg>
+''';
