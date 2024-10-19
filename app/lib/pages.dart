@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:my_map/pages/auth.dart';
+import 'package:my_map/pages/signup.dart';
 import 'package:my_map/pages/friends.dart';
 import 'package:my_map/pages/home.dart';
 import 'package:my_map/pages/location.dart';
 import 'package:my_map/pages/profiles.dart';
 import 'package:my_map/pages/settings.dart';
+import 'package:my_map/pages/login.dart';
 
 class RoutesSetup extends StatelessWidget {
   const RoutesSetup({super.key});
