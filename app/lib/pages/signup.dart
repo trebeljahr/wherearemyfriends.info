@@ -71,6 +71,14 @@ class _SignupPageState extends State<SignupPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (_errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  _errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(
@@ -109,7 +117,7 @@ class _SignupPageState extends State<SignupPage> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _handleSignup,
               child: const Text('Sign Up'),
             ),
             const SizedBox(height: 16),
