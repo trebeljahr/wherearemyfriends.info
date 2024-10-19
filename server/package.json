@@ -6,7 +6,7 @@
     "build": "npx tsc",
     "start": "NODE_ENV=production node dist/index.js",
     "dev": "NODE_ENV=development nodemon index.ts",
-    "prod": "pm2 start dist/index.js --name wamf -i 2 --wait-ready --listen-timeout 10000"
+    "prod": "pm2 restart ecosystem.config.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.670.0",
