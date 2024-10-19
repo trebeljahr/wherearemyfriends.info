@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:my_map/widgets/navbar.dart';
+import 'package:wamf/widgets/navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

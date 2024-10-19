@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_map/widgets/navbar.dart';
+import 'package:wamf/widgets/navbar.dart';
 
 class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});

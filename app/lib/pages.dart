@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_map/pages/signup.dart';
-import 'package:my_map/pages/friends.dart';
-import 'package:my_map/pages/home.dart';
-import 'package:my_map/pages/location.dart';
-import 'package:my_map/pages/profiles.dart';
-import 'package:my_map/pages/settings.dart';
-import 'package:my_map/pages/login.dart';
+import 'package:wamf/pages/signup.dart';
+import 'package:wamf/pages/friends.dart';
+import 'package:wamf/pages/home.dart';
+import 'package:wamf/pages/location.dart';
+import 'package:wamf/pages/profiles.dart';
+import 'package:wamf/pages/settings.dart';
+import 'package:wamf/pages/login.dart';
 
 class RoutesSetup extends StatelessWidget {
   const RoutesSetup({super.key});

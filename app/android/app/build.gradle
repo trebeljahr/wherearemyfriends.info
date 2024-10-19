@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace "com.example.my_map"
+    namespace "com.example.wamf"
 
     defaultConfig {
-        applicationId "com.example.my_map"
+        applicationId "com.example.wamf"
         minSdkVersion 21
         targetSdkVersion 35
         resValue "string", "applicationName", "MyMapApp"

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:my_map/widgets/altcha.dart';
-import 'package:my_map/widgets/navbar.dart';
+import 'package:wamf/widgets/altcha.dart';
+import 'package:wamf/widgets/navbar.dart';
 import 'dart:typed_data';
 
 String encodeAltchaPayload(String payload) {

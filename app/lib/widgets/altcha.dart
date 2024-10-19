@@ -195,7 +195,7 @@ class _AltchaWidgetState extends State<AltchaWidget> {
             ),
           const Align(
             alignment: Alignment.centerRight,
-            child: Text('Verify with Altcha'),
+            child: Text('Protected by Altcha'),
           ),
         ],
       ),
