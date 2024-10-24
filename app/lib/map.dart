@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:wamf/consts.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -22,7 +23,7 @@ class MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: MapLibreMap(
-        styleString: "https://tiles.openfreemap.org/styles/liberty",
+        styleString: mapStyle,
         myLocationEnabled: true,
         initialCameraPosition: const CameraPosition(target: LatLng(0.0, 0.0)),
         trackCameraPosition: true,

@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:wamf/consts.dart';
 
 const randomMarkerNum = 10;
 
@@ -86,7 +87,7 @@ class CustomMarkerState extends State<CustomMarker> {
     return Scaffold(
       body: Stack(children: [
         MapLibreMap(
-          styleString: "https://tiles.openfreemap.org/styles/liberty",
+          styleString: mapStyle,
           trackCameraPosition: true,
           onMapCreated: _onMapCreated,
           initialCameraPosition:

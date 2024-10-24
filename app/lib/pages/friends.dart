@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wamf/widgets/custom_marker.dart';
+import 'package:wamf/widgets/map_with_friends.dart';
+// import 'package:wamf/widgets/custom_marker.dart';
 // import 'package:wamf/widgets/map_with_friends.dart';
 import 'package:wamf/widgets/navbar.dart';
+import 'package:wamf/widgets/stadiamaps_example.dart';
 
 class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});
@@ -11,9 +13,9 @@ class FriendsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text('Friends Page')),
         drawer: const CustomNavbar(),
-        body: const Center(
-          // child: FriendsPage()
-          child: CustomMarkerPage(),
-        ));
+        body: const Center(child: MapWithFriendsPage()
+            // child: StadiaMapsExample()
+            // child: CustomMarkerPage(),
+            ));
   }
 }
