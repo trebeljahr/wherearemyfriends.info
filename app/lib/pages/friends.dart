@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wamf/widgets/map_with_friends.dart';
 import 'package:wamf/widgets/navbar.dart';
 
 class FriendsPage extends StatelessWidget {
@@ -10,7 +11,7 @@ class FriendsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Friends Page')),
       drawer: const CustomNavbar(),
       body: const Center(
-        child: Text('This is Friends Page', style: TextStyle(fontSize: 24)),
+        child: MapWithFriendsPage(),
       ),
     );
   }
