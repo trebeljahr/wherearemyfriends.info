@@ -49,7 +49,9 @@ class MarkerState extends State<Marker> {
           left: pos.x,
           top: pos.y,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              print("Marker ${widget.id} clicked!");
+            },
             child: widget.child,
           ),
         );

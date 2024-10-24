@@ -8,7 +8,7 @@ class MapMarkers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: markers.toList(),
+      children: markers,
     );
   }
 }

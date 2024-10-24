@@ -9,6 +9,9 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:wamf/consts.dart';
 import 'package:wamf/services/user_service.dart';
 import 'package:wamf/types/friend.dart';
+import 'package:wamf/types/location.dart';
+import 'package:wamf/widgets/map/marker.dart';
+import 'package:wamf/widgets/map/marker_list.dart';
 
 class MapWithFriendsPage extends StatelessWidget {
   const MapWithFriendsPage({super.key});
@@ -96,10 +99,6 @@ class MapWithFriendsState extends State<MapWithFriends> {
     }
   }
 
-  void _onMapCreated(MapLibreMapController controller) {
-    _controller = controller;
-  }
-
   Future<void> _addFriendImagesToMap() async {
     final friends = await _friendsFuture;
     for (var friend in friends) {
@@ -124,30 +123,109 @@ class MapWithFriendsState extends State<MapWithFriends> {
     }
   }
 
+  final markerList = <Marker>[];
+
+  Future<void> addMarker(SingleLocation location, String name) async {
+    final geoCoordinate = LatLng(location.latitude, location.longitude);
+    final screenCoordinate = await _controller.toScreenLocation(geoCoordinate);
+
+    final Point<double> position = Point<double>(
+        screenCoordinate.x.toDouble(), screenCoordinate.y.toDouble());
+
+    final marker = Marker(
+      position: position,
+      geoCoordinate: geoCoordinate,
+      id: name,
+      child: Image.asset(
+        "assets/random-woman.jpg",
+        height: 32,
+        width: 32,
+      ),
+    );
+
+    markerList.add(marker);
+    setState(() {});
+  }
+
+  Future<void> _updateMarkerPosition() async {
+    if (markerList.isNotEmpty) {
+      final points =
+          await _controller.toScreenLocationBatch(markerList.map((m) {
+        return m.geoCoordinate;
+      }));
+
+      markerList.asMap().forEach((i, value) {
+        final Point<double> position =
+            Point<double>(points[i].x.toDouble(), points[i].y.toDouble());
+        markerList[i].screenPosition.value = position;
+      });
+
+      // for (var marker in markerList) {
+      //   final screenCoordinate =
+      //       await _controller.toScreenLocation(marker.geoCoordinate);
+
+      //   final Point<double> position = Point<double>(
+      //       screenCoordinate.x.toDouble(), screenCoordinate.y.toDouble());
+
+      //   marker.screenPosition.value = position;
+      //   setState(() {});
+
+      // RenderBox? box = context.findRenderObject() as RenderBox?;
+      // if (box != null) {
+      //   final Offset globalPosition = box.localToGlobal(Offset.zero);
+
+      //   // Add the global offset to get the final position relative to the screen
+      //   final Point<double> position = Point<double>(
+      //     screenCoordinate.x.toDouble() + globalPosition.dx,
+      //     screenCoordinate.y.toDouble() + globalPosition.dy,
+      //   );
+
+      //   marker.screenPosition.value = position;
+
+      //   // Refresh the UI
+      //   if (mounted) {
+      //     setState(() {});
+      //   }
+      // }
+      // }
+    }
+  }
+
+  void _onMapCreated(MapLibreMapController controller) {
+    _controller = controller;
+
+    _controller.addListener(() {
+      if (controller.isCameraMoving) {
+        _updateMarkerPosition();
+      }
+    });
+  }
+
   void _onStyleLoaded() async {
     try {
       final friends = await _friendsFuture;
 
-      await _addFriendImagesToMap();
+      // await _addFriendImagesToMap();
 
       // _controller.addSymbolLayer("myFriends", "myFriendsLayerId",
       //     const SymbolLayerProperties(iconColor: "blue"));
 
-      // for (var friend in friends) {
-      //   await _controller.addSymbol(SymbolOptions(
-      //     geometry: LatLng(
-      //       friend.location.latitude,
-      //       friend.location.longitude,
-      //     ),
-      //     // iconImage: friend.profilePicture,
+      for (var friend in friends) {
+        await addMarker(friend.location, friend.username);
+        // await _controller.addSymbol(SymbolOptions(
+        //   geometry: LatLng(
+        //     friend.location.latitude,
+        //     friend.location.longitude,
+        //   ),
+        //   // iconImage: friend.profilePicture,
 
-      //     iconSize: 1.0,
-      //     iconImage: friend.username, // 'assets/random-woman.jpg',
+        //   iconSize: 1.0,
+        //   iconImage: friend.username, // 'assets/random-woman.jpg',
 
-      //     // textField: friend.username,
-      //     // textOffset: const Offset(0, 1.5),
-      //   ));
-      // }
+        //   // textField: friend.username,
+        //   // textOffset: const Offset(0, 1.5),
+        // ));
+      }
     } catch (e) {
       print('Error adding markers: $e');
     }
@@ -168,16 +246,21 @@ class MapWithFriendsState extends State<MapWithFriends> {
             return const Center(child: Text('No friends found.'));
           }
 
-          return MapLibreMap(
-              styleString: mapStyle,
-              myLocationEnabled: true,
-              initialCameraPosition:
-                  const CameraPosition(target: LatLng(0.0, 0.0), zoom: 3),
-              trackCameraPosition: true,
-              onStyleLoadedCallback: _onStyleLoaded,
-              onMapClick: _onMapClick,
-              onMapLongClick: _onMapClick,
-              onMapCreated: _onMapCreated);
+          return Stack(children: [
+            MapLibreMap(
+                styleString: mapStyle,
+                myLocationEnabled: true,
+                initialCameraPosition:
+                    const CameraPosition(target: LatLng(0.0, 0.0), zoom: 3),
+                trackCameraPosition: true,
+                onStyleLoadedCallback: _onStyleLoaded,
+                onMapClick: _onMapClick,
+                onMapLongClick: _onMapClick,
+                onMapCreated: _onMapCreated),
+            MapMarkers(
+              markers: markerList,
+            )
+          ]);
         },
       ),
     );
