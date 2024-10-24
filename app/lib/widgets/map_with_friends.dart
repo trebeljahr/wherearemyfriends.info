@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:wamf/consts.dart';
 import 'package:wamf/services/user_service.dart';
@@ -46,10 +46,19 @@ class MapWithFriendsState extends State<MapWithFriends> {
     _controller = controller;
   }
 
-  Future<void> _addImageToMap() async {
-    final ByteData bytes = await rootBundle.load('assets/random-woman.jpg');
-    final Uint8List list = bytes.buffer.asUint8List();
-    _controller.addImage('assetImage', list);
+  Future<void> _addFriendImagesToMap() async {
+    final friends = await _friendsFuture;
+    for (var friend in friends) {
+      try {
+        final response = await http.get(Uri.parse(friend.profilePicture));
+        if (response.statusCode == 200) {
+          final Uint8List list = response.bodyBytes;
+          await _controller.addImage(friend.username, list);
+        }
+      } catch (e) {
+        // Handle image loading error if necessary
+      }
+    }
   }
 
   void _onMapClick(Point<double> point, LatLng latLng) {
@@ -64,10 +73,10 @@ class MapWithFriendsState extends State<MapWithFriends> {
     try {
       final friends = await _friendsFuture;
 
-      await _addImageToMap();
+      await _addFriendImagesToMap();
 
-      _controller.addSymbolLayer("myFriends", "myFriendsLayerId",
-          const SymbolLayerProperties(iconColor: "blue"));
+      // _controller.addSymbolLayer("myFriends", "myFriendsLayerId",
+      //     const SymbolLayerProperties(iconColor: "blue"));
 
       for (var friend in friends) {
         await _controller.addSymbol(SymbolOptions(
@@ -78,7 +87,7 @@ class MapWithFriendsState extends State<MapWithFriends> {
           // iconImage: friend.profilePicture,
 
           iconSize: 1.0,
-          iconImage: "assetImage", // 'assets/random-woman.jpg',
+          iconImage: friend.username, // 'assets/random-woman.jpg',
 
           // textField: friend.username,
           // textOffset: const Offset(0, 1.5),

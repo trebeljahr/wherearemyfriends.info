@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wamf/widgets/map_with_friends.dart';
-// import 'package:wamf/widgets/custom_marker.dart';
-// import 'package:wamf/widgets/map_with_friends.dart';
 import 'package:wamf/widgets/navbar.dart';
-import 'package:wamf/widgets/stadiamaps_example.dart';
 
 class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});
