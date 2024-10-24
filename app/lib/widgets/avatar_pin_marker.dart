@@ -19,7 +19,6 @@ class AvatarPinMarker extends StatefulWidget {
 
 class AvatarPinMarkerState extends State<AvatarPinMarker> {
   late Image _avatarImage;
-  bool _showPopup = false;
 
   @override
   void initState() {
@@ -39,79 +38,42 @@ class AvatarPinMarkerState extends State<AvatarPinMarker> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _showPopup = !_showPopup;
-        });
-      },
-      child: Stack(
-        alignment: Alignment.topCenter,
-        clipBehavior: Clip.none,
-        children: [
-          // Circle part of the pin with a ring
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: widget.pinColor,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: ClipOval(
-                  child: _avatarImage,
-                ),
+    return Stack(
+      children: [
+        Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: widget.pinColor,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black, width: 2),
+              ),
+              child: ClipOval(
+                child: _avatarImage,
               ),
             ),
           ),
-          // Triangle part of the pin
-          Positioned(
-            bottom: -25,
-            child: Transform.rotate(
-              angle: 0,
-              child: CustomPaint(
-                size: const Size(30, 30),
-                painter: _TrianglePainter(color: widget.pinColor),
-              ),
+        ),
+        // Triangle part of the pin
+        Positioned(
+          bottom: -25,
+          child: Transform.rotate(
+            angle: 0,
+            child: CustomPaint(
+              size: const Size(30, 30),
+              painter: _TrianglePainter(color: widget.pinColor),
             ),
           ),
-          // Popup for the username
-          if (_showPopup)
-            Positioned(
-              top: -50,
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    widget.userName,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

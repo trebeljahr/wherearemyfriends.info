@@ -1,8 +1,5 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:wamf/consts.dart';
@@ -14,11 +11,14 @@ ScreenshotController screenshotController = ScreenshotController();
 
 // Reading bytes from a network image
 Future<Uint8List> getImageForUserMarker(String username, String imgSrc) async {
-  Uint8List imageBytes =
-      await screenshotController.captureFromWidget(AvatarPinMarker(
-    userName: username,
-    imgSrc: imgSrc,
-  ));
+  Uint8List imageBytes = await screenshotController.captureFromWidget(
+    AvatarPinMarker(
+      userName: username,
+      imgSrc: imgSrc,
+    ),
+    // pixelRatio: 3.0,
+    // targetSize: const Size(30, 30)
+  );
   return imageBytes;
 }
 
@@ -29,18 +29,6 @@ class MapWithFriendsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MapWithFriends();
   }
-}
-
-Future<Uint8List> svgToPngBytes(String data) async {
-  final SvgStringLoader svgStringLoader = SvgStringLoader(data);
-  final PictureInfo pictureInfo = await vg.loadPicture(svgStringLoader, null);
-
-  final ui.Image image = await pictureInfo.picture.toImage(256, 256);
-  final ByteData? byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
-  final Uint8List uint8List = byteData!.buffer.asUint8List();
-
-  return uint8List;
 }
 
 class MapWithFriends extends StatefulWidget {
@@ -77,7 +65,7 @@ class MapWithFriendsState extends State<MapWithFriends> {
       await _controller.addSymbol(SymbolOptions(
         geometry: LatLng(friend.location.latitude, friend.location.longitude),
         iconImage: friend.username,
-        iconSize: 2.0,
+        iconSize: 1.0,
       ));
     } catch (e) {
       debugPrint('Error adding SVG marker: $e');
