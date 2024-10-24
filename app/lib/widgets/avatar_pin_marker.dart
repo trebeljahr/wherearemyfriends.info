@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class AvatarPinMarker extends StatelessWidget {
   final String imgSrc;
   final Color pinColor;
+  final String userName;
 
   // ignore: use_super_parameters
   const AvatarPinMarker({
     Key? key,
     required this.imgSrc,
-    required this.pinColor,
+    required this.userName,
+    this.pinColor = Colors.blue,
   }) : super(key: key);
 
   @override
@@ -29,12 +31,19 @@ class AvatarPinMarker extends StatelessWidget {
           ),
         ),
         ClipOval(
-          child: Image.network(
-            imgSrc,
-            height: 48,
-            width: 48,
-            fit: BoxFit.cover,
-          ),
+          child: imgSrc.startsWith("http")
+              ? Image.network(
+                  imgSrc,
+                  height: 48,
+                  width: 48,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  "assets/no-user.webp",
+                  height: 48,
+                  width: 48,
+                  fit: BoxFit.cover,
+                ),
         ),
       ],
     );
