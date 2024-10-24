@@ -3,15 +3,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:wamf/services/auth_service.dart';
-import 'package:wamf/widgets/map_with_friends.dart';
+import 'package:wamf/types/friend.dart';
 
 class UserService {
   Future<List<Friend>> fetchFriends() async {
     final response =
         await authService.authenticatedRequest('/api/friends', 'GET');
     if (response.statusCode == 200) {
-      final friendsJson = json.decode(response.body);
-      return friendsJson.map((friend) => Friend.fromJson(friend)).toList();
+      final List<dynamic> friendsJson = json.decode(response.body);
+      final List<Friend> friendsArray = friendsJson
+          .map((friend) => Friend.fromJson(friend))
+          .toList(growable: false);
+      return friendsArray;
     } else {
       throw Exception('Failed to load friends');
     }

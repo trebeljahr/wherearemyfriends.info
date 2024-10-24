@@ -1,8 +1,8 @@
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import 'package:wamf/providers/user_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wamf/types/user.dart';
 
 const String backendBaseUrl = 'https://wherearemyfriends.info';
 const String authTokenKey = 'authToken';

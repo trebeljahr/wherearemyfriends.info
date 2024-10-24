@@ -1,33 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
-import 'package:wamf/providers/user_provider.dart';
 import 'package:wamf/services/user_service.dart';
-
-class Friend {
-  final String id;
-  final String username;
-  final String profilePicture;
-  final String sharingState;
-  final SingleLocation location;
-
-  Friend({
-    required this.id,
-    required this.username,
-    required this.profilePicture,
-    required this.sharingState,
-    required this.location,
-  });
-
-  factory Friend.fromJson(Map<String, dynamic> json) {
-    return Friend(
-      id: json['_id'] ?? '',
-      username: json['username'] ?? '',
-      profilePicture: json['profilePicture'] ?? '',
-      sharingState: json['sharingState'] ?? '',
-      location: SingleLocation.fromJson(json['location'] ?? {}),
-    );
-  }
-}
+import 'package:wamf/types/friend.dart';
 
 class MapWithFriendsPage extends StatelessWidget {
   const MapWithFriendsPage({super.key});
@@ -58,7 +32,6 @@ class MapWithFriendsState extends State<MapWithFriends> {
     try {
       return await userService.fetchFriends();
     } catch (e) {
-      print('Error fetching friends locations: $e');
       return [];
     }
   }
@@ -92,8 +65,7 @@ class MapWithFriendsState extends State<MapWithFriends> {
                     friend.location.latitude,
                     friend.location.longitude,
                   ),
-                  iconImage:
-                      "assets/friend_marker.png", // Assume there's a marker image in your assets.
+                  iconImage: friend.profilePicture,
                   textField: friend.username,
                   textOffset: const Offset(0, 1.5),
                 ));
