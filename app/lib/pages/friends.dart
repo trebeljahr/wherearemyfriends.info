@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wamf/widgets/map_with_friends.dart';
+import 'package:wamf/widgets/map/map_page.dart';
 import 'package:wamf/widgets/navbar.dart';
 
 class FriendsPage extends StatelessWidget {
@@ -8,11 +8,13 @@ class FriendsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Friends Page')),
-        drawer: const CustomNavbar(),
-        body: const Center(child: MapWithFriendsPage()
-            // child: StadiaMapsExample()
-            // child: CustomMarkerPage(),
-            ));
+      appBar: AppBar(title: const Text('Friends Page')),
+      drawer: const CustomNavbar(),
+      body: const MapPageWithCustomWidget(),
+
+      // child: MapWithFriendsPage(),
+      // child: StadiaMapsExample(),
+      // child: CustomMarkerPage(),
+    );
   }
 }
