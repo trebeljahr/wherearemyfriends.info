@@ -59,11 +59,13 @@ class UserService {
     return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<List<dynamic>> fetchReceivedRequests() async {
+  Future<List<OtherUser>> fetchReceivedRequests() async {
     final response =
         await authService.authenticatedRequest('/api/friends/requests', 'GET');
     if (response.statusCode == 200) {
-      return json.decode(response.body) as List<dynamic>;
+      return json.decode(response.body).map<OtherUser>((jsonPayload) {
+        return OtherUser.fromJson(jsonPayload);
+      }).toList();
     } else {
       throw Exception('Failed to load received requests');
     }
