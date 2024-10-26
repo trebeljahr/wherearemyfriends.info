@@ -84,7 +84,7 @@ class MapWithFriendsState extends State<MapWithFriends> {
         await addCustomImageMarker(friend);
       }
     } catch (e) {
-      print('Error adding markers: $e');
+      // Handle error
     }
   }
 

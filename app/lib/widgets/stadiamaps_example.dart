@@ -332,7 +332,7 @@ class MapState extends State<Map> {
       offlineDataState = OfflineDataState.notDownloaded;
     });
 
-    if (context.mounted) {
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: const Text("Offline data marked for removal"),
         backgroundColor: Theme.of(context).primaryColor,

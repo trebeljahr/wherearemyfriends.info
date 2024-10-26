@@ -1,0 +1,1692 @@
+{
+  "uyXDjR38fpiH9zAB3WLsw": {
+    "name": "Afghanistan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        66.2385139,
+        33.7680065
+      ]
+    }
+  },
+  "9YHIFhARoXp_xEXlrvClT": {
+    "name": "Angola",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        17.5691241,
+        -11.8775768
+      ]
+    }
+  },
+  "4kBY8SnNcyUAGc1CakGnu": {
+    "name": "Albania",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.9999619,
+        41.000028
+      ]
+    }
+  },
+  "AtRzd6VFHlQspvJ6_Yo7q": {
+    "name": "United Arab Emirates",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        53.9994829,
+        24.0002488
+      ]
+    }
+  },
+  "C1DA1JeoXwt4wsyjBoPWs": {
+    "name": "Argentina",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -64.9672817,
+        -34.9964963
+      ]
+    }
+  },
+  "8G-3GSod473sYD5j6hLDe": {
+    "name": "Armenia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        44.6736646,
+        40.7696272
+      ]
+    }
+  },
+  "U2Bmv5wr1mYxOhQjcemlL": {
+    "name": "Australia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        134.755,
+        -24.7761086
+      ]
+    }
+  },
+  "Bv07KxARZGDiM1N6R--aY": {
+    "name": "Austria",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        14.12456,
+        47.59397
+      ]
+    }
+  },
+  "PJYF5LR8pFgqPV9PBJmcW": {
+    "name": "Azerbaijan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        47.7872508,
+        40.3936294
+      ]
+    }
+  },
+  "9PvzepRq00Yhv88e549tZ": {
+    "name": "Burundi",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        29.9324519,
+        -3.426449
+      ]
+    }
+  },
+  "Zvd07m5dYNJ4NgJ0EELW5": {
+    "name": "Belgium",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        4.6667145,
+        50.6402809
+      ]
+    }
+  },
+  "L_Vs8Nm0h18Qzgobrv98B": {
+    "name": "Benin",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        2.2584408,
+        9.5293472
+      ]
+    }
+  },
+  "fsYV2nagPWJZvPjuc0b7H": {
+    "name": "Burkina Faso",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -1.6880314,
+        12.0753083
+      ]
+    }
+  },
+  "NdlGaCCT-NdmweGkCUKmX": {
+    "name": "Bangladesh",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        90.2934413,
+        24.4769288
+      ]
+    }
+  },
+  "cp-Z7qFzA0jQWvN3qyDNF": {
+    "name": "Bulgaria",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        25.4856617,
+        42.6073975
+      ]
+    }
+  },
+  "uPOdeI__xdaORcJXMLzei": {
+    "name": "The Bahamas",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -78.0000547,
+        24.7736546
+      ]
+    }
+  },
+  "80KhmX3KYB7bPumnBqha4": {
+    "name": "Bosnia and Herzegovina",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        17.5961467,
+        44.3053476
+      ]
+    }
+  },
+  "wyVjl9vB5N0_uflSIXMYX": {
+    "name": "Belarus",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        27.6971358,
+        53.4250605
+      ]
+    }
+  },
+  "HtaFIuoM2savk0yonrnjN": {
+    "name": "Belize",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -88.6859028,
+        17.1204943
+      ]
+    }
+  },
+  "57Y5M68xEW3mXnJia5iP-": {
+    "name": "Bolivia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -64.9912286,
+        -17.0568696
+      ]
+    }
+  },
+  "80fL2w7gPmcD4mS1g4QoE": {
+    "name": "Brazil",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -53.2,
+        -10.3333333
+      ]
+    }
+  },
+  "MJcPDtgL1_R-f8Xu_d5f7": {
+    "name": "Brunei",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        114.5653908,
+        4.4137155
+      ]
+    }
+  },
+  "RKgu4A3MiEFiGvEKZ5AKP": {
+    "name": "Bhutan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        90.5119273,
+        27.549511
+      ]
+    }
+  },
+  "kkG2VNlTQi2wrxL5APWtk": {
+    "name": "Botswana",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        24.5928742,
+        -23.1681782
+      ]
+    }
+  },
+  "9K7nLh-0C5_7a4L-jznZm": {
+    "name": "Central African Republic",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.9981227,
+        7.0323598
+      ]
+    }
+  },
+  "v8_f-JYU24GZV5--nt4Dk": {
+    "name": "Canada",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -107.991707,
+        61.0666922
+      ]
+    }
+  },
+  "lmObCNN2yLkLFMBqBOS-x": {
+    "name": "Switzerland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        8.2319736,
+        46.7985624
+      ]
+    }
+  },
+  "mPPrCvUkQem-X38cDrSXd": {
+    "name": "Chile",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -71.3187697,
+        -31.7613365
+      ]
+    }
+  },
+  "7CoQw_Kq9MB8QgmTaqcHA": {
+    "name": "China",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        104.999927,
+        35.000074
+      ]
+    }
+  },
+  "4PEs9lAJDIz6koZrd8LnX": {
+    "name": "Ivory Coast",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -5.5679458,
+        7.9897371
+      ]
+    }
+  },
+  "dopgev5Xo4e5FQIcBThVu": {
+    "name": "Cameroon",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        13.1535811,
+        4.6125522
+      ]
+    }
+  },
+  "SQr_EX1WqFnXiBG5VsmOs": {
+    "name": "Democratic Republic of the Congo",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        23.8222636,
+        -2.9814344
+      ]
+    }
+  },
+  "3f31K3Q018fkmVLh2aNVB": {
+    "name": "Republic of the Congo",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        15.6419155,
+        -0.7264327
+      ]
+    }
+  },
+  "NxVSTvGo01H-e7HfsNxdA": {
+    "name": "Colombia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -72.9088133,
+        4.099917
+      ]
+    }
+  },
+  "QjVCjcodVvqeB5b31xl80": {
+    "name": "Costa Rica",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -84.0739102,
+        10.2735633
+      ]
+    }
+  },
+  "99hIB2byOlGuoXxiJbImG": {
+    "name": "Cuba",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -80.8328748,
+        23.0131338
+      ]
+    }
+  },
+  "Ila5W2LCQ8EA1k4-w-KAG": {
+    "name": "Cyprus",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        33.1451285,
+        34.9823018
+      ]
+    }
+  },
+  "iQpycfGuBR2JByF01HrGy": {
+    "name": "Czechia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        15.3381061,
+        49.7439047
+      ]
+    }
+  },
+  "-3-SreBG3bTMvbVC5rm1A": {
+    "name": "Germany",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        10.4478313,
+        51.1638175
+      ]
+    }
+  },
+  "hBxuRIEm3NAxjoZ1rc6JA": {
+    "name": "Djibouti",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        42.8453061,
+        11.8145966
+      ]
+    }
+  },
+  "c_uqN-yAXw_lHUITvxDMU": {
+    "name": "Denmark",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        10.3333283,
+        55.670249
+      ]
+    }
+  },
+  "H1g0hhYgvllAP8L8FMmzy": {
+    "name": "Dominican Republic",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -70.3028026,
+        19.0974031
+      ]
+    }
+  },
+  "m9MD7LiuWZIpSiqMsnh2I": {
+    "name": "Algeria",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        2.9999825,
+        28.0000272
+      ]
+    }
+  },
+  "94A78b2r03FnjQMYq1NXq": {
+    "name": "Ecuador",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -79.3666965,
+        -1.3397668
+      ]
+    }
+  },
+  "LbrTxeyywWrU5p3LscX5x": {
+    "name": "Egypt",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        29.2675469,
+        26.2540493
+      ]
+    }
+  },
+  "atbZxN9JrS_Ldcmly3nwr": {
+    "name": "Eritrea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        37.9999668,
+        15.9500319
+      ]
+    }
+  },
+  "rIIPgXeAsgCiuZb_Yocmf": {
+    "name": "Spain",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -4.8379791,
+        39.3260685
+      ]
+    }
+  },
+  "xlJ_RVZkwA9yJZM4ma1xi": {
+    "name": "Estonia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        25.3319078,
+        58.7523778
+      ]
+    }
+  },
+  "cYtTTW5pcSHCEMpeZzKal": {
+    "name": "Ethiopia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        38.6521203,
+        10.2116702
+      ]
+    }
+  },
+  "rwkfdYKHUzRdysJRV4TNU": {
+    "name": "Finland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        25.9209164,
+        63.2467777
+      ]
+    }
+  },
+  "UTRn31ySlBMAedXvV29gI": {
+    "name": "Fiji",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        179.0122737,
+        -18.1239696
+      ]
+    }
+  },
+  "IPKQ9bstqD65EEG2s5obd": {
+    "name": "Falkland Islands",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -59.5383657,
+        -51.9492937
+      ]
+    }
+  },
+  "5-C3m0fKwEI3chkOblHUv": {
+    "name": "France",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        1.8883335,
+        46.603354
+      ]
+    }
+  },
+  "-Y5s6WPCmJwDOtVgBxpXN": {
+    "name": "Gabon",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        11.6899699,
+        -0.8999695
+      ]
+    }
+  },
+  "EHGB4CRGYfQFC5g5rHhnK": {
+    "name": "United Kingdom",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -3.2765753,
+        54.7023545
+      ]
+    }
+  },
+  "Z--lmxv2uNCPxzPaxtjjc": {
+    "name": "Georgia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        44.0287806,
+        41.6808672
+      ]
+    }
+  },
+  "Iq5U3LE8ETjY0hbQfKoAy": {
+    "name": "Ghana",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -1.0800271,
+        8.0300284
+      ]
+    }
+  },
+  "bkHqrEThgOTaOPLb4_r98": {
+    "name": "Guinea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -10.7083587,
+        10.7226226
+      ]
+    }
+  },
+  "jcv7wz0OlL-pP9giK5Mmg": {
+    "name": "Gambia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -15.4900464,
+        13.470062
+      ]
+    }
+  },
+  "zirioFarhu71QqkwzJoyo": {
+    "name": "Guinea-Bissau",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -15.2351044,
+        11.815215
+      ]
+    }
+  },
+  "eM1AK6QJOocb6HiFXlQvM": {
+    "name": "Equatorial Guinea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        10.5170357,
+        1.613172
+      ]
+    }
+  },
+  "m2Tg2p230lWk_rY0kf5CM": {
+    "name": "Greece",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        21.9877132,
+        38.9953683
+      ]
+    }
+  },
+  "7T4vliTYwlckIjwun4tYp": {
+    "name": "Greenland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -42.8125967,
+        77.6192349
+      ]
+    }
+  },
+  "VU6icDCLMAoqvkHypgyXn": {
+    "name": "Guatemala",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -90.345759,
+        15.5855545
+      ]
+    }
+  },
+  "pk49j7fJdoVCpleD9uyfz": {
+    "name": "Guyana",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -58.6416891,
+        4.8417097
+      ]
+    }
+  },
+  "rcpNu2_LqFA5u_6E9ZdGi": {
+    "name": "Honduras",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -86.0755145,
+        15.2572432
+      ]
+    }
+  },
+  "yRuPhQzASya3ymflVmw7T": {
+    "name": "Croatia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        15.6575209,
+        45.3658443
+      ]
+    }
+  },
+  "LdeG8nCkp9hVtUmJv3gWE": {
+    "name": "Haiti",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -72.3570972,
+        19.1399952
+      ]
+    }
+  },
+  "1YIYkbifuRf2V3_4AcUb9": {
+    "name": "Hungary",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.5060937,
+        47.1817585
+      ]
+    }
+  },
+  "Cp8pgUfVPELrVwBSslx-G": {
+    "name": "Indonesia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        117.8902853,
+        -2.4833826
+      ]
+    }
+  },
+  "L682ZM_NjHCJDoRhhn-fi": {
+    "name": "India",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        78.6677428,
+        22.3511148
+      ]
+    }
+  },
+  "tkZSvu3s5un0mEDENogHc": {
+    "name": "Ireland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -7.9794599,
+        52.865196
+      ]
+    }
+  },
+  "eMWcV1zjCf8DKkIVoDOJ4": {
+    "name": "Iran",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        54.5643516,
+        32.6475314
+      ]
+    }
+  },
+  "-w6iLryLiJiNccHHQxzAa": {
+    "name": "Iraq",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        44.1749775,
+        33.0955793
+      ]
+    }
+  },
+  "jIpfo6UjG4HQ7YKqanImc": {
+    "name": "Iceland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -18.1059013,
+        64.9841821
+      ]
+    }
+  },
+  "-IrXJmO-kZoC_tMfdkL9p": {
+    "name": "Israel",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        34.8594762,
+        30.8124247
+      ]
+    }
+  },
+  "zcAoqQrfIwYxEcCvL-9QL": {
+    "name": "Italy",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        12.674297,
+        42.6384261
+      ]
+    }
+  },
+  "bvRIlgvz7Ueb-ByTC8jAI": {
+    "name": "Jamaica",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -77.3947693,
+        18.1850507
+      ]
+    }
+  },
+  "jXPPTlhVssfdb-9Dou4K3": {
+    "name": "Jordan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        36.941628,
+        31.1667049
+      ]
+    }
+  },
+  "YrWkZtTMp6EwE8Q243ygt": {
+    "name": "Japan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        139.2394179,
+        36.5748441
+      ]
+    }
+  },
+  "PrWsutkQFuZySOvjMCej1": {
+    "name": "Kazakhstan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        66.7780818,
+        48.1012954
+      ]
+    }
+  },
+  "whCT1dMLMzsxKUd_xDsim": {
+    "name": "Kenya",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        38.4313975,
+        1.4419683
+      ]
+    }
+  },
+  "7O18DjJ0F7oz5qAgHVHnY": {
+    "name": "Kyrgyzstan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        74.724091,
+        41.5089324
+      ]
+    }
+  },
+  "lNB2SE32w8xH5ygOmxyFj": {
+    "name": "Cambodia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        104.8144914,
+        12.5433216
+      ]
+    }
+  },
+  "MhAyZ0ca5AkcRmCvdEyyQ": {
+    "name": "South Korea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        127.6961188,
+        36.638392
+      ]
+    }
+  },
+  "lmMn84TJez2v1KpMTo7V6": {
+    "name": "Kosovo",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        20.9021231,
+        42.5869578
+      ]
+    }
+  },
+  "VGk3_j19WAB9Z0bBB3DNm": {
+    "name": "Kuwait",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        47.4979476,
+        29.2733964
+      ]
+    }
+  },
+  "Jddg7iiRLAY3l8J-v1pbQ": {
+    "name": "Laos",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        103.378253,
+        20.0171109
+      ]
+    }
+  },
+  "qAooubE_0usVIN7l2cCk8": {
+    "name": "Lebanon",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        35.843409,
+        33.8750629
+      ]
+    }
+  },
+  "Us8oOlGKaX2qb_fimt0wW": {
+    "name": "Liberia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -9.3658524,
+        5.7499721
+      ]
+    }
+  },
+  "w-KLFDxddrtujuOBAI02a": {
+    "name": "Libya",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        18.1236723,
+        26.8234472
+      ]
+    }
+  },
+  "bzwG2tmquCKp5Rfip7zbU": {
+    "name": "Sri Lanka",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        80.7137847,
+        7.5554942
+      ]
+    }
+  },
+  "TPY5yMgxEY8btfdt2UZIp": {
+    "name": "Lesotho",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        28.3350193,
+        -29.6039267
+      ]
+    }
+  },
+  "bxFZVFWGGgRDx2P5c4h_Y": {
+    "name": "Lithuania",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        23.7499997,
+        55.3500003
+      ]
+    }
+  },
+  "YACttthJDon3_Zfdk8JO_": {
+    "name": "Luxembourg",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        6.1296751,
+        49.8158683
+      ]
+    }
+  },
+  "kaQMmn_RaJd7NiWmIseQq": {
+    "name": "Latvia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        24.7537645,
+        56.8406494
+      ]
+    }
+  },
+  "LdGSzyQlRDF4DKG6Qcysa": {
+    "name": "Morocco",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -7.3362482,
+        31.1728205
+      ]
+    }
+  },
+  "d5MyrMZijsXqvmTBFOK_H": {
+    "name": "Moldova",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        28.5670941,
+        47.2879608
+      ]
+    }
+  },
+  "MGPnrSUQJB9HgKO2k4W_r": {
+    "name": "Madagascar",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        46.4416422,
+        -18.9249604
+      ]
+    }
+  },
+  "aHIQdyWOB23G1QpvqCZZ0": {
+    "name": "Mexico",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -102.0077097,
+        23.6585116
+      ]
+    }
+  },
+  "dfj9-cmWV7_JaAmihPipk": {
+    "name": "Macedonia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        21.7168387,
+        41.6171214
+      ]
+    }
+  },
+  "Qoa3IsHEWLLsvAj_yjkxi": {
+    "name": "Mali",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -2.2900239,
+        16.3700359
+      ]
+    }
+  },
+  "o443Eq16d-vzs7YXv7ZIa": {
+    "name": "Myanmar",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        95.9999652,
+        17.1750495
+      ]
+    }
+  },
+  "dNJWjW3fCXgHV_ZvXtGea": {
+    "name": "Montenegro",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.5180992,
+        42.9868853
+      ]
+    }
+  },
+  "HDT7R6tl2t3hG9td0hxqA": {
+    "name": "Mongolia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        103.8499736,
+        46.8250388
+      ]
+    }
+  },
+  "Zyu2zL7VePed24cAgoFs5": {
+    "name": "Mozambique",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        34.9144977,
+        -19.302233
+      ]
+    }
+  },
+  "5OhVtB1YY29jx16yxQN_H": {
+    "name": "Mauritania",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -9.2399263,
+        20.2540382
+      ]
+    }
+  },
+  "rrSopfdDgiIqwoGt9Qtza": {
+    "name": "Malawi",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        33.9301963,
+        -13.2687204
+      ]
+    }
+  },
+  "lfHnsuZ4tDLIUvcoO0nUF": {
+    "name": "Malaysia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        102.2656823,
+        4.5693754
+      ]
+    }
+  },
+  "zy3glIyH7r3FE8n3uYjHZ": {
+    "name": "Namibia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        17.3231107,
+        -23.2335499
+      ]
+    }
+  },
+  "UEAYuBipB6z7KILy2YSxU": {
+    "name": "Niger",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        9.3238432,
+        17.7356214
+      ]
+    }
+  },
+  "HcP7j2iKrwpAXHUibsM2w": {
+    "name": "Nigeria",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        7.9999721,
+        9.6000359
+      ]
+    }
+  },
+  "M_a7pyNk9qe_DQfGfA_S-": {
+    "name": "Nicaragua",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -85.2936911,
+        12.6090157
+      ]
+    }
+  },
+  "RZTH4-5XYXphHcAVItDy9": {
+    "name": "Netherlands",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        5.6343227,
+        52.2434979
+      ]
+    }
+  },
+  "XsibbrUf-QNRWeFN2y4Rr": {
+    "name": "Norway",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        8.7876653,
+        61.1529386
+      ]
+    }
+  },
+  "23kOckSGcjr4VdoGpnRyK": {
+    "name": "Nepal",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        83.9999901,
+        28.3780464
+      ]
+    }
+  },
+  "G50rl7D8mtzZlv7Ms9CdJ": {
+    "name": "New Zealand",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        172.8344077,
+        -41.5000831
+      ]
+    }
+  },
+  "W-g0RYxlewk1kyxrzS4d7": {
+    "name": "Oman",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        57.0036901,
+        21.0000287
+      ]
+    }
+  },
+  "Eotu-IwbPinC2x-eSBjSf": {
+    "name": "Pakistan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        71.247499,
+        30.3308401
+      ]
+    }
+  },
+  "9956tHpGUfaG7ypBWn-SD": {
+    "name": "Panama",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -81.1308434,
+        8.559559
+      ]
+    }
+  },
+  "raWzgiPMYYbZrOMUSZ-SB": {
+    "name": "Peru",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -75.0458515,
+        -6.8699697
+      ]
+    }
+  },
+  "mrYb_-mo9luwrg0PSFhSV": {
+    "name": "Philippines",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        122.7312101,
+        12.7503486
+      ]
+    }
+  },
+  "5Qf62RxRurbXHMX4MGGUx": {
+    "name": "Papua New Guinea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        144.2489081,
+        -5.6816069
+      ]
+    }
+  },
+  "8v1o5eccKYBV3v94nxtyR": {
+    "name": "Poland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.134422,
+        52.215933
+      ]
+    }
+  },
+  "bF5ZZw8RUju37jdLK0grs": {
+    "name": "North Korea",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        127.0870417,
+        40.3736611
+      ]
+    }
+  },
+  "yZmmChlBdbWIuuMZbQytc": {
+    "name": "Portugal",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -8.1353519,
+        39.6621648
+      ]
+    }
+  },
+  "AjgQd727v6sb-zny8Ceg3": {
+    "name": "Paraguay",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -58.1693445,
+        -23.3165935
+      ]
+    }
+  },
+  "354gmCCYy7pbgc4Ws63jI": {
+    "name": "Qatar",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        51.2295295,
+        25.3336984
+      ]
+    }
+  },
+  "QrzeRVU3ZKy4C7mkIkbEz": {
+    "name": "Romania",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        24.6859225,
+        45.9852129
+      ]
+    }
+  },
+  "1uqKNUVGMYkNBUnQ4M2A8": {
+    "name": "Russia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        97.7453061,
+        64.6863136
+      ]
+    }
+  },
+  "zWR5j_U39qteU0DwD1rff": {
+    "name": "Rwanda",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        30.0644358,
+        -1.9646631
+      ]
+    }
+  },
+  "ZuR1pCQbe4J2R3EJA6xPp": {
+    "name": "Saudi Arabia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        42.3528328,
+        25.6242618
+      ]
+    }
+  },
+  "xXKp2bdHY-DszSIB3nsAZ": {
+    "name": "Sudan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        29.4917691,
+        14.5844444
+      ]
+    }
+  },
+  "9R1IlY37zdqoQW8LqmSHt": {
+    "name": "South Sudan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        29.6667897,
+        7.8699431
+      ]
+    }
+  },
+  "u_WVbMyB4dG87NxmQrWl-": {
+    "name": "Senegal",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -14.4529612,
+        14.4750607
+      ]
+    }
+  },
+  "iH5Eoro3qBAZXE11fyFAY": {
+    "name": "Sierra Leone",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -11.8400269,
+        8.6400349
+      ]
+    }
+  },
+  "dlIzO8h1DoMyb15lS8JAv": {
+    "name": "El Salvador",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -88.9140683,
+        13.8000382
+      ]
+    }
+  },
+  "f9pLTokHyIyLRw_-6246u": {
+    "name": "Somaliland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        46.0099127,
+        9.7277474
+      ]
+    }
+  },
+  "J4IU3_aGRqy6U0-d34rzy": {
+    "name": "Somalia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        49.083416,
+        8.3676771
+      ]
+    }
+  },
+  "uAQMovM5Eoi8ohsByTNMm": {
+    "name": "Republic of Serbia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        20.55144,
+        44.1534121
+      ]
+    }
+  },
+  "jsLs9jjjT1sNoAtRFWnX7": {
+    "name": "Suriname",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -56.0771187,
+        4.1413025
+      ]
+    }
+  },
+  "-soVBAIIMWMjwkumjhqlS": {
+    "name": "Slovakia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.4528646,
+        48.7411522
+      ]
+    }
+  },
+  "3Q6RM7sQzANjHRaWouof2": {
+    "name": "Slovenia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        14.8153333,
+        46.1199444
+      ]
+    }
+  },
+  "749nqA4Yz0gshwYLGZFSy": {
+    "name": "Sweden",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        14.5208584,
+        59.6749712
+      ]
+    }
+  },
+  "5l_ZWo6SLct2Uft-V-v8b": {
+    "name": "Swaziland",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        31.3991317,
+        -26.5624806
+      ]
+    }
+  },
+  "2gFTo7tTIAzSv7DCqU41C": {
+    "name": "Syria",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        39.0494106,
+        34.6401861
+      ]
+    }
+  },
+  "PZoavU9Og2Ys2W3d3HNIB": {
+    "name": "Chad",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        19.0156172,
+        15.6134137
+      ]
+    }
+  },
+  "l0a3VJgMPsWnFAYkrT-OJ": {
+    "name": "Togo",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        1.0199765,
+        8.7800265
+      ]
+    }
+  },
+  "BFtile8_xB1cNEPjp-9ik": {
+    "name": "Thailand",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        100.83273,
+        14.8971921
+      ]
+    }
+  },
+  "GQxqblH-VQbbQzZGxzCAk": {
+    "name": "Tajikistan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        70.8156541,
+        38.6281733
+      ]
+    }
+  },
+  "VKNW7e0TlppCSM60cir8f": {
+    "name": "Turkmenistan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        59.3924609,
+        39.3763807
+      ]
+    }
+  },
+  "GwbzBP3Ybi1q9M8OrrkiC": {
+    "name": "East Timor",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        126.063482,
+        -8.7443169
+      ]
+    }
+  },
+  "DaVnlpVzTPsyosn9Id0vg": {
+    "name": "Trinidad and Tobago",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -61.0840075,
+        10.7466905
+      ]
+    }
+  },
+  "7FDdjiRLjGkplyC6I-k1W": {
+    "name": "Tunisia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        9.400138,
+        33.8439408
+      ]
+    }
+  },
+  "NAjJpZhIqJrOC3FII3-8b": {
+    "name": "Turkey",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        34.9249653,
+        38.9597594
+      ]
+    }
+  },
+  "mrvw1RpVsEO6CeXsTpFJw": {
+    "name": "Taiwan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        120.9820179,
+        23.9739374
+      ]
+    }
+  },
+  "_YiMmT-bJS-WVCzcog5i_": {
+    "name": "United Republic of Tanzania",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        35.7878438,
+        -6.5247123
+      ]
+    }
+  },
+  "6ImuQYbAC4lG3qlRg973R": {
+    "name": "Uganda",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        32.2166578,
+        1.5333554
+      ]
+    }
+  },
+  "hYlwOEgtjDR7V3tq5B-Tx": {
+    "name": "Ukraine",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        31.2718321,
+        49.4871968
+      ]
+    }
+  },
+  "oMBfHJaTOUAYeH9KnFEwB": {
+    "name": "Uruguay",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -56.0201525,
+        -32.8755548
+      ]
+    }
+  },
+  "dBoB0zuUq2qTDXgYkE5Cw": {
+    "name": "United States of America",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -100.445882,
+        39.7837304
+      ]
+    }
+  },
+  "I3YKnM1ivYrcY4aQ9hR4j": {
+    "name": "Uzbekistan",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        63.9528098,
+        41.32373
+      ]
+    }
+  },
+  "ea_n5YtRjse65hcG64GvC": {
+    "name": "Venezuela",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        -66.1109318,
+        8.0018709
+      ]
+    }
+  },
+  "1qxOmYgWtsu5V7lYo7uID": {
+    "name": "Vietnam",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        107.9650855,
+        15.9266657
+      ]
+    }
+  },
+  "L_pZGXTXqtuZHPdJE5xUy": {
+    "name": "Vanuatu",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        168.1069154,
+        -16.5255069
+      ]
+    }
+  },
+  "FK4hqUXmg6Spw3u3G7NO6": {
+    "name": "Yemen",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        47.8915271,
+        16.3471243
+      ]
+    }
+  },
+  "gzKETBmGLgtjRWsIUdm30": {
+    "name": "South Africa",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        24.991639,
+        -28.8166236
+      ]
+    }
+  },
+  "k112vcDORtbPxqdGlTm_v": {
+    "name": "Zambia",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        27.5589884,
+        -14.5189121
+      ]
+    }
+  },
+  "AkmKWd_8ZseEqxSjeWTQX": {
+    "name": "Zimbabwe",
+    "labelPoint": {
+      "type": "Point",
+      "coordinates": [
+        29.7468414,
+        -18.4554963
+      ]
+    }
+  }
+}

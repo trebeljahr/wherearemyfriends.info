@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wamf/widgets/friends_privacy_settings.dart';
+import 'package:wamf/widgets/friend_search.dart';
 import 'package:wamf/widgets/navbar.dart';
 
 class FriendsPage extends StatelessWidget {
@@ -11,7 +11,8 @@ class FriendsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Friends Page')),
       drawer: const CustomNavbar(),
 
-      body: const FriendsPrivacySettings(),
+      body: const FriendSearch(),
+      // body: const FriendsPrivacySettings(),
       // body: const MapPageWithCustomWidget(),
       // body: const MapWithFriendsPage(),
       // child: StadiaMapsExample(),

@@ -20,6 +20,8 @@ dependencies:
   shared_preferences: ^2.3.2
   provider: ^6.1.2
   screenshot: ^3.0.0
+  flutter_typeahead: ^5.2.0
+  turf: ^0.0.10
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +32,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/data/

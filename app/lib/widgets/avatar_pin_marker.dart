@@ -6,11 +6,11 @@ class AvatarPinMarker extends StatefulWidget {
   final String userName;
 
   const AvatarPinMarker({
-    Key? key,
+    super.key,
     required this.imgSrc,
     required this.userName,
     this.pinColor = Colors.blue,
-  }) : super(key: key);
+  });
 
   @override
   AvatarPinMarkerState createState() => AvatarPinMarkerState();
