@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wamf/widgets/friend_search.dart';
 import 'package:wamf/widgets/navbar.dart';
+import 'package:wamf/widgets/user_search.dart';
 
 class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});
@@ -11,7 +11,8 @@ class FriendsPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Friends Page')),
       drawer: const CustomNavbar(),
 
-      body: const FriendSearch(),
+      body: const UserSearch(),
+      // body: const FriendSearch(),
       // body: const FriendsPrivacySettings(),
       // body: const MapPageWithCustomWidget(),
       // body: const MapWithFriendsPage(),

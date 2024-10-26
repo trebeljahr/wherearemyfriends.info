@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
 import 'package:wamf/services/auth_service.dart';
 import 'package:wamf/services/user_service.dart';
 import 'package:wamf/types/friend.dart';
@@ -103,10 +103,8 @@ class FriendSearchState extends State<FriendSearch> {
           CityAndCountryData(cityData: _cityData!, countryData: _countryData!),
           friend);
       if (option.contains(', ')) {
-        // City selected
         return names['cityName'] == optionValueLower;
       } else {
-        // Country selected
         return names['countryName'] == optionValueLower;
       }
     }).toList();
@@ -157,9 +155,6 @@ class FriendSearchState extends State<FriendSearch> {
             _typeAheadController.text = suggestion;
             _handleSelect(suggestion);
           },
-          // noItemsFoundBuilder: (context) => ListTile(
-          //   title: Text('No options found'),
-          // ),
           loadingBuilder: (context) => const Center(
             child: CircularProgressIndicator(),
           ),
@@ -169,7 +164,6 @@ class FriendSearchState extends State<FriendSearch> {
           hideWithKeyboard: true,
           retainOnLoading: false,
           itemSeparatorBuilder: (context, index) => const Divider(),
-          // Add any additional parameters as needed
         ),
         const SizedBox(height: 16),
         if (_selectedOption != null)

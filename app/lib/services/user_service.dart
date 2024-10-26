@@ -1,9 +1,20 @@
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wamf/services/auth_service.dart';
 import 'package:wamf/types/friend.dart';
+
+class SuccessResponse {
+  final String message;
+
+  SuccessResponse({required this.message});
+
+  factory SuccessResponse.fromJson(Map<String, dynamic> json) {
+    return SuccessResponse(message: json['message']);
+  }
+}
 
 class UserService {
   Future<List<Friend>> fetchFriends() async {
@@ -20,27 +31,32 @@ class UserService {
     }
   }
 
-  Future<void> makeFriendRequest(String friendId) async {
-    await authService.authenticatedRequest('/api/friends/requests', 'POST',
+  Future<SuccessResponse?> makeFriendRequest(String friendId) async {
+    final response = await authService.authenticatedRequest(
+        '/api/friends/requests', 'POST',
         body: {'friendId': friendId});
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> acceptFriendRequest(String requesterId) async {
-    await authService.authenticatedRequest(
+  Future<SuccessResponse?> acceptFriendRequest(String requesterId) async {
+    final response = await authService.authenticatedRequest(
         '/api/friends/requests/accept', 'POST',
         body: {'requesterId': requesterId});
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> declineFriendRequest(String requesterId) async {
-    await authService.authenticatedRequest(
+  Future<SuccessResponse?> declineFriendRequest(String requesterId) async {
+    final response = await authService.authenticatedRequest(
         '/api/friends/requests/decline', 'POST',
         body: {'requesterId': requesterId});
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> revokeFriendRequest(String friendId) async {
-    await authService.authenticatedRequest(
+  Future<SuccessResponse?> revokeFriendRequest(String friendId) async {
+    final response = await authService.authenticatedRequest(
         '/api/friends/requests/revoke', 'POST',
         body: {'friendId': friendId});
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
   Future<List<dynamic>> fetchReceivedRequests() async {
@@ -53,50 +69,60 @@ class UserService {
     }
   }
 
-  Future<Map<String, dynamic>> searchForUser(String username) async {
+  Future<OtherUser?> searchForUser(String username) async {
     final response = await authService.authenticatedRequest(
         '/api/users/search?username=$username', 'GET');
     if (response.statusCode == 200) {
-      return json.decode(response.body) as Map<String, dynamic>;
+      final jsonPayload = json.decode(response.body);
+      return OtherUser.fromJson(jsonPayload);
     } else {
-      throw Exception('Failed to search for user');
+      return null;
     }
   }
 
-  Future<Map<String, dynamic>> getUserProfile(String username) async {
+  Future<OtherUser?> getUserProfile(String username) async {
     final response = await authService.authenticatedRequest(
         '/api/profiles/$username', 'GET');
     if (response.statusCode == 200) {
-      return json.decode(response.body) as Map<String, dynamic>;
+      return OtherUser.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load user profile');
+      return null;
     }
   }
 
-  Future<void> updateUserLocation(Map<String, dynamic> userLocation) async {
-    await authService.authenticatedRequest('/api/users/location', 'PUT',
-        body: userLocation);
+  Future<SuccessResponse> updateUserLocation(
+      Map<String, dynamic> userLocation) async {
+    final response = await authService
+        .authenticatedRequest('/api/users/location', 'PUT', body: userLocation);
+
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<http.Response> updateFriendPrivacy(
+  Future<SuccessResponse> updateFriendPrivacy(
       String friendId, String newVisibility) async {
     final response = await authService.authenticatedRequest(
         '/api/friends/privacy', 'PUT',
         body: {'friendId': friendId, 'newVisibility': newVisibility});
-    return response;
+
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> removeFriend(String friendId) async {
-    await authService.authenticatedRequest('/api/friends', 'DELETE',
+  Future<SuccessResponse> removeFriend(String friendId) async {
+    final response = await authService.authenticatedRequest(
+        '/api/friends', 'DELETE',
         body: {'friendId': friendId});
+
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> updateDefaultPrivacy(String defaultPrivacy) async {
-    await authService.authenticatedRequest('/api/users/default-privacy', 'PUT',
+  Future<SuccessResponse> updateDefaultPrivacy(String defaultPrivacy) async {
+    final response = await authService.authenticatedRequest(
+        '/api/users/default-privacy', 'PUT',
         body: {'defaultPrivacy': defaultPrivacy});
+    return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<void> uploadProfilePicture(Uint8List fileBytes) async {
+  Future<SuccessResponse> uploadProfilePicture(Uint8List fileBytes) async {
     final request = http.MultipartRequest(
         'POST', Uri.parse('$backendBaseUrl/api/users/profile-picture'));
     request.files.add(http.MultipartFile.fromBytes('profilePicture', fileBytes,
@@ -108,9 +134,12 @@ class UserService {
     }
 
     final response = await request.send();
+
     if (response.statusCode != 200) {
       throw Exception('Failed to upload profile picture');
     }
+
+    return SuccessResponse.fromJson(json.decode(response.stream.toString()));
   }
 }
 

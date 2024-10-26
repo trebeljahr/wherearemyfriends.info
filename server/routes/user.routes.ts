@@ -315,7 +315,7 @@ router.get(
           .json({ message: "Friend request already sent." });
       }
 
-      return res.json(friend);
+      return res.status(200).json(friend);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Server error" });
