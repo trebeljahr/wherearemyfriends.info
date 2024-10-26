@@ -78,10 +78,12 @@ class UserService {
         body: userLocation);
   }
 
-  Future<void> updateFriendPrivacy(
+  Future<http.Response> updateFriendPrivacy(
       String friendId, String newVisibility) async {
-    await authService.authenticatedRequest('/api/friends/privacy', 'PUT',
+    final response = await authService.authenticatedRequest(
+        '/api/friends/privacy', 'PUT',
         body: {'friendId': friendId, 'newVisibility': newVisibility});
+    return response;
   }
 
   Future<void> removeFriend(String friendId) async {

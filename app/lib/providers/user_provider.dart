@@ -16,7 +16,7 @@ class AuthState extends ChangeNotifier {
 
   Future<void> logout() async {
     await authService.clearAuthToken();
-    _user = null; // api token is empty
+    _user = null;
     notifyListeners();
   }
 
@@ -31,7 +31,7 @@ class AuthState extends ChangeNotifier {
       return;
     }
 
-    if (_user == null && !_isLoading) {
+    if (!_isLoading) {
       _isLoading = true;
 
       try {
@@ -40,6 +40,9 @@ class AuthState extends ChangeNotifier {
         if (fetchedUser != null) {
           setUser(fetchedUser);
         }
+      } catch (err) {
+        await authService.clearAuthToken();
+        _user = null;
       } finally {
         _isLoading = false;
       }
