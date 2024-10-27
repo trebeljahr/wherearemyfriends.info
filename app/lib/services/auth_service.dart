@@ -68,6 +68,15 @@ class AuthService {
         throw UnsupportedError('Unsupported HTTP method: $method');
     }
   }
+
+  Future<void> changePassword(String oldPassword, String newPassword) async {
+    final response = await authenticatedRequest('/auth/change-password', 'POST',
+        body: {'oldPassword': oldPassword, 'newPassword': newPassword});
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change password');
+    }
+  }
 }
 
 final authService = AuthService();

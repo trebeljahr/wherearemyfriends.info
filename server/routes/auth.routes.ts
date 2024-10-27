@@ -43,12 +43,7 @@ router.get("/altcha-challenge", async (_: Request, res: Response) => {
 async function verifyAltchaChallenge(req: Request, res: Response) {
   try {
     const { altchaPayload } = req.body;
-
-    console.log({ altchaPayload });
-
     const decodedString = Buffer.from(altchaPayload, "base64").toString("utf8");
-
-    console.log({ decodedString });
 
     const decodedJSON = JSON.parse(decodedString) as {
       algorithm: string;
@@ -58,8 +53,6 @@ async function verifyAltchaChallenge(req: Request, res: Response) {
       signature: string;
       took: number;
     };
-
-    console.log({ decoded: decodedJSON });
 
     const existingChallenge = await AltchaChallenge.findOne({
       challenge: decodedJSON.challenge,
@@ -218,12 +211,7 @@ router.post(
   isAuthenticated,
   async (req: Request, res: Response) => {
     try {
-      const { oldPassword, newPassword, altchaPayload } = req.body;
-
-      const altchaOk = await verifySolution(altchaPayload, ALTCHA_HMAC_KEY);
-      if (!altchaOk) {
-        return res.status(403).json({ message: "Altcha solution invalid" });
-      }
+      const { oldPassword, newPassword } = req.body;
 
       if (!oldPassword || !newPassword) {
         return res
