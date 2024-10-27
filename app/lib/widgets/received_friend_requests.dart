@@ -1,4 +1,3 @@
-// received_friend_requests.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wamf/providers/user_provider.dart';
@@ -54,6 +53,7 @@ class ReceivedFriendRequestsState extends State<ReceivedFriendRequests> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text(
           'Received Friend Requests',

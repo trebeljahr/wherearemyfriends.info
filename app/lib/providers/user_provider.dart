@@ -14,10 +14,15 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> logout() async {
+  Future<void> reset() async {
     await authService.clearAuthToken();
     _user = null;
+    _isLoading = false;
     notifyListeners();
+  }
+
+  Future<void> logout() async {
+    reset();
   }
 
   bool get isAuthorized {
@@ -39,10 +44,11 @@ class AuthState extends ChangeNotifier {
 
         if (fetchedUser != null) {
           setUser(fetchedUser);
+        } else {
+          await reset();
         }
       } catch (err) {
-        await authService.clearAuthToken();
-        _user = null;
+        await reset();
       } finally {
         _isLoading = false;
       }

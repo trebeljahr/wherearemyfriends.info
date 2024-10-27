@@ -13,14 +13,18 @@ class FriendsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text('Friends Page')),
         drawer: const CustomNavbar(),
-        body: const Column(
-          children: [
-            UserSearch(),
-            ReceivedFriendRequests(),
-            SentFriendRequests(),
-            FriendsPrivacySettings(),
-          ],
-        )
+        body: const SingleChildScrollView(
+            child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UserSearch(),
+                    ReceivedFriendRequests(),
+                    SentFriendRequests(),
+                    FriendsPrivacySettings(),
+                  ],
+                )))
         // body: const FriendSearch(),
         // body: const MapPageWithCustomWidget(),
         // body: const MapWithFriendsPage(),
