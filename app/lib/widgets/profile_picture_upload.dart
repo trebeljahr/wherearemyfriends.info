@@ -102,7 +102,8 @@ class ProfilePictureUploadState extends State<ProfilePictureUpload> {
     try {
       final authState = Provider.of<AuthState>(context, listen: false);
 
-      await userService.uploadProfilePicture(imageFile.readAsBytesSync());
+      await userService.uploadProfilePicture(
+          imageFile.readAsBytesSync(), imageFile.path);
       await authState.loadUser(); // Refresh user data
 
       if (mounted) {

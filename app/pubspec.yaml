@@ -25,6 +25,8 @@ dependencies:
   qr_flutter: ^4.1.0
   image_cropper: ^8.0.2
   image_picker: ^1.1.2
+  mime: ^2.0.0
+  http_parser: ^4.1.1
 
 dev_dependencies:
   flutter_test:

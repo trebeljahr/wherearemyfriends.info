@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:wamf/services/auth_service.dart';
 import 'package:wamf/types/friend.dart';
@@ -123,13 +125,23 @@ class UserService {
     return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<SuccessResponse> uploadProfilePicture(Uint8List fileByteData) async {
+  Future<SuccessResponse> uploadProfilePicture(
+      Uint8List fileByteData, String filename) async {
     final url = Uri.parse('$backendBaseUrl/api/users/profile-picture');
     final request = http.MultipartRequest('POST', url);
 
+    String? mimeType = lookupMimeType(filename, headerBytes: fileByteData);
+
+    if (mimeType == null) {
+      throw Exception('Could not determine MIME type of the file');
+    }
+
     final fileToUpload = http.MultipartFile.fromBytes(
-        'profilePicture', fileByteData,
-        filename: 'profilePic.jpg');
+      'profilePicture',
+      fileByteData,
+      filename: 'profilePic.jpg',
+      contentType: MediaType.parse(mimeType),
+    );
 
     request.files.add(fileToUpload);
 
