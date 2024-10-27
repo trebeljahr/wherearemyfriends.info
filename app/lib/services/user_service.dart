@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wamf/services/auth_service.dart';
 import 'package:wamf/types/friend.dart';
 
@@ -124,13 +123,18 @@ class UserService {
     return SuccessResponse.fromJson(json.decode(response.body));
   }
 
-  Future<SuccessResponse> uploadProfilePicture(Uint8List fileBytes) async {
-    final request = http.MultipartRequest(
-        'POST', Uri.parse('$backendBaseUrl/api/users/profile-picture'));
-    request.files.add(http.MultipartFile.fromBytes('profilePicture', fileBytes,
-        filename: 'profile_picture.png'));
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(authTokenKey);
+  Future<SuccessResponse> uploadProfilePicture(Uint8List fileByteData) async {
+    final url = Uri.parse('$backendBaseUrl/api/users/profile-picture');
+    final request = http.MultipartRequest('POST', url);
+
+    final fileToUpload = http.MultipartFile.fromBytes(
+        'profilePicture', fileByteData,
+        filename: 'profilePic.jpg');
+
+    request.files.add(fileToUpload);
+
+    final token = await authService.getAuthToken();
+
     if (token != null) {
       request.headers['Authorization'] = 'Bearer $token';
     }

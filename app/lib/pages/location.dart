@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wamf/providers/user_provider.dart';
-import 'package:wamf/widgets/change_password.dart';
 import 'package:wamf/widgets/navbar.dart';
-import 'package:wamf/widgets/qr_code.dart';
 
 class MyLocationPage extends StatelessWidget {
   const MyLocationPage({super.key});
@@ -43,19 +41,6 @@ class MyLocationPage extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text('Country: ${user.location.country!.name}'),
                       ],
-                      const SizedBox(height: 24),
-                      const DisplayQRCode(),
-                      const SizedBox(height: 24),
-                      const ChangePasswordWidget(),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<AuthState>().logout();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        },
-                        child: const Text('Logout'),
-                      ),
                     ],
                   ),
                 ),

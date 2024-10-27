@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wamf/pages/friends.dart';
-import 'package:wamf/pages/home.dart';
 import 'package:wamf/pages/location.dart';
 import 'package:wamf/pages/login.dart';
 import 'package:wamf/pages/profiles.dart';
