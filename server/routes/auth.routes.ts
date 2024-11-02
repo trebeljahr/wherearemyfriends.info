@@ -12,7 +12,7 @@ const router = express.Router();
 const saltRounds = 10;
 
 const passwordRegex =
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/;
 
 const passwordRegexNotMatchingError =
   "Your password must have at least 12 characters and contain at least one number, one lowercase, one uppercase and one special character.";
