@@ -1,18 +1,17 @@
+import { createChallenge, verifySolution } from "altcha-lib";
 import bcrypt from "bcryptjs";
-import express, { NextFunction, Response, Request } from "express";
+import express, { type NextFunction, type Response, type Request } from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User";
-import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
 import { ALTCHA_HMAC_KEY, TOKEN_SECRET } from "../config/envVars";
-import { createChallenge, extractParams, verifySolution } from "altcha-lib";
-import { AltchaChallenge } from "../models/CaptchaChallenges";
+import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
 import { rateLimiter } from "../middleware/rateLimiter";
+import { AltchaChallenge } from "../models/CaptchaChallenges";
+import User from "../models/User";
 
 const router = express.Router();
 const saltRounds = 10;
 
-const passwordRegex =
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
 
 const passwordRegexNotMatchingError =
   "Your password must have at least 12 characters and contain at least one number, one lowercase, one uppercase and one special character.";
@@ -127,8 +126,7 @@ router.post("/signup", rateLimiter, async (req: Request, res: Response) => {
 
     if (foundUserByUsername) {
       return res.status(400).json({
-        message:
-          "A user with this username already exists. Please choose another username.",
+        message: "A user with this username already exists. Please choose another username.",
       });
     }
 
@@ -176,9 +174,7 @@ router.post("/login", async (req: Request, res: Response) => {
     const foundUser = foundUserByEmail || foundUserByUsername;
 
     if (!foundUser) {
-      res
-        .status(401)
-        .json({ message: "No user found for this email or username." });
+      res.status(401).json({ message: "No user found for this email or username." });
       return;
     }
 
@@ -214,9 +210,7 @@ router.post(
       const { oldPassword, newPassword } = req.body;
 
       if (!oldPassword || !newPassword) {
-        return res
-          .status(400)
-          .json({ message: "Provide old and new password" });
+        return res.status(400).json({ message: "Provide old and new password" });
       }
 
       const user = await User.findById(req.auth._id);
@@ -246,37 +240,33 @@ router.post(
     } catch (error) {
       return res.status(500).json({ message: "Error saving the new password" });
     }
-  }
+  },
 );
 
-router.get(
-  "/verify",
-  jwtMiddleware,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.auth?._id)
-      .populate("friends", "username profilePicture")
-      .populate("sentFriendRequests", "profilePicture username")
-      .populate("receivedFriendRequests", "profilePicture username");
+router.get("/verify", jwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+  const user = await User.findById(req.auth?._id)
+    .populate("friends", "username profilePicture")
+    .populate("sentFriendRequests", "profilePicture username")
+    .populate("receivedFriendRequests", "profilePicture username");
 
-    if (!user) {
-      return res.status(403).json({ message: "User not authorized" });
-    }
-
-    const resObject = {
-      _id: user._id,
-      username: user.username,
-      profilePicture: user.profilePicture,
-      location: user.location,
-      friends: user.friends,
-      email: user.email,
-      privacySettings: user.privacySettings,
-      receivedFriendRequests: user.receivedFriendRequests,
-      sentFriendRequests: user.sentFriendRequests,
-      defaultPrivacy: user.defaultPrivacy,
-    };
-
-    res.status(200).json(resObject);
+  if (!user) {
+    return res.status(403).json({ message: "User not authorized" });
   }
-);
+
+  const resObject = {
+    _id: user._id,
+    username: user.username,
+    profilePicture: user.profilePicture,
+    location: user.location,
+    friends: user.friends,
+    email: user.email,
+    privacySettings: user.privacySettings,
+    receivedFriendRequests: user.receivedFriendRequests,
+    sentFriendRequests: user.sentFriendRequests,
+    defaultPrivacy: user.defaultPrivacy,
+  };
+
+  res.status(200).json(resObject);
+});
 
 export default router;

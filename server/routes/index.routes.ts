@@ -1,5 +1,5 @@
 import express from "express";
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 const router = express.Router();
 

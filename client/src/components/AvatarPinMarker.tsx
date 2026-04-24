@@ -3,10 +3,7 @@ interface AvatarPinMarkerProps {
   pinColor: string;
 }
 
-export const AvatarPinMarker: React.FC<AvatarPinMarkerProps> = ({
-  imgSrc,
-  pinColor,
-}) => {
+export const AvatarPinMarker: React.FC<AvatarPinMarkerProps> = ({ imgSrc, pinColor }) => {
   return (
     <div
       className={`border border-gray-900 relative h-14 w-14 rounded-full rounded-br-none flex justify-center items-center rotate-45 ${pinColor}`}

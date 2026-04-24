@@ -57,12 +57,7 @@ export const UserSearch = () => {
 
         {message && <p className="mb-4">{message}</p>}
 
-        {otherUserId && (
-          <SendFriendRequest
-            friendId={otherUserId}
-            setFriendId={setOtherUserId}
-          />
-        )}
+        {otherUserId && <SendFriendRequest friendId={otherUserId} setFriendId={setOtherUserId} />}
       </div>
     </>
   );

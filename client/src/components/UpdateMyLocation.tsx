@@ -1,17 +1,14 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
 import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
-import Map, {
-  MapLayerMouseEvent,
-  NavigationControl,
-} from "react-map-gl/maplibre";
+import Map, { type MapLayerMouseEvent, NavigationControl } from "react-map-gl/maplibre";
 import { ScaleLoader } from "react-spinners";
-import { useUpdateUserLocation } from "../hooks/useUpdateUserLocation";
-import { getCurrentLocationFromGps } from "../lib/getCurrentLocationFromGps";
 import { useAuth } from "../context/auth.context";
+import { useUpdateUserLocation } from "../hooks/useUpdateUserLocation";
 import { defaultMapSettings } from "../lib/consts";
-import { UserLocationMarkers } from "./UserLocationMarkers";
+import { getCurrentLocationFromGps } from "../lib/getCurrentLocationFromGps";
 import { DisplayExactLocation } from "./SharingInformation";
+import { UserLocationMarkers } from "./UserLocationMarkers";
 
 export const UpdateMyLocation = () => {
   const { updateUserLocation } = useUpdateUserLocation();
@@ -61,11 +58,7 @@ const UseGeolocationButton = () => {
       onClick={handleLocationfromGPS}
       className="mb-4 p-2 bg-blue-500 text-white rounded w-56"
     >
-      {loading ? (
-        <ScaleLoader color="white" height={15} />
-      ) : (
-        <p>Use My Current Location</p>
-      )}
+      {loading ? <ScaleLoader color="white" height={15} /> : <p>Use My Current Location</p>}
     </button>
   );
 };
@@ -80,10 +73,9 @@ const InstructionInfoBox = () => {
       <p>
         <b>Click on the map to update your location.</b>
         <br />
-        Your location will be calculated and shared based on your privacy
-        settings, and it's easier to share your exact location when you are
-        further zoomed in. Alternatively you can also use the button below to
-        load the location from your GPS data.
+        Your location will be calculated and shared based on your privacy settings, and it's easier
+        to share your exact location when you are further zoomed in. Alternatively you can also use
+        the button below to load the location from your GPS data.
       </p>
     </div>
   );
@@ -104,10 +96,7 @@ const LocationInfoBox = () => {
             {user.location.country.name}
           </p>
         ) : (
-          <p>
-            You are not sharing your country location with anybody at the
-            moment.
-          </p>
+          <p>You are not sharing your country location with anybody at the moment.</p>
         )}
 
         {user?.location.city ? (
@@ -116,17 +105,13 @@ const LocationInfoBox = () => {
             {user.location.city.name}
           </p>
         ) : (
-          <p>
-            You are not sharing your city location with anybody at the moment.
-          </p>
+          <p>You are not sharing your city location with anybody at the moment.</p>
         )}
 
         {user?.location.exact ? (
           <DisplayExactLocation location={user.location.exact} />
         ) : (
-          <p>
-            You are not sharing your exact location with anybody at the moment.
-          </p>
+          <p>You are not sharing your exact location with anybody at the moment.</p>
         )}
       </div>
     </div>

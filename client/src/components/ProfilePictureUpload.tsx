@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
-import { useAuth } from "../context/auth.context";
-import { userService } from "../services/user.service";
+import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import Modal from "react-modal";
 import { ClipLoader } from "react-spinners";
+import { useAuth } from "../context/auth.context";
 import { getCroppedImg } from "../lib/utils";
+import { userService } from "../services/user.service";
 
 Modal.setAppElement("#root");
 
@@ -75,12 +75,7 @@ export const ProfilePictureUpload = () => {
 
         <label className="w-fit cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
           Select Image
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
+          <input type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
         </label>
       </div>
 

@@ -1,5 +1,5 @@
-import { Schema, model, Document } from "mongoose";
-import { SharingState } from "./User";
+import { type Document, Schema, model } from "mongoose";
+import type { SharingState } from "./User";
 
 interface IPrivacySetting extends Document {
   userId: Schema.Types.ObjectId;
@@ -17,9 +17,6 @@ const PrivacySettingSchema = new Schema<IPrivacySetting>({
   },
 });
 
-const PrivacySetting = model<IPrivacySetting>(
-  "PrivacySetting",
-  PrivacySettingSchema
-);
+const PrivacySetting = model<IPrivacySetting>("PrivacySetting", PrivacySettingSchema);
 
 export default PrivacySetting;

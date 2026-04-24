@@ -1,6 +1,6 @@
-import axios, { Axios } from "axios";
-import { LoggedInUser } from "../lib/types";
+import axios, { type Axios } from "axios";
 import { backendURL } from "../lib/consts";
+import type { LoggedInUser } from "../lib/types";
 
 class AuthService {
   api: Axios;

@@ -2,13 +2,10 @@ import debounce from "lodash/debounce";
 import { useState } from "react";
 import AsyncSelect from "react-select/async";
 import { useData } from "../context/DataContext";
+import type { Friend } from "../lib/types";
 import { normalizeName } from "../lib/utils";
 import { useFriends } from "./MapWithFriendMarkers";
-import {
-  getCountryAndCityNameFromFriend,
-  SharingInformation,
-} from "./SharingInformation";
-import { Friend } from "../lib/types";
+import { SharingInformation, getCountryAndCityNameFromFriend } from "./SharingInformation";
 
 type OptionType = {
   value: string;
@@ -28,10 +25,7 @@ export const FriendSearch = () => {
     return null;
   }
 
-  const loadOptions = (
-    inputValue: string,
-    callback: (options: OptionType[]) => void
-  ) => {
+  const loadOptions = (inputValue: string, callback: (options: OptionType[]) => void) => {
     if (!inputValue) {
       callback([]);
       return;
@@ -57,11 +51,7 @@ export const FriendSearch = () => {
     const cityOptions: OptionType[] = [];
     let cityCount = 0;
 
-    for (
-      let i = 0;
-      i < cityData.features.length && cityCount < maxCities;
-      i++
-    ) {
+    for (let i = 0; i < cityData.features.length && cityCount < maxCities; i++) {
       const feature = cityData.features[i];
       const cityName = feature.properties.name;
       const countryName = feature.properties.country.name;
@@ -100,10 +90,7 @@ export const FriendSearch = () => {
         if (!friend.location) {
           return false;
         }
-        const { countryName, cityName } = getCountryAndCityNameFromFriend(
-          data,
-          friend
-        );
+        const { countryName, cityName } = getCountryAndCityNameFromFriend(data, friend);
 
         if (option.type === "country") {
           return countryName === optionValueLower;
@@ -132,19 +119,14 @@ export const FriendSearch = () => {
         className="w-72 mb-5 relative z-[1100]"
       />
       {selectedOption && (
-        <h3 className="text-xl font-medium mb-3">
-          Users in {selectedOption.label}:
-        </h3>
+        <h3 className="text-xl font-medium mb-3">Users in {selectedOption.label}:</h3>
       )}
 
       {filteredFriends.length > 0 ? (
         <ul className="list-none p-0">
           {filteredFriends.map((friend) => {
             return (
-              <li
-                key={friend._id}
-                className="flex items-center my-6 not-prose space-x-4"
-              >
+              <li key={friend._id} className="flex items-center my-6 not-prose space-x-4">
                 <img
                   src={friend.profilePicture}
                   alt={`${friend.username}'s profile`}

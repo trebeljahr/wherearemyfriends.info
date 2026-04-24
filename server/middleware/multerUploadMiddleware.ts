@@ -7,7 +7,7 @@ const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 const fileFilter = (
   _: Express.Request,
   file: Express.Multer.File,
-  cb: multer.FileFilterCallback
+  cb: multer.FileFilterCallback,
 ) => {
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);

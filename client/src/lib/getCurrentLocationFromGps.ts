@@ -10,7 +10,7 @@ export const getCurrentLocationFromGps = async () => {
         (error) => {
           const errorMsg = "Error getting current position: " + error.message;
           reject(errorMsg);
-        }
+        },
       );
     } else {
       const errorMsg = "Geolocation is not supported by this browser.";

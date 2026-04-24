@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { type ChangeEvent, type Dispatch, type SetStateAction, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { TbEye, TbEyeClosed } from "react-icons/tb";
 
@@ -58,12 +58,8 @@ export const PasswordFieldComponent = ({
           {passwordVisible ? <TbEye /> : <TbEyeClosed />}
         </button>
       </div>
-      {strengthMeter && (
-        <PasswordStrengthMeter passwordStrength={passwordStrength} />
-      )}
-      {checklist && (
-        <PasswordCriteriaChecklist passwordChecks={passwordChecks} />
-      )}
+      {strengthMeter && <PasswordStrengthMeter passwordStrength={passwordStrength} />}
+      {checklist && <PasswordCriteriaChecklist passwordChecks={passwordChecks} />}
     </div>
   );
 };
@@ -83,9 +79,7 @@ export const usePasswordStrength = (password: string) => {
     twelveCharactersOrMore: password.match(twelveCharactersOrMore),
   };
 
-  const passwordStrength = Object.values(passwordChecks).filter(
-    (value) => value
-  ).length;
+  const passwordStrength = Object.values(passwordChecks).filter((value) => value).length;
 
   return { passwordChecks, passwordStrength };
 };

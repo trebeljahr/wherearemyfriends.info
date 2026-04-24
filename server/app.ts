@@ -1,13 +1,13 @@
 import "dotenv/config";
-import express from "express";
 import path from "path";
+import express from "express";
 import { configureApp } from "./config";
+import { CORRECT_PATH } from "./config/envVars";
 import { connectToDB } from "./db";
 import addErrorHandlingToApp from "./error-handling";
 import authRoutes from "./routes/auth.routes";
 import indexRoutes from "./routes/index.routes";
 import userRoutes from "./routes/user.routes";
-import { CORRECT_PATH } from "./config/envVars";
 
 connectToDB();
 

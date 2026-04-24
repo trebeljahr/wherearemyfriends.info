@@ -1,13 +1,10 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { type ChangeEvent, useRef, useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Altcha } from "../components/Altcha";
-import {
-  PasswordFieldComponent,
-  usePasswordStrength,
-} from "../hooks/usePasswordField";
-import authService from "../services/auth.service";
 import { useAuth } from "../context/auth.context";
+import { PasswordFieldComponent, usePasswordStrength } from "../hooks/usePasswordField";
+import authService from "../services/auth.service";
 
 export function SignupPage() {
   const { storeToken, authenticateUser } = useAuth();
@@ -60,9 +57,7 @@ export function SignupPage() {
   return (
     <div className="mt-16 sm:mt-10 sm:py-24 flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full sm:max-w-md p-8 space-y-6 bg-white rounded-lg sm:shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800">
-          Sign Up
-        </h1>
+        <h1 className="text-2xl font-bold text-center text-gray-800">Sign Up</h1>
 
         {errorMessage && (
           <div className="flex items-center p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-md">
@@ -96,10 +91,7 @@ export function SignupPage() {
               required
             />
           </fieldset>
-          <PasswordFieldComponent
-            password={password}
-            setPassword={setPassword}
-          />
+          <PasswordFieldComponent password={password} setPassword={setPassword} />
           <fieldset>
             <Altcha
               ref={altchaRef}
@@ -121,11 +113,7 @@ export function SignupPage() {
 
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            state={location.state}
-            className="text-blue-600 hover:underline"
-          >
+          <Link to="/login" state={location.state} className="text-blue-600 hover:underline">
             Login
           </Link>
         </p>

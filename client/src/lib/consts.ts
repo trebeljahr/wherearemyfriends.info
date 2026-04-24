@@ -1,5 +1,5 @@
-import { ViewState } from "react-map-gl";
 import maplibregl from "maplibre-gl";
+import type { ViewState } from "react-map-gl";
 
 export const backendURL = import.meta.env.PROD
   ? ""

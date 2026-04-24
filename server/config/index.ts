@@ -1,8 +1,8 @@
-import express from "express";
-import { Express } from "express";
-import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import express from "express";
+import type { Express } from "express";
+import logger from "morgan";
 import { FRONTEND_URL } from "./envVars";
 
 export const configureApp = (app: Express): void => {
@@ -11,7 +11,7 @@ export const configureApp = (app: Express): void => {
     app.use(
       cors({
         origin: [FRONTEND_URL],
-      })
+      }),
     );
   }
 

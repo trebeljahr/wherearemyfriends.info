@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaCog } from "react-icons/fa";
 import { FaPowerOff } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
@@ -20,7 +20,7 @@ export const useCloseWhenClickedOutside = ({
         setOpen(false);
       }
     },
-    [ref, setOpen]
+    [ref, setOpen],
   );
 
   useEffect(() => {
@@ -79,10 +79,7 @@ export const FoldableUserLogo = () => {
               </p>
             </div>
 
-            <NavLink
-              to="/settings"
-              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
-            >
+            <NavLink to="/settings" className="block w-full px-4 py-2 hover:bg-gray-100 text-left">
               <FaCog className="inline-block mr-2" />
               Settings
             </NavLink>

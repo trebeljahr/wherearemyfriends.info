@@ -24,11 +24,8 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         latitude={user.location.city.latitude}
         anchor="bottom"
       >
-        <AvatarPinMarker
-          imgSrc={user.profilePicture}
-          pinColor={"bg-cyan-600"}
-        />
-      </Marker>
+        <AvatarPinMarker imgSrc={user.profilePicture} pinColor={"bg-cyan-600"} />
+      </Marker>,
     );
   }
 
@@ -40,11 +37,8 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         latitude={user.location.country.latitude}
         anchor="bottom"
       >
-        <AvatarPinMarker
-          imgSrc={user.profilePicture}
-          pinColor={"bg-green-500"}
-        />
-      </Marker>
+        <AvatarPinMarker imgSrc={user.profilePicture} pinColor={"bg-green-500"} />
+      </Marker>,
     );
   }
 
@@ -63,7 +57,7 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         }}
       >
         <AvatarPinMarker imgSrc={user.profilePicture} pinColor={"bg-red-400"} />
-      </Marker>
+      </Marker>,
     );
   }
 

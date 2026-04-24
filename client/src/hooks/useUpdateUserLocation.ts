@@ -1,9 +1,9 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useAuth } from "../context/auth.context";
 import { useData } from "../context/DataContext";
+import { useAuth } from "../context/auth.context";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
+import type { UserLocationData } from "../lib/types";
 import { userService } from "../services/user.service";
-import { UserLocationData } from "../lib/types";
 
 export const useUpdateUserLocation = () => {
   const { user, refreshUser } = useAuth();

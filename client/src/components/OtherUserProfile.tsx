@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { OtherUser } from "../lib/types";
-import { userService } from "../services/user.service";
 import { useAuth } from "../context/auth.context";
+import type { OtherUser } from "../lib/types";
+import { userService } from "../services/user.service";
+import { DefaultPrivacySettingForOtherUser } from "./DefaultPrivacySetting";
 import { DisplaySingleFriendRequest } from "./DisplaySingleFriendRequest";
 import { SendFriendRequest } from "./SendFriendRequest";
-import { DefaultPrivacySettingForOtherUser } from "./DefaultPrivacySetting";
 
 export const OtherUserProfile: React.FC = () => {
   const { user } = useAuth();
@@ -30,9 +30,7 @@ export const OtherUserProfile: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const alreadyFriends = user?.friends
-    .map(({ _id }) => _id)
-    .includes(otherUser._id);
+  const alreadyFriends = user?.friends.map(({ _id }) => _id).includes(otherUser._id);
   const sameUser = user?._id === otherUser._id;
   const alreadySentFriendRequest = user?.sentFriendRequests
     .map(({ _id }) => _id)

@@ -1,10 +1,8 @@
-import { SharingState } from "./types";
+import type { SharingState } from "./types";
 
 export const normalizeName = (name: string) => name.trim();
 
-export const mapSharingStateToMarkerColor = (
-  sharingState: SharingState
-): string => {
+export const mapSharingStateToMarkerColor = (sharingState: SharingState): string => {
   switch (sharingState) {
     case "exact":
       return "bg-red-400";
@@ -19,7 +17,7 @@ export const mapSharingStateToMarkerColor = (
 
 export const getCroppedImg = (
   imageSrc: string,
-  pixelCrop: { x: number; y: number; width: number; height: number }
+  pixelCrop: { x: number; y: number; width: number; height: number },
 ): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -45,7 +43,7 @@ export const getCroppedImg = (
         0,
         0,
         pixelCrop.width,
-        pixelCrop.height
+        pixelCrop.height,
       );
 
       canvas.toBlob((blob) => {

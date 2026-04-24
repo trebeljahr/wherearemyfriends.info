@@ -1,7 +1,7 @@
-import { CityAndCountryData, SingleLocation } from "../lib/types";
-import { normalizeName } from "../lib/utils";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
-import { Friend, SharingState } from "../lib/types";
+import type { CityAndCountryData, SingleLocation } from "../lib/types";
+import type { Friend, SharingState } from "../lib/types";
+import { normalizeName } from "../lib/utils";
 
 export function DisplayExactLocation({
   location,
@@ -22,14 +22,8 @@ export function DisplayExactLocation({
   );
 }
 
-export function getCountryAndCityNameFromFriend(
-  data: CityAndCountryData,
-  friend: Friend
-) {
-  const { country, city } = findCityAndCountryByCoordinates(
-    data,
-    friend.location
-  );
+export function getCountryAndCityNameFromFriend(data: CityAndCountryData, friend: Friend) {
+  const { country, city } = findCityAndCountryByCoordinates(data, friend.location);
 
   return {
     countryName: normalizeName(country.name),
@@ -54,17 +48,13 @@ export const SharingInformation = ({
     return null;
   }
 
-  const { countryName, cityName } = getCountryAndCityNameFromFriend(
-    data,
-    friend
-  );
+  const { countryName, cityName } = getCountryAndCityNameFromFriend(data, friend);
   const { shareCountry, shareCity } = resolveSharingState(friend.sharingState);
 
   return (
     <div className="prose prose-p:!m-0 !text-left m-2">
       <p className="leading-snug">
-        <b>{friend.username}</b> is sharing their {friend.sharingState} location
-        with you.
+        <b>{friend.username}</b> is sharing their {friend.sharingState} location with you.
       </p>
       <div className="mt-4">
         {shareCountry && (
@@ -77,9 +67,7 @@ export const SharingInformation = ({
             <b>City:</b> {cityName}
           </p>
         )}
-        {friend.sharingState === "exact" && (
-          <DisplayExactLocation location={friend.location} />
-        )}
+        {friend.sharingState === "exact" && <DisplayExactLocation location={friend.location} />}
       </div>
     </div>
   );

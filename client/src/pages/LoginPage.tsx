@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
 import authService from "../services/auth.service";
@@ -10,10 +10,8 @@ export function LoginPage() {
 
   const { storeToken, authenticateUser } = useAuth();
 
-  const handleEmail = (e: ChangeEvent<HTMLInputElement>) =>
-    setEmailOrUsername(e.target.value);
-  const handlePassword = (e: ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
+  const handleEmail = (e: ChangeEvent<HTMLInputElement>) => setEmailOrUsername(e.target.value);
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,9 +50,7 @@ export function LoginPage() {
 
         <form onSubmit={handleLoginSubmit} className="space-y-5">
           <fieldset>
-            <label className="block mb-1 text-gray-600">
-              Email or Username
-            </label>
+            <label className="block mb-1 text-gray-600">Email or Username</label>
             <input
               type="text"
               name="emailOrUsername"
@@ -89,11 +85,7 @@ export function LoginPage() {
 
         <p className="text-sm text-center text-gray-600">
           Don't have an account yet?{" "}
-          <Link
-            to="/signup"
-            state={location.state}
-            className="text-blue-600 hover:underline"
-          >
+          <Link to="/signup" state={location.state} className="text-blue-600 hover:underline">
             Sign Up
           </Link>
         </p>

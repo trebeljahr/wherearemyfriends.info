@@ -20,9 +20,8 @@ export const LandingPage: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Share your location with friends on your own terms. Control how much
-          each friend can see—country, city, or exact spot. Stay connected
-          effortlessly.
+          Share your location with friends on your own terms. Control how much each friend can
+          see—country, city, or exact spot. Stay connected effortlessly.
         </motion.p>
 
         <motion.div
@@ -58,8 +57,7 @@ export const LandingPage: React.FC = () => {
             {
               icon: <FaHandsHelping className="w-8 h-8" />,
               title: "Stay Connected:",
-              description:
-                "See where your friends are and make plans to meet up with ease.",
+              description: "See where your friends are and make plans to meet up with ease.",
             },
             {
               icon: <FaMapMarkerAlt className="w-8 h-8" />,

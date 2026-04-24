@@ -3,11 +3,8 @@ import { forwardRef, useRef, useState } from "react";
 import { FaBars, FaX } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
-import {
-  FoldableUserLogo,
-  useCloseWhenClickedOutside,
-} from "./FoldableUserLogo";
 import { CustomNavLink } from "./CustomNavlink";
+import { FoldableUserLogo, useCloseWhenClickedOutside } from "./FoldableUserLogo";
 
 export const Navbar = () => {
   const { user } = useAuth();
@@ -18,22 +15,14 @@ export const Navbar = () => {
   };
 
   const PreconfiguredNavlink: typeof NavLink = forwardRef(({ ...props }, _) => {
-    return (
-      <CustomNavLink
-        {...props}
-        className="h-fit"
-        onClick={() => setIsOpen(false)}
-      />
-    );
+    return <CustomNavLink {...props} className="h-fit" onClick={() => setIsOpen(false)} />;
   });
 
   const links = (
     <>
       {user ? (
         <>
-          <PreconfiguredNavlink to="/location">
-            My Location
-          </PreconfiguredNavlink>
+          <PreconfiguredNavlink to="/location">My Location</PreconfiguredNavlink>
           <PreconfiguredNavlink to="/friends">Friends</PreconfiguredNavlink>
         </>
       ) : (
@@ -75,10 +64,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex md:hidden">
-          <button
-            onClick={toggleMenu}
-            className="text-white focus:outline-none"
-          >
+          <button onClick={toggleMenu} className="text-white focus:outline-none">
             {isOpen ? <FaX size={24} /> : <FaBars size={24} />}
           </button>
 
@@ -95,9 +81,7 @@ export const Navbar = () => {
             exit={{ height: 0 }}
             className="md:hidden bg-gray-800 overflow-hidden z-10 mb-4 sm:mb-6"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-              {links}
-            </div>
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">{links}</div>
           </motion.div>
         )}
       </AnimatePresence>

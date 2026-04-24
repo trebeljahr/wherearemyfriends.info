@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { type Document, Schema, model } from "mongoose";
 
 interface IAltchaChallenge extends Document {
   challenge: string;
@@ -22,7 +22,4 @@ const AltchaChallengeSchema = new Schema<IAltchaChallenge>({
 
 AltchaChallengeSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3600 });
 
-export const AltchaChallenge = model<IAltchaChallenge>(
-  "AltchaChallenge",
-  AltchaChallengeSchema
-);
+export const AltchaChallenge = model<IAltchaChallenge>("AltchaChallenge", AltchaChallengeSchema);

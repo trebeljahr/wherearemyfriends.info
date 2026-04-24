@@ -7,27 +7,20 @@ import {
   Transition,
 } from "@headlessui/react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
-import { SharingState } from "../lib/types";
-import { generateOptions, PrivacyOption } from "./PrivacyOptions";
+import type { SharingState } from "../lib/types";
+import { type PrivacyOption, generateOptions } from "./PrivacyOptions";
 
 interface PrivacyOptionComponentProps {
   value: SharingState;
   onChange: (value: SharingState) => void;
 }
 
-export const PrivacyOptionsComponent = ({
-  value,
-  onChange,
-}: PrivacyOptionComponentProps) => {
+export const PrivacyOptionsComponent = ({ value, onChange }: PrivacyOptionComponentProps) => {
   const options = generateOptions("your");
-  const selectedOption =
-    options.find((option) => option.value === value) || options[0];
+  const selectedOption = options.find((option) => option.value === value) || options[0];
 
   return (
-    <Listbox
-      value={selectedOption}
-      onChange={(option: PrivacyOption) => onChange(option.value)}
-    >
+    <Listbox value={selectedOption} onChange={(option: PrivacyOption) => onChange(option.value)}>
       {({ open }) => (
         <div className="relative">
           <ListboxButton className="relative w-full sm:w-auto p-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">

@@ -1,4 +1,4 @@
-import { Point } from "geojson";
+import type { Point } from "geojson";
 
 export type Friend = {
   _id: string;

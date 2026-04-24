@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Marker } from "react-map-gl/maplibre";
 import { useData } from "../context/DataContext";
+import type { Feature, Friend } from "../lib/types";
 import { mapSharingStateToMarkerColor } from "../lib/utils";
-import { Feature, Friend } from "../lib/types";
 import { AvatarPinMarker } from "./AvatarPinMarker";
 import { SharingInformation } from "./SharingInformation";
 
@@ -20,9 +20,7 @@ export const FriendMarkerPin = ({ friend }: { friend: Feature<Friend> }) => {
     const root = createRoot(popupNode);
     root.render(<SharingInformation friend={friend.properties} data={data} />);
 
-    const newPopup = new maplibregl.Popup({ offset: [0, -40] }).setDOMContent(
-      popupNode
-    );
+    const newPopup = new maplibregl.Popup({ offset: [0, -40] }).setDOMContent(popupNode);
 
     setPopup(newPopup);
 
@@ -35,13 +33,7 @@ export const FriendMarkerPin = ({ friend }: { friend: Feature<Friend> }) => {
   const [longitude, latitude] = friend.geometry.coordinates;
 
   return (
-    <Marker
-      key={_id}
-      longitude={longitude}
-      latitude={latitude}
-      anchor="bottom"
-      popup={popup}
-    >
+    <Marker key={_id} longitude={longitude} latitude={latitude} anchor="bottom" popup={popup}>
       <AvatarPinMarker
         imgSrc={profilePicture}
         pinColor={mapSharingStateToMarkerColor(sharingState)}

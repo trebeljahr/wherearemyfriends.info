@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useAuth } from "../context/auth.context";
-import { OtherUser } from "../lib/types";
+import type { OtherUser } from "../lib/types";
 import { userService } from "../services/user.service";
 
 export const DisplaySingleFriendRequest = ({
@@ -19,9 +19,7 @@ export const DisplaySingleFriendRequest = ({
 
     try {
       await userService.acceptFriendRequest(requesterId);
-      setRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== requesterId)
-      );
+      setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requesterId));
       await refreshUser();
     } catch (err) {
       alert("Failed to accept friend request.");
@@ -36,9 +34,7 @@ export const DisplaySingleFriendRequest = ({
     try {
       await userService.declineFriendRequest(requesterId);
 
-      setRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== requesterId)
-      );
+      setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requesterId));
     } catch (err) {
       alert("Failed to decline friend request.");
     }

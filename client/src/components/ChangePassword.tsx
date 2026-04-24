@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
-import {
-  PasswordFieldComponent,
-  usePasswordStrength,
-} from "../hooks/usePasswordField";
+import { PasswordFieldComponent, usePasswordStrength } from "../hooks/usePasswordField";
 import authService from "../services/auth.service";
 
 export const ChangePassword = () => {

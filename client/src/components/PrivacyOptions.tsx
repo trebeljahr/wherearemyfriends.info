@@ -1,5 +1,5 @@
 import { FaCity, FaExclamationTriangle, FaMap, FaMapPin } from "react-icons/fa";
-import { SharingState } from "../lib/types";
+import type { SharingState } from "../lib/types";
 
 export interface PrivacyOption {
   value: SharingState;
@@ -7,9 +7,7 @@ export interface PrivacyOption {
   icon: JSX.Element;
 }
 
-export const generateOptions = (
-  pronoun: "their" | "your" = "your"
-): PrivacyOption[] => [
+export const generateOptions = (pronoun: "their" | "your" = "your"): PrivacyOption[] => [
   {
     value: "exact",
     label: `Sharing ${pronoun} exact location`,

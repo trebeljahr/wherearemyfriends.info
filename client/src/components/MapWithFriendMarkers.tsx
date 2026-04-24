@@ -2,7 +2,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useMemo, useState } from "react";
 import Map, { NavigationControl } from "react-map-gl/maplibre";
 import { defaultMapSettings } from "../lib/consts";
-import { Friend } from "../lib/types";
+import type { Friend } from "../lib/types";
 import { userService } from "../services/user.service";
 import { FriendMarkerPin } from "./CustomFriendMarker";
 
@@ -42,7 +42,7 @@ export const MapWithFriendMarkers: React.FC = () => {
           },
         })),
     }),
-    [friends]
+    [friends],
   );
 
   return (

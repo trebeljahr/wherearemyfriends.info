@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 import "altcha";
 import { backendURL } from "../lib/consts";
@@ -27,7 +21,7 @@ export const Altcha = forwardRef<{ value: string | null }, AltchaProps>(
           },
         };
       },
-      [value]
+      [value],
     );
 
     useEffect(() => {
@@ -42,8 +36,7 @@ export const Altcha = forwardRef<{ value: string | null }, AltchaProps>(
 
       if (current) {
         current.addEventListener("statechange", handleStateChange);
-        return () =>
-          current.removeEventListener("statechange", handleStateChange);
+        return () => current.removeEventListener("statechange", handleStateChange);
       }
     }, [onStateChange]);
 
@@ -56,5 +49,5 @@ export const Altcha = forwardRef<{ value: string | null }, AltchaProps>(
         challengeurl={backendURL + "/auth/altcha-challenge"}
       />
     );
-  }
+  },
 );

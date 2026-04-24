@@ -1,5 +1,5 @@
 import { useAuth } from "../context/auth.context";
-import { SharingState } from "../lib/types";
+import type { SharingState } from "../lib/types";
 import { userService } from "../services/user.service";
 import { PrivacyOptionsComponent } from "./PrivacyOptionsComponent";
 
@@ -23,17 +23,14 @@ export const DefaultPrivacySetting = () => {
     <div className="w-full flex items-center p-4 border rounded-lg shadow-sm flex-wrap bg-white">
       <p>You are</p>
       <div className="w-full sm:w-auto sm:mx-2">
-        <PrivacyOptionsComponent
-          value={user.defaultPrivacy}
-          onChange={updateDefaultPrivacy}
-        />
+        <PrivacyOptionsComponent value={user.defaultPrivacy} onChange={updateDefaultPrivacy} />
       </div>
       <p>per default with new friends.</p>
     </div>
   );
 };
 
-import { OtherUser } from "../lib/types";
+import type { OtherUser } from "../lib/types";
 import { generateOptions } from "./PrivacyOptions";
 
 export const DefaultPrivacySettingForOtherUser = ({
@@ -45,9 +42,7 @@ export const DefaultPrivacySettingForOtherUser = ({
   const isYou = user?._id === otherUser._id;
 
   const options = generateOptions(isYou ? "your" : "their");
-  const privacyOption = options.find(
-    (option) => option.value === otherUser.defaultPrivacy
-  );
+  const privacyOption = options.find((option) => option.value === otherUser.defaultPrivacy);
 
   if (!privacyOption || !user) return null;
 

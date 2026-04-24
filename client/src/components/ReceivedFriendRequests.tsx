@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/auth.context";
-import { OtherUser } from "../lib/types";
+import type { OtherUser } from "../lib/types";
 import { userService } from "../services/user.service";
 import { DisplaySingleFriendRequest } from "./DisplaySingleFriendRequest";
 

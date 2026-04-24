@@ -1,10 +1,4 @@
-import {
-  NextFunction,
-  Request,
-  Response,
-  ErrorRequestHandler,
-  Application,
-} from "express";
+import type { Application, NextFunction, Request, Response } from "express";
 
 export const addErrorHandlingToApp = (app: Application) => {
   app.use((_: Request, res: Response, next: NextFunction) => {

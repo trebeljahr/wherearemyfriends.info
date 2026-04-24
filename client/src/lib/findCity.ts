@@ -1,16 +1,13 @@
 import * as turf from "@turf/turf";
-import { CityProperties, Feature, CityAndCountryData } from "./types";
-import { SingleLocation } from "./types";
+import type { CityAndCountryData, CityProperties, Feature } from "./types";
+import type { SingleLocation } from "./types";
 
 export const findCityAndCountryByCoordinates = (
   { cityData, countryData }: CityAndCountryData,
-  { latitude, longitude }: SingleLocation
+  { latitude, longitude }: SingleLocation,
 ): { city: SingleLocation; country: SingleLocation } => {
   const point = turf.point([longitude, latitude]);
-  const city = turf.nearestPoint(
-    point,
-    cityData
-  ) as unknown as Feature<CityProperties>;
+  const city = turf.nearestPoint(point, cityData) as unknown as Feature<CityProperties>;
 
   const countryId = city.properties.country.id;
   const country = countryData[countryId];

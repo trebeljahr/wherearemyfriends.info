@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { type Document, Schema, model } from "mongoose";
 import { CLOUDFRONT_URL } from "../config/envVars";
 
 export type SharingState = "exact" | "city" | "country" | "none";
@@ -78,12 +78,8 @@ const UserSchema = new Schema<IUser>({
   },
   password: { type: String, required: true },
   location: { type: UserLocationSchema, default: { lastUpdated: new Date() } },
-  receivedFriendRequests: [
-    { type: Schema.Types.ObjectId, ref: "User", default: [] },
-  ],
-  sentFriendRequests: [
-    { type: Schema.Types.ObjectId, ref: "User", default: [] },
-  ],
+  receivedFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  sentFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   defaultPrivacy: {
     type: String,
     enum: ["exact", "city", "country", "none"],

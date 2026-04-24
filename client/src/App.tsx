@@ -1,14 +1,14 @@
-import { Routes, Route } from "react-router-dom";
-import { HomePage } from "./pages/HomePage";
-import { MyLocationPage } from "./pages/MyLocationPage";
-import { SignupPage } from "./pages/SignupPage";
-import { LoginPage } from "./pages/LoginPage";
-import { Navbar } from "./components/Navbar";
-import { IsPrivate } from "./components/IsPrivate";
+import { Route, Routes } from "react-router-dom";
 import { IsAnon } from "./components/IsAnon";
-import { FriendsPage } from "./pages/FriendsPage";
-import { SettingsPage } from "./pages/SettingsPage";
+import { IsPrivate } from "./components/IsPrivate";
+import { Navbar } from "./components/Navbar";
 import { OtherUserProfile } from "./components/OtherUserProfile";
+import { FriendsPage } from "./pages/FriendsPage";
+import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
+import { MyLocationPage } from "./pages/MyLocationPage";
+import { SettingsPage } from "./pages/SettingsPage";
+import { SignupPage } from "./pages/SignupPage";
 
 export function App() {
   return (

@@ -1,5 +1,5 @@
+import type { NextFunction, Request, Response } from "express";
 import { expressjwt as jwt } from "express-jwt";
-import { NextFunction, Request, Response } from "express";
 
 export const jwtMiddleware = jwt({
   secret: process.env.TOKEN_SECRET as string,
@@ -7,11 +7,7 @@ export const jwtMiddleware = jwt({
   getToken: getTokenFromHeaders,
 });
 
-export const isAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
   if (!req.auth) {
     res.status(401).json({ error: "Unauthorized" });
     return;
@@ -21,10 +17,7 @@ export const isAuthenticated = (
 };
 
 function getTokenFromHeaders(req: Request): string | undefined {
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.split(" ")[0] === "Bearer"
-  ) {
+  if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
     const token = req.headers.authorization.split(" ")[1];
     return token;
   }
