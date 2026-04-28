@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "packageManager": "pnpm@10.33.2",
   "private": true,
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "client": "cd client && npm run dev",
@@ -14,7 +17,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.0.1",
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.4.13",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0"
   },
