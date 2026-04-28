@@ -33,10 +33,7 @@ class AuthService {
     return this.api.post("/signup", requestBody);
   };
 
-  changePassword = (requestBody: {
-    oldPassword: string;
-    newPassword: string;
-  }) => {
+  changePassword = (requestBody: { oldPassword: string; newPassword: string }) => {
     return this.api.post("/change-password", requestBody);
   };
 

@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, createContext, useContext, useEffect, useState } from "react";
+import { createContext, type FC, type ReactNode, useContext, useEffect, useState } from "react";
 import type { CityAndCountryData, CityData, CountryData } from "../lib/types";
 
 export const DataContext = createContext<CityAndCountryData>({

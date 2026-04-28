@@ -1,6 +1,5 @@
 import * as turf from "@turf/turf";
-import type { CityAndCountryData, CityProperties, Feature } from "./types";
-import type { SingleLocation } from "./types";
+import type { CityAndCountryData, CityProperties, Feature, SingleLocation } from "./types";
 
 export const findCityAndCountryByCoordinates = (
   { cityData, countryData }: CityAndCountryData,

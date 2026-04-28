@@ -1,6 +1,6 @@
 import { createChallenge, verifySolution } from "altcha-lib";
 import bcrypt from "bcryptjs";
-import express, { type NextFunction, type Response, type Request } from "express";
+import express, { type NextFunction, type Request, type Response } from "express";
 import jwt from "jsonwebtoken";
 import { ALTCHA_HMAC_KEY, TOKEN_SECRET } from "../config/envVars";
 import { isAuthenticated, jwtMiddleware } from "../middleware/jwt.middleware";
@@ -237,13 +237,13 @@ router.post(
       await user.save();
 
       return res.status(200).json({ message: "Password succesfully updated!" });
-    } catch (error) {
+    } catch (_error) {
       return res.status(500).json({ message: "Error saving the new password" });
     }
   },
 );
 
-router.get("/verify", jwtMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+router.get("/verify", jwtMiddleware, async (req: Request, res: Response, _next: NextFunction) => {
   const user = await User.findById(req.auth?._id)
     .populate("friends", "username profilePicture")
     .populate("sentFriendRequests", "profilePicture username")

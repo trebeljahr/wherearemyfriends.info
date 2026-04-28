@@ -1,4 +1,4 @@
-import { type Document, Schema, model } from "mongoose";
+import { type Document, model, Schema } from "mongoose";
 import { CLOUDFRONT_URL } from "../config/envVars";
 
 export type SharingState = "exact" | "city" | "country" | "none";

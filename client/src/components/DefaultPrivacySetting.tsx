@@ -33,11 +33,7 @@ export const DefaultPrivacySetting = () => {
 import type { OtherUser } from "../lib/types";
 import { generateOptions } from "./PrivacyOptions";
 
-export const DefaultPrivacySettingForOtherUser = ({
-  otherUser,
-}: {
-  otherUser: OtherUser;
-}) => {
+export const DefaultPrivacySettingForOtherUser = ({ otherUser }: { otherUser: OtherUser }) => {
   const { user } = useAuth();
   const isYou = user?._id === otherUser._id;
 

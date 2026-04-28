@@ -1,6 +1,6 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useData } from "../context/DataContext";
 import { useAuth } from "../context/auth.context";
+import { useData } from "../context/DataContext";
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
 import type { UserLocationData } from "../lib/types";
 import { userService } from "../services/user.service";

@@ -1,7 +1,7 @@
 import type { Application, NextFunction, Request, Response } from "express";
 
 export const addErrorHandlingToApp = (app: Application) => {
-  app.use((_: Request, res: Response, next: NextFunction) => {
+  app.use((_: Request, res: Response, _next: NextFunction) => {
     res.status(404).json({ message: "This route does not exist" });
   });
 

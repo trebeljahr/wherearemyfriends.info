@@ -1,13 +1,8 @@
 import { findCityAndCountryByCoordinates } from "../lib/findCity";
-import type { CityAndCountryData, SingleLocation } from "../lib/types";
-import type { Friend, SharingState } from "../lib/types";
+import type { CityAndCountryData, Friend, SharingState, SingleLocation } from "../lib/types";
 import { normalizeName } from "../lib/utils";
 
-export function DisplayExactLocation({
-  location,
-}: {
-  location: SingleLocation;
-}) {
+export function DisplayExactLocation({ location }: { location: SingleLocation }) {
   return (
     <div className="flex flex-wrap">
       <span className="mr-2">

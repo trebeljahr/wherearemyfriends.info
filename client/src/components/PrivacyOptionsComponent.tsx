@@ -8,7 +8,7 @@ import {
 } from "@headlessui/react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
 import type { SharingState } from "../lib/types";
-import { type PrivacyOption, generateOptions } from "./PrivacyOptions";
+import { generateOptions, type PrivacyOption } from "./PrivacyOptions";
 
 interface PrivacyOptionComponentProps {
   value: SharingState;

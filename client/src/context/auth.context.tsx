@@ -24,7 +24,7 @@ function AuthProviderWrapper(props: any) {
         setIsLoading(false);
         setUser(user);
         setAuthToken(storedToken);
-      } catch (error) {
+      } catch (_error) {
         setIsLoggedIn(false);
         setIsLoading(false);
         setUser(null);
@@ -47,7 +47,7 @@ function AuthProviderWrapper(props: any) {
 
   useEffect(() => {
     authenticateUser();
-  }, []);
+  }, [authenticateUser]);
 
   return (
     <AuthContext.Provider

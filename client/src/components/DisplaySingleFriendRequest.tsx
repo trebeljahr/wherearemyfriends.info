@@ -21,7 +21,7 @@ export const DisplaySingleFriendRequest = ({
       await userService.acceptFriendRequest(requesterId);
       setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requesterId));
       await refreshUser();
-    } catch (err) {
+    } catch (_err) {
       alert("Failed to accept friend request.");
     }
   };
@@ -35,7 +35,7 @@ export const DisplaySingleFriendRequest = ({
       await userService.declineFriendRequest(requesterId);
 
       setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requesterId));
-    } catch (err) {
+    } catch (_err) {
       alert("Failed to decline friend request.");
     }
   };

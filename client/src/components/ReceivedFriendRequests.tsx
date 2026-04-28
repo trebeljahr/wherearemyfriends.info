@@ -21,7 +21,7 @@ export const ReceivedFriendRequests = () => {
         const data = await userService.fetchReceivedRequests();
         setReceivedRequests(data);
         setLoading(false);
-      } catch (err) {
+      } catch (_err) {
         setError("Failed to fetch pending friend requests.");
         setLoading(false);
       }

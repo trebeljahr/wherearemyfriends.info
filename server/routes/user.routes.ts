@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import express, { type Request, type Response } from "express";
 import { Jimp } from "jimp";
@@ -188,7 +188,7 @@ router.put("/friends/privacy", async (req: Request, res) => {
   try {
     const user = await User.findById(currentUserId);
 
-    if (!user || !user.friends.includes(friendId) || friendId === currentUserId) {
+    if (!user?.friends.includes(friendId) || friendId === currentUserId) {
       return res.status(404).json({ message: "User not found." });
     }
 

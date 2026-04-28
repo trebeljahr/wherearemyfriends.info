@@ -5,7 +5,7 @@ import { useData } from "../context/DataContext";
 import type { Friend } from "../lib/types";
 import { normalizeName } from "../lib/utils";
 import { useFriends } from "./MapWithFriendMarkers";
-import { SharingInformation, getCountryAndCityNameFromFriend } from "./SharingInformation";
+import { getCountryAndCityNameFromFriend, SharingInformation } from "./SharingInformation";
 
 type OptionType = {
   value: string;

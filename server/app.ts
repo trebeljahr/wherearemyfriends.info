@@ -1,5 +1,5 @@
 import "dotenv/config";
-import path from "path";
+import path from "node:path";
 import express from "express";
 import { configureApp } from "./config";
 import { CORRECT_PATH } from "./config/envVars";

@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
 import type { Express } from "express";
+import express from "express";
 import logger from "morgan";
 import { FRONTEND_URL } from "./envVars";
 

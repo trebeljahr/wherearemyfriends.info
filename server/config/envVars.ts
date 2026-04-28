@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 const MONGODB_URI = process.env.MONGODB_URI as string;
@@ -45,12 +45,12 @@ const CORRECT_PATH =
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 export {
-  TOKEN_SECRET,
-  MONGODB_URI,
-  PORT,
-  FRONTEND_URL,
-  CORRECT_PATH,
   ALTCHA_HMAC_KEY,
   BUCKET_NAME,
   CLOUDFRONT_URL,
+  CORRECT_PATH,
+  FRONTEND_URL,
+  MONGODB_URI,
+  PORT,
+  TOKEN_SECRET,
 };

@@ -35,30 +35,28 @@ export const UserSearch = () => {
   };
 
   return (
-    <>
-      <div className="mb-4">
-        <h2 className="text-2xl font-bold mb-4">Add a New Friend</h2>
+    <div className="mb-4">
+      <h2 className="text-2xl font-bold mb-4">Add a New Friend</h2>
 
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter friend's username"
-          className="p-2 border border-gray-300 rounded-lg"
-        />
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Enter friend's username"
+        className="p-2 border border-gray-300 rounded-lg"
+      />
 
-        <button
-          onClick={searchForUser}
-          disabled={loading}
-          className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
-        >
-          {loading ? "Searching..." : "Search"}
-        </button>
+      <button
+        onClick={searchForUser}
+        disabled={loading}
+        className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
+      >
+        {loading ? "Searching..." : "Search"}
+      </button>
 
-        {message && <p className="mb-4">{message}</p>}
+      {message && <p className="mb-4">{message}</p>}
 
-        {otherUserId && <SendFriendRequest friendId={otherUserId} setFriendId={setOtherUserId} />}
-      </div>
-    </>
+      {otherUserId && <SendFriendRequest friendId={otherUserId} setFriendId={setOtherUserId} />}
+    </div>
   );
 };

@@ -84,11 +84,7 @@ export const usePasswordStrength = (password: string) => {
   return { passwordChecks, passwordStrength };
 };
 
-const PasswordStrengthMeter = ({
-  passwordStrength,
-}: {
-  passwordStrength: number;
-}) => {
+const PasswordStrengthMeter = ({ passwordStrength }: { passwordStrength: number }) => {
   const strengthColors = ["red", "orange", "#03a2cc", "#03a2cc", "#0ce052"];
   const strengthColor = strengthColors[passwordStrength - 1] || "";
   const strengthWidth = `${(passwordStrength / 5) * 100}%`;
@@ -103,11 +99,7 @@ const PasswordStrengthMeter = ({
   );
 };
 
-const PasswordCriteriaChecklist = ({
-  passwordChecks,
-}: {
-  passwordChecks: PasswordChecks;
-}) => {
+const PasswordCriteriaChecklist = ({ passwordChecks }: { passwordChecks: PasswordChecks }) => {
   return (
     <div className="space-y-2">
       <div className="flex items-center">

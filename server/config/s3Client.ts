@@ -1,5 +1,6 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 console.debug("Running Node.js version:", process.version);

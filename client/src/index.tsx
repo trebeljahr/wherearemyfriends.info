@@ -1,8 +1,8 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import { App } from "./App";
-import { DataProvider } from "./context/DataContext";
 import { AuthProviderWrapper } from "./context/auth.context";
+import { DataProvider } from "./context/DataContext";
 import "./index.css";
 
 const rootElement = document.getElementById("root");

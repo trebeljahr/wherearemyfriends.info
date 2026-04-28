@@ -12,17 +12,13 @@ export const Altcha = forwardRef<{ value: string | null }, AltchaProps>(
     const widgetRef = useRef<HTMLElement>(null);
     const [value, setValue] = useState<string | null>(null);
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          get value() {
-            return value;
-          },
-        };
-      },
-      [value],
-    );
+    useImperativeHandle(ref, () => {
+      return {
+        get value() {
+          return value;
+        },
+      };
+    }, [value]);
 
     useEffect(() => {
       const handleStateChange = (ev: Event | CustomEvent) => {
