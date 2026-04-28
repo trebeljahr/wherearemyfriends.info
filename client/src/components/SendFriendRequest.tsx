@@ -34,6 +34,7 @@ export const SendFriendRequest = ({
     <p className="mb-4">{message}</p>
   ) : (
     <button
+      type="button"
       onClick={addFriend}
       disabled={loading}
       className="p-2 bg-green-500 text-white rounded-lg"

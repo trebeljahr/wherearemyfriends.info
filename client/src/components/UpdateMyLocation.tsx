@@ -55,6 +55,7 @@ const UseGeolocationButton = () => {
 
   return (
     <button
+      type="button"
       onClick={handleLocationfromGPS}
       className="mb-4 p-2 bg-blue-500 text-white rounded w-56"
     >

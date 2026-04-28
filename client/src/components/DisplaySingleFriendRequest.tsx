@@ -50,12 +50,14 @@ export const DisplaySingleFriendRequest = ({
       <span className="ml-4">{request.username}</span>
       <div className="mt-2 ml-auto">
         <button
+          type="button"
           onClick={() => handleAccept(request._id)}
           className="mr-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
           Accept
         </button>
         <button
+          type="button"
           onClick={() => handleDecline(request._id)}
           className="px-4 py-2 bg-red-400 text-white rounded hover:bg-red-600"
         >

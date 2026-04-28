@@ -85,6 +85,7 @@ export const FriendsPrivacySettings = () => {
                 )}
               </div>
               <button
+                type="button"
                 onClick={() => openModal(friend._id)}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -146,6 +147,7 @@ export const FriendsPrivacySettings = () => {
                         </div>
                         <div className="p-6 mt-auto">
                           <button
+                            type="button"
                             className="w-full bg-red-500 text-white py-2 rounded-md flex items-center justify-center"
                             onClick={() => {
                               handleRemoveFriend(selectedFriend._id);

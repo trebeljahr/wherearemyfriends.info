@@ -41,7 +41,7 @@ export const SentFriendRequests = () => {
                   Waiting for approval from <b>{potentialFriend.username}</b>
                 </p>
               </div>
-              <button onClick={() => revokeFriendRequest(potentialFriend._id)}>
+              <button type="button" onClick={() => revokeFriendRequest(potentialFriend._id)}>
                 <div className="w-8 h-8 flex items-center justify-center rounded-full bg-red-100 hover:bg-red-200 text-red-500">
                   <FaTrash className="w-4 h-4" />
                 </div>

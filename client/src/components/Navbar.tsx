@@ -64,7 +64,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex md:hidden">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
+          <button type="button" onClick={toggleMenu} className="text-white focus:outline-none">
             {isOpen ? <FaX size={24} /> : <FaBars size={24} />}
           </button>
 
