@@ -121,7 +121,7 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const friendsWithPrivacy = user.friends.map((friend: any) => {
+    const friendsWithPrivacy = user.friends.map((friend: unknown) => {
       const typedFriend = friend as IUser;
       const sharingState =
         (typedFriend.privacySettings as FriendPrivacy[]).find(
@@ -192,8 +192,8 @@ router.put("/friends/privacy", async (req: Request, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const friendPrivacy = user.privacySettings.find(
-      (privacy: any) => privacy.friendId.toString() === friendId,
+    const friendPrivacy = (user.privacySettings as FriendPrivacy[]).find(
+      (privacy) => privacy.friendId.toString() === friendId,
     );
 
     if (friendPrivacy) {
@@ -337,7 +337,7 @@ router.get("/friends/requests", async (req: Request, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const receivedFriendRequests = user.receivedFriendRequests.map((requester: any) => ({
+    const receivedFriendRequests = (user.receivedFriendRequests as IUser[]).map((requester) => ({
       _id: requester._id,
       username: requester.username,
       profilePicture: requester.profilePicture,

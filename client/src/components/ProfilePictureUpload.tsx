@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import Cropper from "react-easy-crop";
+import Cropper, { type Area } from "react-easy-crop";
 import Modal from "react-modal";
 import { ClipLoader } from "react-spinners";
 import { useAuth } from "../context/auth.context";
@@ -10,7 +10,7 @@ Modal.setAppElement("#root");
 
 export const ProfilePictureUpload = () => {
   const { user, refreshUser } = useAuth();
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [cropping, setCropping] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -38,7 +38,7 @@ export const ProfilePictureUpload = () => {
     setZoom(zoom);
   };
 
-  const onCropComplete = useCallback((_: any, croppedAreaPixels: any) => {
+  const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 

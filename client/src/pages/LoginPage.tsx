@@ -1,6 +1,7 @@
 import { type ChangeEvent, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.context";
+import { getErrorMessage } from "../lib/types";
 import authService from "../services/auth.service";
 
 export function LoginPage() {
@@ -31,9 +32,8 @@ export function LoginPage() {
 
       const from = location.state?.from || "/location";
       navigate(from, { replace: true });
-    } catch (error: any) {
-      const errorDescription = error.response.data.message;
-      setErrorMessage(errorDescription);
+    } catch (error) {
+      setErrorMessage(getErrorMessage(error));
     }
   };
 

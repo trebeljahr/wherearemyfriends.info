@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Altcha } from "../components/Altcha";
 import { useAuth } from "../context/auth.context";
 import { PasswordFieldComponent, usePasswordStrength } from "../hooks/usePasswordField";
+import { getErrorMessage } from "../lib/types";
 import authService from "../services/auth.service";
 
 export function SignupPage() {
@@ -45,11 +46,9 @@ export function SignupPage() {
 
       const from = location.state?.from || "/location";
       navigate(from, { replace: true });
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
-
-      const errorMessage = error?.response?.data?.message || error?.message;
-      setErrorMessage(errorMessage);
+      setErrorMessage(getErrorMessage(error));
     }
   };
 
@@ -95,8 +94,9 @@ export function SignupPage() {
           <fieldset>
             <Altcha
               ref={altchaRef}
-              onStateChange={(ev: any) => {
-                setAltchaValue(ev.detail.payload);
+              onStateChange={(ev) => {
+                const detail = (ev as CustomEvent<{ payload: string }>).detail;
+                setAltchaValue(detail?.payload ?? "");
               }}
             />
           </fieldset>

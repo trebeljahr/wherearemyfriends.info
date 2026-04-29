@@ -1,5 +1,16 @@
 import type { Point } from "geojson";
 
+/** Shape of an axios-style error caught from API calls. */
+export type HttpError = Error & {
+  response?: { data?: { message?: string } };
+};
+
+/** Extract a user-facing message from an unknown caught error. */
+export function getErrorMessage(error: unknown): string {
+  const e = error as HttpError;
+  return e?.response?.data?.message || e?.message || "Unknown error";
+}
+
 export type Friend = {
   _id: string;
   username: string;

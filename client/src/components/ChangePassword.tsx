@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import { PasswordFieldComponent, usePasswordStrength } from "../hooks/usePasswordField";
+import { getErrorMessage } from "../lib/types";
 import authService from "../services/auth.service";
 
 export const ChangePassword = () => {
@@ -17,10 +18,9 @@ export const ChangePassword = () => {
     try {
       await authService.changePassword(requestBody);
       setSuccessMessage("Password changed successfully");
-    } catch (error: any) {
+    } catch (error) {
       console.error(error);
-      const errorMessage = error?.response?.data?.message || error?.message;
-      setErrorMessage(errorMessage);
+      setErrorMessage(getErrorMessage(error));
     }
   };
 

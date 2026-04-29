@@ -1,10 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, type PropsWithChildren, useContext, useEffect, useState } from "react";
 import type { AuthContextType, LoggedInUser } from "../lib/types";
 import authService from "../services/auth.service";
 
 const AuthContext = createContext({} as AuthContextType);
 
-function AuthProviderWrapper(props: any) {
+function AuthProviderWrapper(props: PropsWithChildren) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<LoggedInUser | null>(null);

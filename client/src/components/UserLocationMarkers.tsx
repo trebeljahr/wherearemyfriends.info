@@ -1,5 +1,5 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Marker } from "react-map-gl/maplibre";
+import { Marker, type MarkerDragEvent } from "react-map-gl/maplibre";
 import { useAuth } from "../context/auth.context";
 import { AvatarPinMarker } from "./AvatarPinMarker";
 
@@ -50,7 +50,7 @@ export const UserLocationMarkers = ({ updateUserLocation }: MarkerProps) => {
         latitude={user.location.exact.latitude}
         anchor="bottom"
         draggable
-        onDragEnd={(event: any) => {
+        onDragEnd={(event: MarkerDragEvent) => {
           const { lng, lat } = event.lngLat;
           const newCoordinates: [number, number] = [lng, lat];
           updateUserLocation(newCoordinates);

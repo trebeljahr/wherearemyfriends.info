@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getErrorMessage } from "../lib/types";
 import { userService } from "../services/user.service";
 import { SendFriendRequest } from "./SendFriendRequest";
 
@@ -26,9 +27,9 @@ export const UserSearch = () => {
       } else {
         setMessage("No user found with that username.");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error searching for friend:", error);
-      setMessage("Error: " + error.response.data.message);
+      setMessage("Error: " + getErrorMessage(error));
     } finally {
       setLoading(false);
     }

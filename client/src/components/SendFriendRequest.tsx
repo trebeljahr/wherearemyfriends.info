@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/auth.context";
+import { getErrorMessage } from "../lib/types";
 import { userService } from "../services/user.service";
 
 export const SendFriendRequest = ({
@@ -20,9 +21,9 @@ export const SendFriendRequest = ({
       setMessage(data.message);
       setFriendId(null);
       await refreshUser();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error adding friend:", error);
-      setMessage("Error: " + error.response.data.message);
+      setMessage("Error: " + getErrorMessage(error));
       setFriendId(null);
     } finally {
       setLoading(false);
