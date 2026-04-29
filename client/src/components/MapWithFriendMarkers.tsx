@@ -1,5 +1,6 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useMemo, useState } from "react";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js convention (Error component name)
 import Map, { NavigationControl } from "react-map-gl/maplibre";
 import { defaultMapSettings } from "../lib/consts";
 import type { Friend } from "../lib/types";

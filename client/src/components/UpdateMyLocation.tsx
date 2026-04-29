@@ -1,6 +1,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useState } from "react";
 import { FaInfo, FaLocationCrosshairs } from "react-icons/fa6";
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Next.js convention (Error component name)
 import Map, { type MapLayerMouseEvent, NavigationControl } from "react-map-gl/maplibre";
 import { ScaleLoader } from "react-spinners";
 import { useAuth } from "../context/auth.context";
