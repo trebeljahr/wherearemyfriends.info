@@ -10,6 +10,23 @@
       content="Web site created using create-react-app"
     />
     <title>wherearemyfriends.info</title>
+    <script>
+      (function () {
+        var domain = "wherearemyfriends.info";
+        if (location.hostname !== domain) return;
+        window.plausible =
+          window.plausible ||
+          function () {
+            (window.plausible.q = window.plausible.q || []).push(arguments);
+          };
+        var script = document.createElement("script");
+        script.defer = true;
+        script.dataset.domain = domain;
+        script.src =
+          "https://plausible.trebeljahr.com/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js";
+        document.head.appendChild(script);
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
