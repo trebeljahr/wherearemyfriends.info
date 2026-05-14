@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite --port 3000",
+    "prebuild": "node scripts/generate-seo.mjs",
     "build": "vite build",
     "serve": "vite preview",
     "assembleBetterDatasets": "tsx ./src/scripts/assembleBetterDatasets.ts"

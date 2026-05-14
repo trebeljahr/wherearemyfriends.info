@@ -1,0 +1,106 @@
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const seo = {
+  siteUrl: "https://wherearemyfriends.info",
+  outputDir: path.resolve(__dirname, "../public"),
+  routes: [{ path: "/", changefreq: "monthly", priority: "1.0" }],
+  lastmod: (process.env.SITEMAP_LASTMOD || new Date().toISOString()).slice(0, 10),
+  title: "Where Are My Friends?",
+  subtitle: "Private Location Sharing Map",
+  description:
+    "Share live GPS or city-level location with selected friends on a privacy-first map with per-user visibility controls and friend requests.",
+  imageAlt: "Where Are My Friends private location sharing map preview",
+};
+
+const escapeXml = (value) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+
+const joinUrl = (base, urlPath) => {
+  const cleanBase = base.replace(/\/$/, "");
+  const cleanPath = urlPath === "/" ? "/" : `/${urlPath.replace(/^\/+/, "")}`;
+  return `${cleanBase}${cleanPath}`;
+};
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${seo.routes
+  .map(
+    (route) => `  <url>
+    <loc>${escapeXml(joinUrl(seo.siteUrl, route.path))}</loc>
+    <lastmod>${seo.lastmod}</lastmod>
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
+  </url>`,
+  )
+  .join("\n")}
+</urlset>
+`;
+
+const robots = `User-agent: *
+Allow: /
+
+Sitemap: ${joinUrl(seo.siteUrl, "/sitemap.xml")}
+`;
+
+const ogImage = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">${escapeXml(seo.title)} - ${escapeXml(seo.subtitle)}</title>
+  <desc id="desc">${escapeXml(seo.imageAlt)}</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#082f49" />
+      <stop offset="0.48" stop-color="#166534" />
+      <stop offset="1" stop-color="#f8fafc" />
+    </linearGradient>
+    <radialGradient id="pulse" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#bbf7d0" stop-opacity="0.95" />
+      <stop offset="1" stop-color="#bbf7d0" stop-opacity="0" />
+    </radialGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#052e16" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <g opacity="0.22" stroke="#e0f2fe" stroke-width="2" fill="none">
+    <path d="M40 160 C190 120 260 220 410 178 S675 105 820 178 990 245 1160 190" />
+    <path d="M30 430 C220 355 330 490 515 410 S795 290 950 390 1060 480 1170 425" />
+    <path d="M120 72 L310 208 L505 125 L720 275 L960 160 L1125 258" />
+    <path d="M110 520 L290 380 L460 468 L665 318 L910 485 L1110 342" />
+  </g>
+  <circle cx="935" cy="178" r="210" fill="url(#pulse)" opacity="0.75" />
+  <g filter="url(#shadow)">
+    <rect x="94" y="96" width="608" height="438" rx="42" fill="#f8fafc" opacity="0.96" />
+    <path d="M134 184 C240 112 350 254 456 178 552 110 620 162 666 216 L666 492 L134 492 Z" fill="#dbeafe" />
+    <path d="M134 404 C245 346 348 430 466 362 548 314 602 334 666 382 L666 492 L134 492 Z" fill="#bbf7d0" />
+    <path d="M212 302 C302 232 402 370 512 282" stroke="#0369a1" stroke-width="18" stroke-linecap="round" fill="none" opacity="0.55" />
+    <g>
+      <path d="M548 186 C548 138 588 100 636 100 S724 138 724 186 C724 252 636 334 636 334 S548 252 548 186Z" fill="#ef4444" />
+      <circle cx="636" cy="186" r="32" fill="#fff7ed" />
+      <path d="M214 260 C214 224 244 196 280 196 S346 224 346 260 C346 310 280 370 280 370 S214 310 214 260Z" fill="#2563eb" />
+      <circle cx="280" cy="260" r="23" fill="#eff6ff" />
+      <path d="M395 382 C395 349 422 323 455 323 S515 349 515 382 C515 428 455 482 455 482 S395 428 395 382Z" fill="#16a34a" />
+      <circle cx="455" cy="382" r="20" fill="#f0fdf4" />
+    </g>
+  </g>
+  <text x="760" y="204" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">Where Are</text>
+  <text x="760" y="292" fill="#f8fafc" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">My Friends?</text>
+  <text x="764" y="360" fill="#dcfce7" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">Private Location Sharing Map</text>
+  <text x="764" y="430" fill="#ecfeff" font-family="Inter, Arial, sans-serif" font-size="25">GPS, city-level privacy, friend requests,</text>
+  <text x="764" y="466" fill="#ecfeff" font-family="Inter, Arial, sans-serif" font-size="25">and selected sharing controls.</text>
+</svg>
+`;
+
+await mkdir(seo.outputDir, { recursive: true });
+await Promise.all([
+  writeFile(path.join(seo.outputDir, "sitemap.xml"), sitemap),
+  writeFile(path.join(seo.outputDir, "robots.txt"), robots),
+  writeFile(path.join(seo.outputDir, "og-image.svg"), ogImage),
+]);
