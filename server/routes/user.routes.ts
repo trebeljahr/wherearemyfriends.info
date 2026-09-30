@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import express, { type Request, type Response } from "express";
+import { imageSize } from "image-size";
 import { Jimp } from "jimp";
 import { BUCKET_NAME, CLOUDFRONT_URL } from "../config/envVars";
 import { s3Client } from "../config/s3Client";
@@ -25,10 +26,64 @@ declare global {
   }
 }
 
+export const publicUser = (
+  user: Pick<IUser, "_id" | "username" | "profilePicture" | "defaultPrivacy">,
+) => ({
+  _id: user._id,
+  username: user.username,
+  profilePicture: user.profilePicture,
+  defaultPrivacy: user.defaultPrivacy,
+});
+
+const validId = (value: unknown): value is string =>
+  typeof value === "string" && /^[a-fA-F0-9]{24}$/.test(value);
+const validVisibility = (value: unknown): value is SharingState =>
+  typeof value === "string" && ["exact", "city", "country", "none"].includes(value);
+
 const router = express.Router();
 
 router.use(jwtMiddleware);
 router.use(isAuthenticated);
+
+// Reject structured query values before they can become MongoDB operators.
+router.use((req, res, next) => {
+  const routePath = req.path.toLowerCase().replace(/\/+$/, "");
+  const requiredId =
+    routePath.includes("/requests/accept") || routePath.includes("/requests/decline")
+      ? "requesterId"
+      : (routePath === "/friends" && req.method === "DELETE") ||
+          routePath === "/friends/privacy" ||
+          routePath === "/friends/requests/revoke" ||
+          (routePath === "/friends/requests" && req.method === "POST")
+        ? "friendId"
+        : undefined;
+  if (requiredId && !validId(req.body?.[requiredId])) {
+    return res.status(400).json({ message: "Invalid user ID." });
+  }
+  for (const field of ["friendId", "requesterId"]) {
+    if (req.body && field in req.body) {
+      if (!validId(req.body[field])) {
+        return res.status(400).json({ message: "Invalid user ID." });
+      }
+      req.body[field] = req.body[field].toLowerCase();
+    }
+  }
+  if (
+    routePath === "/users/search" &&
+    (typeof req.query.username !== "string" ||
+      !req.query.username.trim() ||
+      req.query.username.length > 254)
+  ) {
+    return res.status(400).json({ message: "Provide a username." });
+  }
+  if (
+    (routePath === "/friends/privacy" && !validVisibility(req.body?.newVisibility)) ||
+    (routePath === "/users/default-privacy" && !validVisibility(req.body?.defaultPrivacy))
+  ) {
+    return res.status(400).json({ message: "Invalid privacy setting." });
+  }
+  next();
+});
 
 router.post(
   "/users/profile-picture",
@@ -51,7 +106,23 @@ router.post(
         width: 288,
       };
 
-      const image = await Jimp.read(req.file.buffer);
+      let image: Awaited<ReturnType<typeof Jimp.read>>;
+      try {
+        const dimensions = imageSize(req.file.buffer);
+        if (
+          !["jpg", "png", "gif", "bmp", "tiff"].includes(dimensions.type || "") ||
+          !dimensions.width ||
+          !dimensions.height ||
+          dimensions.width * dimensions.height > 16_000_000
+        ) {
+          return res
+            .status(400)
+            .json({ message: "Unsupported image or image dimensions too large." });
+        }
+        image = await Jimp.read(req.file.buffer);
+      } catch {
+        return res.status(400).json({ message: "Invalid image." });
+      }
       image.resize({ w: size.width });
 
       const processedImageBuffer = await image.getBuffer("image/jpeg");
@@ -114,28 +185,33 @@ router.get("/friends", async (req: Request<{ _id: string }>, res) => {
     const { _id: userId } = req.auth;
 
     const user = await User.findById(userId)
-      .populate("friends", "username profilePicture privacySettings location")
+      .populate("friends", "username profilePicture privacySettings location friends")
       .lean();
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const friendsWithPrivacy = user.friends.map((friend: unknown) => {
-      const typedFriend = friend as IUser;
-      const sharingState =
-        (typedFriend.privacySettings as FriendPrivacy[]).find(
-          (setting) => setting.friendId.toString() === userId.toString(),
-        )?.visibility || "country";
+    const friendsWithPrivacy = user.friends
+      .filter((friend: unknown) => {
+        const target = friend as IUser | null;
+        return target?.friends.some((id) => id.toString() === userId);
+      })
+      .map((friend: unknown) => {
+        const typedFriend = friend as IUser;
+        const sharingState =
+          (typedFriend.privacySettings as FriendPrivacy[]).find(
+            (setting) => setting.friendId.toString() === userId.toString(),
+          )?.visibility || "none";
 
-      return {
-        _id: typedFriend._id,
-        username: typedFriend.username,
-        profilePicture: typedFriend.profilePicture,
-        sharingState,
-        location: mapSharingStateToLocation(sharingState, typedFriend.location),
-      };
-    });
+        return {
+          _id: typedFriend._id,
+          username: typedFriend.username,
+          profilePicture: typedFriend.profilePicture,
+          sharingState,
+          location: mapSharingStateToLocation(sharingState, typedFriend.location),
+        };
+      });
 
     return res.json(friendsWithPrivacy);
   } catch (error) {
@@ -223,7 +299,7 @@ router.get("/profiles/:username", userSearchRateLimiter, async (req: Request, re
       return res.status(404).json({ message: "User not found." });
     }
 
-    return res.json(user);
+    return res.json(publicUser(user));
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
@@ -256,7 +332,10 @@ router.get("/users/search", userSearchRateLimiter, async (req: Request, res) => 
     const { username } = req.query;
     const { _id: currentUserId } = req.auth;
 
-    const friend = await User.findOne({ username });
+    const friend = await User.findOne(
+      { username },
+      "username profilePicture defaultPrivacy friends receivedFriendRequests",
+    );
     const user = await User.findById(currentUserId);
 
     if (!friend) {
@@ -282,7 +361,7 @@ router.get("/users/search", userSearchRateLimiter, async (req: Request, res) => 
       return res.status(400).json({ message: "Friend request already sent." });
     }
 
-    return res.status(200).json(friend);
+    return res.status(200).json(publicUser(friend));
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error" });
@@ -309,7 +388,10 @@ router.post("/friends/requests", async (req: Request, res) => {
       return res.status(400).json({ message: "You are already friends with this user" });
     }
 
-    if (user.sentFriendRequests.includes(user.id)) {
+    if (
+      user.sentFriendRequests.includes(friendId) ||
+      user.receivedFriendRequests.includes(friendId)
+    ) {
       return res.status(400).json({ message: "Friend request already sent" });
     }
 
@@ -362,7 +444,10 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
       return res.status(404).json({ message: "User not found." });
     }
 
-    if (!user.receivedFriendRequests.includes(requesterId)) {
+    if (
+      !user.receivedFriendRequests.includes(requesterId) ||
+      !requester.sentFriendRequests.includes(user.id)
+    ) {
       return res.status(400).json({ message: "No pending friend request from this user" });
     }
 
@@ -379,12 +464,12 @@ router.post("/friends/requests/accept", async (req: Request, res) => {
 
     user.privacySettings.push({
       friendId: requesterId,
-      visibility: "city",
+      visibility: user.defaultPrivacy,
     });
 
     requester.privacySettings.push({
       friendId: user.id,
-      visibility: "city",
+      visibility: requester.defaultPrivacy,
     });
 
     await user.save();

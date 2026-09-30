@@ -11,7 +11,7 @@ import User from "../models/User";
 const router = express.Router();
 const saltRounds = 10;
 
-const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/g;
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/;
 
 const passwordRegexNotMatchingError =
   "Your password must have at least 12 characters and contain at least one number, one lowercase, one uppercase and one special character.";
@@ -42,6 +42,10 @@ router.get("/altcha-challenge", async (_: Request, res: Response) => {
 async function verifyAltchaChallenge(req: Request, res: Response) {
   try {
     const { altchaPayload } = req.body;
+    if (typeof altchaPayload !== "string" || altchaPayload.length > 4096) {
+      res.status(400).json({ message: "Invalid challenge." });
+      return;
+    }
     const decodedString = Buffer.from(altchaPayload, "base64").toString("utf8");
 
     const decodedJSON = JSON.parse(decodedString) as {
@@ -53,6 +57,10 @@ async function verifyAltchaChallenge(req: Request, res: Response) {
       took: number;
     };
 
+    if (typeof decodedJSON.challenge !== "string" || decodedJSON.challenge.length > 256) {
+      res.status(400).json({ message: "Invalid challenge." });
+      return;
+    }
     const existingChallenge = await AltchaChallenge.findOne({
       challenge: decodedJSON.challenge,
     });
@@ -90,14 +98,16 @@ router.post("/signup", rateLimiter, async (req: Request, res: Response) => {
   try {
     const { email, password, username } = req.body;
 
+    if (
+      ![email, password, username].every(
+        (value) => typeof value === "string" && value.length > 0 && value.length <= 254,
+      )
+    ) {
+      return res.status(400).json({ message: "Provide email, password and username." });
+    }
     const solution = await verifyAltchaChallenge(req, res);
 
     if (!solution) {
-      return;
-    }
-
-    if (email === "" || password === "" || username === "") {
-      res.status(400).json({ message: "Provide email, password and username" });
       return;
     }
 
@@ -156,20 +166,24 @@ router.post("/signup", rateLimiter, async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", rateLimiter, async (req: Request, res: Response) => {
   try {
     const { emailOrUsername, password } = req.body;
 
-    if (emailOrUsername === "" || password === "") {
+    if (
+      ![emailOrUsername, password].every(
+        (value) => typeof value === "string" && value.length > 0 && value.length <= 254,
+      )
+    ) {
       res.status(400).json({ message: "Provide email and password." });
       return;
     }
 
-    const foundUserByEmail = await User.findOne({ email: emailOrUsername });
+    const foundUserByEmail = await User.findOne({ email: emailOrUsername }).select("+password");
 
     const foundUserByUsername = await User.findOne({
       username: emailOrUsername,
-    });
+    }).select("+password");
 
     const foundUser = foundUserByEmail || foundUserByUsername;
 
@@ -209,11 +223,15 @@ router.post(
     try {
       const { oldPassword, newPassword } = req.body;
 
-      if (!oldPassword || !newPassword) {
+      if (
+        ![oldPassword, newPassword].every(
+          (value) => typeof value === "string" && value.length > 0 && value.length <= 254,
+        )
+      ) {
         return res.status(400).json({ message: "Provide old and new password" });
       }
 
-      const user = await User.findById(req.auth._id);
+      const user = await User.findById(req.auth._id).select("+password");
 
       if (!user) {
         return res.status(403).json({ message: "User not authorized" });
@@ -243,30 +261,35 @@ router.post(
   },
 );
 
-router.get("/verify", jwtMiddleware, async (req: Request, res: Response, _next: NextFunction) => {
-  const user = await User.findById(req.auth?._id)
-    .populate("friends", "username profilePicture")
-    .populate("sentFriendRequests", "profilePicture username")
-    .populate("receivedFriendRequests", "profilePicture username");
+router.get(
+  "/verify",
+  jwtMiddleware,
+  isAuthenticated,
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const user = await User.findById(req.auth?._id)
+      .populate("friends", "username profilePicture")
+      .populate("sentFriendRequests", "profilePicture username")
+      .populate("receivedFriendRequests", "profilePicture username");
 
-  if (!user) {
-    return res.status(403).json({ message: "User not authorized" });
-  }
+    if (!user) {
+      return res.status(403).json({ message: "User not authorized" });
+    }
 
-  const resObject = {
-    _id: user._id,
-    username: user.username,
-    profilePicture: user.profilePicture,
-    location: user.location,
-    friends: user.friends,
-    email: user.email,
-    privacySettings: user.privacySettings,
-    receivedFriendRequests: user.receivedFriendRequests,
-    sentFriendRequests: user.sentFriendRequests,
-    defaultPrivacy: user.defaultPrivacy,
-  };
+    const resObject = {
+      _id: user._id,
+      username: user.username,
+      profilePicture: user.profilePicture,
+      location: user.location,
+      friends: user.friends,
+      email: user.email,
+      privacySettings: user.privacySettings,
+      receivedFriendRequests: user.receivedFriendRequests,
+      sentFriendRequests: user.sentFriendRequests,
+      defaultPrivacy: user.defaultPrivacy,
+    };
 
-  res.status(200).json(resObject);
-});
+    res.status(200).json(resObject);
+  },
+);
 
 export default router;

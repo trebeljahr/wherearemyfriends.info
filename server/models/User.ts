@@ -76,7 +76,7 @@ const UserSchema = new Schema<IUser>({
     lowercase: true,
     trim: true,
   },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   location: { type: UserLocationSchema, default: { lastUpdated: new Date() } },
   receivedFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   sentFriendRequests: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
@@ -88,6 +88,14 @@ const UserSchema = new Schema<IUser>({
   friends: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
   privacySettings: { type: [FriendPrivacySchema], default: [] },
   profilePicture: { type: String, default: `${CLOUDFRONT_URL}/no-user.webp` },
+});
+
+// Defense in depth: even explicitly selected hashes never enter JSON responses.
+UserSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    delete (ret as Partial<IUser>).password;
+    return ret;
+  },
 });
 
 const User = model<IUser>("User", UserSchema);

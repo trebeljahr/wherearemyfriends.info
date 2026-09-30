@@ -54,7 +54,7 @@ class UserService {
   }
 
   async searchForUser(username: string) {
-    const response = await this.api.get(`/users/search?username=${username}`);
+    const response = await this.api.get(`/users/search?username=${encodeURIComponent(username)}`);
     return response.data;
   }
 

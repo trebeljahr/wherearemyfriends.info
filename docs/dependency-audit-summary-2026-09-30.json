@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-30",
+  "audits": [
+    {
+      "scope": "server",
+      "command": "npm audit --json",
+      "before": {
+        "info": 0,
+        "low": 4,
+        "moderate": 43,
+        "high": 7,
+        "critical": 3,
+        "total": 57
+      },
+      "after": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "client",
+      "command": "npm audit --json",
+      "before": {
+        "info": 0,
+        "low": 3,
+        "moderate": 9,
+        "high": 17,
+        "critical": 2,
+        "total": 31
+      },
+      "after": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  ]
+}

@@ -74,7 +74,7 @@ class UserService {
 
   Future<OtherUser?> searchForUser(String username) async {
     final response = await authService.authenticatedRequest(
-        '/api/users/search?username=$username', 'GET');
+        '/api/users/search?username=${Uri.encodeQueryComponent(username)}', 'GET');
     if (response.statusCode == 200) {
       final jsonPayload = json.decode(response.body);
       return OtherUser.fromJson(jsonPayload);

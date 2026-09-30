@@ -13,7 +13,8 @@
     "format": "biome format --write .",
     "lint": "biome lint .",
     "check": "biome check --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "audit:dependencies": "npm --prefix server audit && npm --prefix client audit"
   },
   "devDependencies": {
     "concurrently": "^9.0.1",

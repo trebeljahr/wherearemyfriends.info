@@ -8,11 +8,12 @@ export const jwtMiddleware = jwt({
 });
 
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.auth) {
+  if (!req.auth || typeof req.auth._id !== "string" || !/^[a-fA-F0-9]{24}$/.test(req.auth._id)) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
 
+  req.auth._id = req.auth._id.toLowerCase();
   next();
 };
 
