@@ -412,14 +412,17 @@ router.get("/friends/requests", async (req: Request, res) => {
   const { _id: userId } = req.auth;
   try {
     const user = await User.findById(userId)
-      .populate("receivedFriendRequests", "username profilePicture")
+      .populate<{ receivedFriendRequests: Pick<IUser, "_id" | "username" | "profilePicture">[] }>(
+        "receivedFriendRequests",
+        "username profilePicture",
+      )
       .lean();
 
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    const receivedFriendRequests = (user.receivedFriendRequests as IUser[]).map((requester) => ({
+    const receivedFriendRequests = user.receivedFriendRequests.map((requester) => ({
       _id: requester._id,
       username: requester.username,
       profilePicture: requester.profilePicture,

@@ -1,4 +1,4 @@
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import type { ViewState } from "react-map-gl/maplibre";
 
 export const backendURL = import.meta.env.PROD

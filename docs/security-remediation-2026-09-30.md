@@ -29,9 +29,15 @@ Maintainer advisories:
 
 Completed: full server and client npm audits (zero advisories), Biome checks for changed TypeScript/JSON, `git diff --check`, and Node syntax validation of the regression test file.
 
-**Blocked:** server build, regression execution, client typecheck, and client production build. Host checks showed sustained CPU saturation (0.12% idle on a 10-core host), about 14.9 GiB swap used, and load averages far above core count. No heavy validation was started and no foreign process was stopped. The local security branch is saved but is not integrated into `main` until those checks pass.
+Completed after host pressure cleared, holding the shared atomic heavy-check lock:
 
-When resource pressure clears, acquire `/private/tmp/projects-security-heavy-check.lock` atomically with `mkdir`, record ownership, and release only your own lock in cleanup. Run sequentially: `npm --prefix server run build`, `npm --prefix server test`, `cd client && npx tsc --noEmit`, and `npm --prefix client run build`. Fix failures before rebase/fast-forward integration. Use synthetic environment values for tests; do not load production secrets or connect to a live database. Regression tests use two synthetic Mongoose documents, a real Express router/JWT/multipart stack, mocked database queries, and stubbed S3 writes. They do not connect to MongoDB or AWS. This validates HTTP disclosure/authorization boundaries and upload parsing, but does not simulate database concurrency or prove production configuration.
+- Server TypeScript build: passed.
+- Security regression suite: 9/9 passed, including real multipart parsing and a successful image upload with stubbed storage.
+- Client `tsc --noEmit`: passed.
+- Client production build: passed; Vite reports its non-blocking large-chunk warning (about 1.83 MB minified JS).
+- Server build/tests and client build also passed on the project's Node 24.14.1 runtime. Initial checks used the shell's Node 26.
+
+Validation caught and corrected the MapLibre namespace import and optional popup type changes, plus the populated Mongoose request-list type. No browser, live MongoDB, production storage, or real-account smoke test was performed. Regression tests use two synthetic Mongoose documents, a real Express router/JWT/multipart stack, mocked database queries, and stubbed S3 writes. They do not connect to MongoDB or AWS. This validates HTTP disclosure/authorization boundaries and upload parsing, but does not simulate database concurrency or prove production configuration.
 
 ## Separate rollout and incident review
 

@@ -1,4 +1,4 @@
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -33,7 +33,13 @@ export const FriendMarkerPin = ({ friend }: { friend: Feature<Friend> }) => {
   const [longitude, latitude] = friend.geometry.coordinates;
 
   return (
-    <Marker key={_id} longitude={longitude} latitude={latitude} anchor="bottom" popup={popup}>
+    <Marker
+      key={_id}
+      longitude={longitude}
+      latitude={latitude}
+      anchor="bottom"
+      popup={popup ?? undefined}
+    >
       <AvatarPinMarker
         imgSrc={profilePicture}
         pinColor={mapSharingStateToMarkerColor(sharingState)}
